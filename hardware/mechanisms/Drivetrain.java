@@ -22,7 +22,7 @@ public class Drivetrain extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         drivetrain = new SampleMecanumDrive(hwMap);
-        drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drivetrain.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
