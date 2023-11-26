@@ -13,39 +13,55 @@ import com.stuyfission.fissionlib.util.Mechanism;
 
 public class Scoring extends Mechanism {
 
-    private Dropper dropper = new Dropper(opMode);
+    private Arm arm = new Arm(opMode);
+    private Hopper hopper = new Hopper(opMode);
+    private Intake intake = new Intake(opMode);
+    private IntakeSensor intakeSensor = new IntakeSensor(opMode);
     private Slides slides = new Slides(opMode);
+
+    public static double INTAKE_DELAY = 1;
+    public static double SCORE_DELAY = 1;
 
     public Scoring(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
-    private Command releaseCommand = () -> {
-        dropper.release();
-    };
-
-    private Command preScoreCommand = () -> {
-        dropper.hook();
-        slides.scorePos();
-    };
-
+    private Command releaseCommand = () -> hopper.release();
+    private Command intakeCommand = () -> intake.intake();
+    private Command intakeStopCommand = () -> intake.stop();
     private Command retractCommand = () -> {
-        dropper.release();
+        hopper.release();
         slides.intakePos();
+        arm.intakePos();
+        hopper.close();
     };
 
-    private CommandSequence scoreSequence = new CommandSequence().addCommand(releaseCommand).build();
-    private CommandSequence preScoreSequence = new CommandSequence().addCommand(preScoreCommand).build();
-    private CommandSequence resetSequence = new CommandSequence().addCommand(retractCommand).build();
+    private CommandSequence intakeSequence = new CommandSequence()
+            .addCommand(intakeCommand)
+            .addWaitCommand(INTAKE_DELAY)
+            .addCommand(intakeStopCommand)
+            .build();
+    private CommandSequence scoreSequence = new CommandSequence()
+            .addCommand(releaseCommand)
+            .addWaitCommand(SCORE_DELAY)
+            .addCommand(retractCommand)
+            .build();
+    private CommandSequence retractSequence = new CommandSequence()
+            .addCommand(retractCommand)
+            .build();
 
-    private CommandMachine scoreMachine = new CommandMachine().addCommandSequence(preScoreSequence, Controls.PRE_SCORE)
+    private CommandMachine scoreMachine = new CommandMachine()
+            .addCommandSequence(intakeSequence, Controls.INTAKE)
+            .addCommandSequence(intakeSequence, Controls.INTAKE)
             .addCommandSequence(scoreSequence, Controls.SCORE)
-            .addCommandSequence(scoreSequence, Controls.SCORE)
-            .addCommandSequence(resetSequence, Controls.RESET).build();
+            .build();
 
     @Override
     public void init(HardwareMap hwMap) {
-        dropper.init(hwMap);
+        arm.init(hwMap);
+        hopper.init(hwMap);
+        intake.init(hwMap);
+        intakeSensor.init(hwMap);
         slides.init(hwMap);
     }
 
@@ -55,8 +71,27 @@ public class Scoring extends Mechanism {
         scoreMachine.run(gamepad);
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
-            resetSequence.run();
+            retractSequence.run();
             scoreMachine.reset();
+        }
+
+        if (scoreMachine.getCurrentCommandIndex() == 0 || scoreMachine.getCurrentCommandIndex() == 1) {
+            if (intakeSensor.isPixel()) {
+                scoreMachine.next();
+            }
+        }
+
+        if (scoreMachine.getCurrentCommandIndex() == 2) {
+            if (GamepadStatic.isButtonPressed(gamepad, Controls.LOW)) {
+                slides.lowPos();
+                arm.scorePos();
+            } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM)) {
+                slides.mediumPos();
+                arm.scorePos();
+            } else if (GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
+                slides.highPos();
+                arm.scorePos();
+            }
         }
     }
 }

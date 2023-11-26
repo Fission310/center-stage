@@ -12,7 +12,8 @@ import org.firstinspires.ftc.teamcode.opmode.teleop.Controls;
 @Config
 public class Climb extends Mechanism {
 
-    private Servo releaseServo;
+    private Servo leftRelease;
+    private Servo rightRelease;
 
     public static double RELEASE_POS = 1;
 
@@ -22,11 +23,15 @@ public class Climb extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        releaseServo = hwMap.get(Servo.class, "climbMotor");
+        leftRelease = hwMap.get(Servo.class, "climbServoLeft");
+        rightRelease = hwMap.get(Servo.class, "climbServoRight");
+
+        leftRelease.setDirection(Servo.Direction.REVERSE);
     }
 
     public void release() {
-        releaseServo.setPosition(RELEASE_POS);
+        leftRelease.setPosition(RELEASE_POS);
+        rightRelease.setPosition(RELEASE_POS);
     }
 
     @Override
