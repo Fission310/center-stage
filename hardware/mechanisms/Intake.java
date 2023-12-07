@@ -22,7 +22,7 @@ public class Intake extends Mechanism {
     public static double SPEED = 1;
     
     public static double UP_POS = 0;
-    public static double DOWN_POS = 0;
+    public static double DOWN_POS = 0.67;
 
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -35,15 +35,19 @@ public class Intake extends Mechanism {
 
         leftServo = hwMap.get(Servo.class, "leftIntakeServo");
         rightServo = hwMap.get(Servo.class, "rightIntakeServo");
+
+        leftServo.setDirection(Servo.Direction.REVERSE);
+
+        down();
     }
 
     public void intake() {
-        lowerMotor.setPower(SPEED);
+        lowerMotor.setPower(-SPEED);
         upperMotor.setPower(SPEED);
     }
 
     public void outtake() {
-        lowerMotor.setPower(-SPEED);
+        lowerMotor.setPower(SPEED);
         upperMotor.setPower(-SPEED);
     }
 
@@ -68,6 +72,14 @@ public class Intake extends Mechanism {
             up();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_DOWN)) {
             down();
+        }
+
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
+            intake();
+        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.OUTTAKE)) {
+            outtake();
+        } else {
+            stop();
         }
     }
 }

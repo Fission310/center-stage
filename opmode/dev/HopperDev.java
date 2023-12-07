@@ -1,23 +1,23 @@
 package org.firstinspires.ftc.teamcode.opmode.dev;
 
-import org.firstinspires.ftc.teamcode.hardware.mechanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.Hopper;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "DriveTrain test", group = "dev")
-public class Drive extends LinearOpMode {
+@TeleOp(name = "Hopper test", group = "dev")
+public class HopperDev extends LinearOpMode {
 
-    private Drivetrain drivetrain = new Drivetrain(this);
+    private Hopper hopper = new Hopper(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drivetrain.init(hardwareMap);
+        hopper.init(hardwareMap);
 
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            drivetrain.loop(gamepad1);
+            hopper.loop(gamepad1);
         }
     }
 }

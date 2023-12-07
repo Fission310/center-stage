@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.hardware.mechanisms;
 
+import org.firstinspires.ftc.teamcode.opmode.teleop.Controls;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.stuyfission.fissionlib.input.GamepadStatic;
 import com.stuyfission.fissionlib.motion.MotionProfiledDcMotor;
 import com.stuyfission.fissionlib.util.Mechanism;
 
@@ -22,15 +25,16 @@ public class Slides extends Mechanism {
 
     public static double RETRACTION_MULTIPLIER = 0.75;
 
-    public static double KP = 0;
+    public static double KP = 0.26;
     public static double KI = 0;
     public static double KD = 0;
     public static double KF = 0;
 
-    public static double LOW_POS = 0;
-    public static double MEDIUM_POS = 0;
-    public static double HIGH_POS = 0;
-    public static double COLLECT_POS = 0;
+    public static double LOW_POS = 15;
+    public static double MEDIUM_LOW_POS = 30;
+    public static double MEDIUM_HIGH_POS = 45;
+    public static double HIGH_POS = 63;
+    public static double COLLECT_POS = 1.3;
 
     public Slides(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -46,10 +50,14 @@ public class Slides extends Mechanism {
             motor.setMotionConstraints(MAX_VEL, MAX_ACCEL);
             motor.setRetractionMultiplier(RETRACTION_MULTIPLIER);
             motor.setPIDCoefficients(KP, KI, KD, KF);
-            motor.setTargetPosition(0);
         }
 
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftMotor.setTargetPosition(0);
+        rightMotor.setTargetPosition(0);
+
+       // intakePos();
     }
 
     public void lowPos() {
@@ -57,9 +65,14 @@ public class Slides extends Mechanism {
         rightMotor.setTargetPosition(LOW_POS);
     }
 
-    public void mediumPos() {
-        leftMotor.setTargetPosition(MEDIUM_POS);
-        rightMotor.setTargetPosition(MEDIUM_POS);
+    public void mediumLowPos() {
+        leftMotor.setTargetPosition(MEDIUM_LOW_POS);
+        rightMotor.setTargetPosition(MEDIUM_LOW_POS);
+    }
+
+    public void mediumHighPos() {
+        leftMotor.setTargetPosition(MEDIUM_HIGH_POS);
+        rightMotor.setTargetPosition(MEDIUM_HIGH_POS);
     }
 
     public void highPos() {
@@ -75,5 +88,21 @@ public class Slides extends Mechanism {
     public void update() {
         leftMotor.update();
         rightMotor.update();
+    }
+
+    @Override
+    public void loop(Gamepad gamepad) {
+        update();
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
+            highPos();
+        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.LOW)) {
+            lowPos();
+        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_LOW)) {
+            mediumLowPos();
+        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_HIGH)) {
+            mediumHighPos();
+        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
+            intakePos();
+        }
     }
 }

@@ -16,6 +16,7 @@ public class Climb extends Mechanism {
     private Servo rightRelease;
 
     public static double RELEASE_POS = 1;
+    public static double CLOSE_POS = 0.5;
 
     public Climb(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -27,6 +28,9 @@ public class Climb extends Mechanism {
         rightRelease = hwMap.get(Servo.class, "climbServoRight");
 
         leftRelease.setDirection(Servo.Direction.REVERSE);
+
+        leftRelease.setPosition(CLOSE_POS);
+        rightRelease.setPosition(CLOSE_POS);
     }
 
     public void release() {
