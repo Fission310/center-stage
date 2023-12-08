@@ -14,7 +14,7 @@ public class Controls {
     public static final Input RESET = Input.LEFT_STICK_BUTTON;
     public static final Input LAUNCH = Input.DPAD_RIGHT;
     public static final Input INTAKE = Input.RIGHT_BUMPER;
-    public static final Input OUTTAKE = Input.NONE;
+    public static final Input OUTTAKE = Input.RIGHT_TRIGGER;
     public static final Input INTAKE_UP = Input.DPAD_UP;
     public static final Input INTAKE_DOWN = Input.DPAD_DOWN;
 }

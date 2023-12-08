@@ -1,0 +1,27 @@
+Control hub:
+Motors:
+0 - leftSlidesMotor
+1 - lowerIntakeMotor
+2 - leftFront
+3 - leftRear
+
+Servos:
+2 - launchServo
+3 - leftLaunchServo
+4 - leftClimbServo
+5 - leftIntakeServo
+
+Expansion hub:
+Motors:
+0 - rightFront
+1 - rightRear
+2 - upperIntakeMotor
+3 - rightSlidesMotor
+
+Servos:
+0 - hopperServo
+1 - leftArmServo
+2 - rightArmServo
+3 - rightIntakeServo
+4 - rightClimbServo
+5 - rightLaunchServo

@@ -20,8 +20,8 @@ public class Slides2 extends Mechanism {
     public static double LOW_POS = 450;
     public static double MEDIUM_LOW_POS = 650;
     public static double MEDIUM_HIGH_POS = 900;
-    public static double HIGH_POS = 1170;
-    public static double COLLECT_POS = -30;
+    public static double HIGH_POS = 1145;
+    public static double COLLECT_POS = -55;
 
     public static double KP = 0.003;
     public static double KI = 0;
@@ -57,7 +57,7 @@ public class Slides2 extends Mechanism {
         motors[0].setDirection(DcMotorEx.Direction.REVERSE);
         motors[1].setDirection(DcMotorEx.Direction.FORWARD);
 
-        setTarget(70);
+        intakePos();
     }
 
 

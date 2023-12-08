@@ -15,7 +15,7 @@ public class Hopper extends Mechanism {
 
     private Servo releaseServo;
 
-    public static double RELEASE_POS = 0.44;
+    public static double RELEASE_POS = 0.462;
     public static double CLOSE_POS = 0.59;
 
     public Hopper(LinearOpMode opMode) {

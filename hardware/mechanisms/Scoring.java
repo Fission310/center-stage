@@ -65,25 +65,25 @@ public class Scoring extends Mechanism {
         slides.update();
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE)) {
-            scoreSequence.run();
+            scoreSequence.trigger();
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
-            retractSequence.run();
+            retractSequence.trigger();
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.LOW)) {
             slides.lowPos();
-            armSequence.run();
+            armSequence.trigger();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_LOW)) {
             slides.mediumLowPos();
-            armSequence.run();
+            armSequence.trigger();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_HIGH)) {
             slides.mediumHighPos();
-            armSequence.run();
+            armSequence.trigger();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
             slides.highPos();
-            armSequence.run();
+            armSequence.trigger();
         }
     }
 }

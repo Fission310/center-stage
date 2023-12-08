@@ -16,8 +16,8 @@ public class Arm extends Mechanism {
     private Servo leftServo;
     private Servo rightServo;
 
-    public static double INTAKE_POS = 0.99;
-    public static double SCORE_POS = 0.7;
+    public static double INTAKE_POS = 0.98;
+    public static double SCORE_POS = 0.71;
 
     public Arm(LinearOpMode opMode) {
         this.opMode = opMode;
