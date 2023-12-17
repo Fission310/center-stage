@@ -19,10 +19,10 @@ public class Launcher extends Mechanism {
     private Servo leftAngleServo;
     private Servo rightAngleServo;
 
-    public static double LAUNCH_POS = 0.9;
-    public static double CLOSE_POS = 0.8;
+    public static double LAUNCH_POS = 0.6;
+    public static double CLOSE_POS = 0.4;
     public static double FLAT_POS = 0;
-    public static double ANGLE_POS = 0.1;
+    public static double ANGLE_POS = 0.17;
 
     public static double ANGLE_DELAY = 1;
 

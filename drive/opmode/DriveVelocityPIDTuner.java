@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.Intake;
 
 import java.util.List;
 
@@ -66,6 +67,8 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        Intake intake = new Intake(this);
+        intake.init(hardwareMap);
         if (!RUN_USING_ENCODER) {
             RobotLog.setGlobalErrorMsg("%s does not need to be run if the built-in motor velocity" +
                     "PID is not in use", getClass().getSimpleName());

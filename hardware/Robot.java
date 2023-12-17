@@ -32,8 +32,6 @@ public class Robot extends Mechanism {
         intake.init(hwMap);
         climb.init(hwMap);
         launcher.init(hwMap);
-
-        new Webcam(opMode).init(hwMap);
     }
 
     @Override

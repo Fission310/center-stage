@@ -13,6 +13,8 @@ import com.stuyfission.fissionlib.util.Mechanism;
 @Config
 public class Drivetrain extends Mechanism {
 
+    public static double TURN_SPEED = 0.9;
+
     private SampleMecanumDrive drivetrain;
 
     public Drivetrain(LinearOpMode opMode) {
@@ -28,7 +30,7 @@ public class Drivetrain extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         drivetrain.setWeightedDrivePower(
-                new Pose2d(-gamepad.left_stick_y, gamepad.left_stick_x, gamepad.right_stick_x));
+                new Pose2d(gamepad.left_stick_y, -gamepad.left_stick_x, gamepad.right_stick_x * TURN_SPEED));
         drivetrain.update();
     }
 }

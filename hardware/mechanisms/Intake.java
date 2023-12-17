@@ -38,7 +38,7 @@ public class Intake extends Mechanism {
 
         leftServo.setDirection(Servo.Direction.REVERSE);
 
-        down();
+//        down();
     }
 
     public void intake() {

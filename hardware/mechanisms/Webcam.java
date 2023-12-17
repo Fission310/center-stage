@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.mechanisms;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -17,22 +18,26 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stuyfission.fissionlib.util.Mechanism;
 
+import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
+
 public class Webcam extends Mechanism {
 
     private Detector detector;
+    private OpenCvCamera camera;
 
-    public static int LOW_H = 23;
-    public static int LOW_S = 30;
-    public static int LOW_V = 50;
+    private Color color;
 
-    public static int HIGH_H = 32;
-    public static int HIGH_S = 255;
-    public static int HIGH_V = 255;
+    public static int LOW_H_R = 160;
+    public static int LOW_H_B = 110;
+
+    public static int HIGH_H_R = 180;
+    public static int HIGH_H_B = 120;
 
     public static int THRESHHOLD = 1;
 
-    public Webcam(LinearOpMode opMode) {
+    public Webcam(LinearOpMode opMode, Color color) {
         this.opMode = opMode;
+        this.color = color;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class Webcam extends Mechanism {
                 hwMap.appContext.getPackageName());
 
         WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
-        OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -55,29 +60,43 @@ public class Webcam extends Mechanism {
             }
         });
 
-        detector = new Detector();
+        detector = new Detector(color);
         camera.setPipeline(detector);
     }
 
     public enum Position {
-        LEFT,
-        RIGHT,
-        CENTER
+        CENTER(0),
+        RIGHT(1),
+        LEFT(2);
+
+        public int index;
+
+        Position(int index) {
+            this.index = index;
+        }
     }
 
     public Position getPosition() {
         return detector.getPosition();
     }
 
+    public void stopStreaming() {
+        camera.stopStreaming();
+    }
+
     private static class Detector extends OpenCvPipeline {
 
-        private Position pos;
+        private Color color;
+
+        private Position pos = Position.CENTER;
 
         private Mat mat = new Mat();
 
-        private static final Scalar COLOR_FOUND = new Scalar(0, 255, 0);
-        private static final Scalar lowHSV = new Scalar(LOW_H, LOW_S, LOW_V);
-        private static final Scalar highHSV = new Scalar(HIGH_H, HIGH_S, HIGH_V);
+        private FtcDashboard dashboard = FtcDashboard.getInstance();
+        private Telemetry telemetry = dashboard.getTelemetry();
+
+        private static Scalar lowHSV;
+        private static Scalar highHSV;
 
         private static final int SCREEN_WIDTH = 1280;
         private static final int SCREEN_HEIGHT = 720;
@@ -94,42 +113,66 @@ public class Webcam extends Mechanism {
                 new Point(SCREEN_WIDTH / 3.0 * 2, 0),
                 new Point(SCREEN_WIDTH, SCREEN_HEIGHT));
 
-        @Override
-        public Mat processFrame(Mat input) {
-            Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
+        private static double leftPercent;
+        private static double centerPercent;
+        private static double rightPercent;
 
-            Core.inRange(mat, lowHSV, highHSV, mat);
-
-            Mat left = mat.submat(LEFT_ROI);
-            Mat middle = mat.submat(CENTER_ROI);
-            Mat right = mat.submat(RIGHT_ROI);
-
-            double leftValue = Core.sumElems(left).val[0] / LEFT_ROI.area() / 255;
-            double middleValue = Core.sumElems(middle).val[0] / CENTER_ROI.area() / 255;
-            double rightValue = Core.sumElems(right).val[0] / RIGHT_ROI.area() / 255;
-
-            left.release();
-            middle.release();
-            right.release();
-
-            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
-            if (leftValue > THRESHHOLD) {
-                pos = Position.LEFT;
-                Imgproc.rectangle(mat, LEFT_ROI, COLOR_FOUND);
-            } else if (rightValue > THRESHHOLD) {
-                pos = Position.RIGHT;
-                Imgproc.rectangle(mat, RIGHT_ROI, COLOR_FOUND);
-            } else if (middleValue > THRESHHOLD) {
-                pos = Position.CENTER;
-                Imgproc.rectangle(mat, CENTER_ROI, COLOR_FOUND);
-            }
-
-            return mat;
+        public Detector(Color color) {
+            this.color = color;
         }
 
         public Position getPosition() {
             return pos;
         }
-    }
 
+        @Override
+        public Mat processFrame(Mat input) {
+            Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
+
+            switch (color) {
+                case RED:
+                    lowHSV = new Scalar(LOW_H_R, 50, 50);
+                    highHSV = new Scalar(HIGH_H_R, 255, 255);
+                    break;
+                case BLUE:
+                    lowHSV = new Scalar(LOW_H_B, 50, 50);
+                    highHSV = new Scalar(HIGH_H_B, 255, 255);
+                    break;
+            }
+
+            Core.inRange(mat, lowHSV, highHSV, mat);
+
+            // submats for the boxes, these are the regions that'll detect the color
+            Mat leftBox = mat.submat(LEFT_ROI);
+            Mat centerBox = mat.submat(CENTER_ROI);
+            Mat rightBox = mat.submat(RIGHT_ROI);
+
+            // how much in each region is white aka the color we filtered through the mask
+            leftPercent = Core.sumElems(leftBox).val[0] / LEFT_ROI.area() / 255;
+            centerPercent = Core.sumElems(centerBox).val[0] / CENTER_ROI.area() / 255;
+            rightPercent = Core.sumElems(rightBox).val[0] / RIGHT_ROI.area() / 255;
+
+            telemetry.addData("LEFT", leftPercent);
+            telemetry.addData("CENTER", centerPercent);
+            telemetry.addData("RIGHT", rightPercent);
+            telemetry.update();
+
+            if (leftPercent > centerPercent && leftPercent > rightPercent) {
+                Imgproc.rectangle(mat, LEFT_ROI, new Scalar(60, 255, 255), 10);
+                pos = Position.LEFT;
+            } else if (centerPercent > leftPercent && centerPercent > rightPercent) {
+                Imgproc.rectangle(mat, CENTER_ROI, new Scalar(60, 255, 255), 10);
+                pos = Position.CENTER;
+            } else if (rightPercent > leftPercent && rightPercent > centerPercent) {
+                Imgproc.rectangle(mat, RIGHT_ROI, new Scalar(60, 255, 255), 10);
+                pos = Position.RIGHT;
+            }
+
+            leftBox.release();
+            centerBox.release();
+            rightBox.release();
+
+            return mat;
+        }
+    }
 }
