@@ -56,17 +56,17 @@ public class AutoConstants {
     // Spike Mark
     public static double BD_SPIKE_CENTER_HEADING = DOWN;
     public static double BD_SPIKE_CENTER_X = TILE_LENGTH / 2.0;
-    public static double BD_SPIKE_CENTER_Y = WALL_POS - TILE_LENGTH + BOT_LENGTH / 2.0;
+    public static double BD_SPIKE_CENTER_Y = WALL_POS - 2.0 * TILE_LENGTH + BOT_LENGTH / 2.0;
     public static Vector2d BD_SPIKE_VECTOR = new Vector2d(BD_SPIKE_CENTER_X, BD_SPIKE_CENTER_Y);
 
     public static double BD_SPIKE_RIGHT_HEADING = LEFT;
     public static double BD_SPIKE_RIGHT_X = BOT_LENGTH / 2.0;
-    public static double BD_SPIKE_RIGHT_Y = WALL_POS - 3.0 * TILE_LENGTH / 4.0;
+    public static double BD_SPIKE_RIGHT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0;
     public static Vector2d BD_SPIKE_RIGHT_VECTOR = new Vector2d(BD_SPIKE_RIGHT_X, BD_SPIKE_RIGHT_Y);
 
     public static double BD_SPIKE_LEFT_HEADING = DOWN;
     public static double BD_SPIKE_LEFT_X = TILE_LENGTH;
-    public static double BD_SPIKE_LEFT_Y = WALL_POS - 3.0 * TILE_LENGTH / 4.0 + BOT_LENGTH / 2.0;
+    public static double BD_SPIKE_LEFT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0 + BOT_LENGTH / 2.0;
     public static Vector2d BD_SPIKE_LEFT_VECTOR = new Vector2d(BD_SPIKE_LEFT_X, BD_SPIKE_LEFT_Y);
 
     public static double[] BD_SPIKE_HEADINGS = {BD_SPIKE_CENTER_HEADING, BD_SPIKE_RIGHT_HEADING, BD_SPIKE_LEFT_HEADING};

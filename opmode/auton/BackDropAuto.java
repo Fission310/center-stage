@@ -80,7 +80,7 @@ public class BackDropAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        reflect = color == Color.RED ? true : false;
+        reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
         hopper = new Hopper(this);
@@ -98,10 +98,10 @@ public class BackDropAuto extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.setPoseEstimate(AutoConstants.BD_START_POSE);
+        drive.setPoseEstimate(reflectX(AutoConstants.BD_START_POSE));
 
         spikeMarkTraj = drive
-                .trajectorySequenceBuilder(AutoConstants.BD_START_POSE)
+                .trajectorySequenceBuilder(reflectX(AutoConstants.BD_START_POSE))
                 .splineTo(reflectX(AutoConstants.BD_SPIKE_VECTORS[pos.index]),
                         reflectX(AutoConstants.BD_SPIKE_HEADINGS[pos.index]))
                 .build();
@@ -125,6 +125,13 @@ public class BackDropAuto extends LinearOpMode {
             slides.update();
             commandMachine.run(drive.isBusy());
         }
+    }
+
+    public Pose2d reflectX(Pose2d pose) {
+        if (reflect) {
+            return new Pose2d(pose.getX(), pose.getY() * -1, pose.getHeading() * -1);
+        }
+        return pose;
     }
 
     public Vector2d reflectX(Vector2d vector) {
