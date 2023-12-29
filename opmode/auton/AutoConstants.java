@@ -46,6 +46,11 @@ public class AutoConstants {
     public static Vector2d[] TAG_VECTORS = {TAG_CENTER_VECTOR, TAG_RIGHT_VECTOR, TAG_LEFT_VECTOR};
     /** ======= END TAG POSITIONS ======= **/
 
+    // Park Position
+    public static double PARK_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
+    public static double PARK_Y = WALL_POS - BOT_LENGTH;
+    public static Vector2d PARK_VECTOR = new Vector2d(PARK_X, PARK_Y);
+
     /** ======= CONSTANTS FOR BACK DROP ======= **/
     // Start Pose
     public static double BD_START_HEADING = DOWN;
@@ -71,11 +76,50 @@ public class AutoConstants {
 
     public static double[] BD_SPIKE_HEADINGS = {BD_SPIKE_CENTER_HEADING, BD_SPIKE_RIGHT_HEADING, BD_SPIKE_LEFT_HEADING};
     public static Vector2d[] BD_SPIKE_VECTORS = {BD_SPIKE_VECTOR, BD_SPIKE_RIGHT_VECTOR, BD_SPIKE_LEFT_VECTOR};
+    /** ======= END CONSTANTS FOR BACK DROP ======= **/
 
-    // Park Position
-    public static double BD_PARK_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
-    public static double BD_PARK_Y = WALL_POS - BOT_LENGTH;
-    public static Vector2d BD_PARK_VECTOR = new Vector2d(BD_PARK_X, BD_PARK_Y);
+    /** ======= CONSTANTS FOR FRONT ======= **/
+    // Start Pose
+    public static double FR_START_HEADING = DOWN;
+    public static double FR_START_X = -3.0 * TILE_LENGTH / 2.0;
+    public static double FR_START_Y = WALL_POS - BOT_LENGTH / 2.0;
+    public static Pose2d FR_START_POSE = new Pose2d(FR_START_X, FR_START_Y, FR_START_HEADING);
 
+    // Spike Mark
+    public static double FR_SPIKE_CENTER_HEADING = DOWN;
+    public static double FR_SPIKE_CENTER_X = -3.0 * TILE_LENGTH / 2.0;
+    public static double FR_SPIKE_CENTER_Y = WALL_POS - 2.0 * TILE_LENGTH + BOT_LENGTH / 2.0;
+    public static Vector2d FR_SPIKE_VECTOR = new Vector2d(FR_SPIKE_CENTER_X, FR_SPIKE_CENTER_Y);
+
+    public static double FR_SPIKE_RIGHT_HEADING = DOWN;
+    public static double FR_SPIKE_RIGHT_X = -2.0 * TILE_LENGTH;
+    public static double FR_SPIKE_RIGHT_Y = WALL_POS - 2.0 * TILE_LENGTH + BOT_LENGTH / 2.0;
+    public static Vector2d FR_SPIKE_RIGHT_VECTOR = new Vector2d(FR_SPIKE_RIGHT_X, FR_SPIKE_RIGHT_Y);
+
+    public static double FR_SPIKE_LEFT_HEADING = Math.toRadians(-45);
+    public static double FR_SPIKE_LEFT_X = -TILE_LENGTH - BOT_LENGTH / 2.0;
+    public static double FR_SPIKE_LEFT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0 + BOT_LENGTH / 2.0;
+    public static Vector2d FR_SPIKE_LEFT_VECTOR = new Vector2d(FR_SPIKE_LEFT_X, FR_SPIKE_LEFT_Y);
+
+    public static double[] FR_SPIKE_HEADINGS = {FR_SPIKE_CENTER_HEADING, FR_SPIKE_RIGHT_HEADING, FR_SPIKE_LEFT_HEADING};
+    public static Vector2d[] FR_SPIKE_VECTORS = {FR_SPIKE_VECTOR, FR_SPIKE_RIGHT_VECTOR, FR_SPIKE_LEFT_VECTOR};
+
+    // Back Position
+    public static double FR_BACK_HEADING = Math.toRadians(45);
+    public static double FR_BACK_X = -3.0 * TILE_LENGTH / 2.0;
+    public static double FR_BACK_Y = WALL_POS - TILE_LENGTH;
+    public static Vector2d FR_BACK_VECTOR = new Vector2d(FR_BACK_X, FR_BACK_Y);
+
+    // Stack Position
+    public static double FR_STACK_HEADING = LEFT;
+    public static double FR_STACK_X = -WALL_POS + BOT_LENGTH / 2.0;
+    public static double FR_STACK_Y = WALL_POS - 3.0 * TILE_LENGTH / 2.0;
+    public static Vector2d FR_STACK_VECTOR = new Vector2d(FR_STACK_X, FR_STACK_Y);
+
+    // Truss Position
+    public static double FR_TRUSS_HEADING = RIGHT;
+    public static double FR_TRUSS_X = -WALL_POS + 5.0 * TILE_LENGTH / 2.0;
+    public static double FR_TRUSS_Y = WALL_POS - TILE_LENGTH / 2.0;
+    public static Vector2d FR_TRUSS_VECTOR = new Vector2d(FR_TRUSS_X, FR_TRUSS_Y);
     /** ======= END CONSTANTS FOR BACK DROP ======= **/
 }

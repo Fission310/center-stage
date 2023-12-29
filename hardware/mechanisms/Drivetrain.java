@@ -24,13 +24,13 @@ public class Drivetrain extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         drivetrain = new SampleMecanumDrive(hwMap);
-        drivetrain.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
     public void loop(Gamepad gamepad) {
         drivetrain.setWeightedDrivePower(
-                new Pose2d(gamepad.left_stick_y, -gamepad.left_stick_x, gamepad.right_stick_x * TURN_SPEED));
+                new Pose2d(-gamepad.left_stick_y, -gamepad.left_stick_x, -gamepad.right_stick_x * TURN_SPEED));
         drivetrain.update();
     }
 }
