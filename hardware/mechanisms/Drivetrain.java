@@ -30,7 +30,7 @@ public class Drivetrain extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         drivetrain.setWeightedDrivePower(
-                new Pose2d(-gamepad.left_stick_y, -gamepad.left_stick_x, -gamepad.right_stick_x * TURN_SPEED));
+                new Pose2d(Math.pow(-gamepad.left_stick_y, 3), Math.pow(-gamepad.left_stick_x, 3), Math.pow(-gamepad.right_stick_x * TURN_SPEED, 3)));
         drivetrain.update();
     }
 }

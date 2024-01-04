@@ -14,12 +14,14 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stuyfission.fissionlib.util.Mechanism;
 
 import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
 
+@Config
 public class Webcam extends Mechanism {
 
     private Detector detector;
@@ -27,13 +29,11 @@ public class Webcam extends Mechanism {
 
     private Color color;
 
-    public static int LOW_H_R = 160;
-    public static int LOW_H_B = 110;
+    public static int LOW_H_R = 0;
+    public static int LOW_H_B = 100;
 
-    public static int HIGH_H_R = 180;
+    public static int HIGH_H_R = 10;
     public static int HIGH_H_B = 120;
-
-    public static int THRESHHOLD = 1;
 
     public Webcam(LinearOpMode opMode, Color color) {
         this.opMode = opMode;

@@ -29,13 +29,13 @@ public class BackDropAuto extends LinearOpMode {
     private Slides2 slides;
     private Webcam webcam;
 
-    public static double ARM_DELAY = 0.5;
-    public static double SCORE_DELAY = 0.5;
-    public static double SLIDES_DELAY = 0.5;
+    public static double ARM_DELAY = 1;
+    public static double SCORE_DELAY = 1;
+    public static double SLIDES_DELAY = 1;
 
-    private TrajectorySequence spikeMarkTraj;
-    private TrajectorySequence backDropTraj;
-    private TrajectorySequence parkTraj;
+    private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] backDropTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
     private Command releaseCommand = () -> hopper.release();
     private Command slidesCommand = () -> slides.mediumLowPos();
@@ -47,9 +47,9 @@ public class BackDropAuto extends LinearOpMode {
         hopper.close();
     };
 
-    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj);
-    private Command backDropCommand = () -> drive.followTrajectorySequenceAsync(backDropTraj);
-    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj);
+    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[pos.index]);
+    private Command backDropCommand = () -> drive.followTrajectorySequenceAsync(backDropTraj[pos.index]);
+    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[pos.index]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
             .addCommand(spikeMarkCommand)
@@ -57,10 +57,10 @@ public class BackDropAuto extends LinearOpMode {
     private CommandSequence scoreSequence = new CommandSequence()
             .addCommand(backDropCommand)
             // .addWaitCommand(10)
-            .addCommand(slidesCommand)
-            .addWaitCommand(ARM_DELAY)
-            .addCommand(armCommand)
             .addWaitCommand(SLIDES_DELAY)
+            .addCommand(slidesCommand)
+            .addCommand(armCommand)
+            .addWaitCommand(ARM_DELAY)
             .addCommand(releaseCommand)
             .addWaitCommand(SCORE_DELAY)
             .addCommand(retractCommand)
@@ -72,6 +72,7 @@ public class BackDropAuto extends LinearOpMode {
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(scoreSequence)
+            .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
 
@@ -93,35 +94,37 @@ public class BackDropAuto extends LinearOpMode {
         slides.init(hardwareMap);
         webcam.init(hardwareMap);
 
-        while (opModeIsActive() && isStopRequested()) {
+        for (int i = 0; i < 3; i++) {
+            drive.setPoseEstimate(reflectX(AutoConstants.BD_START_POSE));
+
+            spikeMarkTraj[i] = drive
+                    .trajectorySequenceBuilder(reflectX(AutoConstants.BD_START_POSE))
+                    .splineTo(reflectX(AutoConstants.BD_SPIKE_VECTORS[i]),
+                            reflectX(AutoConstants.BD_SPIKE_HEADINGS[i]))
+                    .build();
+            backDropTraj[i] = drive
+                    .trajectorySequenceBuilder(spikeMarkTraj[i].end())
+                    .setReversed(true)
+                    .splineTo(reflectX(AutoConstants.TAG_VECTORS[i]),
+                            reflectX(AutoConstants.TAG_HEADINGS[i]))
+                    .build();
+            parkTraj[i] = drive
+                    .trajectorySequenceBuilder(backDropTraj[i].end())
+                    .strafeTo(reflectX(AutoConstants.PARK_VECTOR))
+                    .build();
+        }
+
+        while (!isStopRequested()) {
             pos = webcam.getPosition();
             telemetry.addData("Position: ", pos);
             telemetry.update();
         }
 
-        drive.setPoseEstimate(reflectX(AutoConstants.BD_START_POSE));
-
-        spikeMarkTraj = drive
-                .trajectorySequenceBuilder(reflectX(AutoConstants.BD_START_POSE))
-                .splineTo(reflectX(AutoConstants.BD_SPIKE_VECTORS[pos.index]),
-                        reflectX(AutoConstants.BD_SPIKE_HEADINGS[pos.index]))
-                .build();
-        backDropTraj = drive
-                .trajectorySequenceBuilder(spikeMarkTraj.end())
-                .setReversed(true)
-                .splineTo(reflectX(AutoConstants.TAG_VECTORS[pos.index]),
-                        reflectX(AutoConstants.TAG_HEADINGS[pos.index]))
-                .build();
-        parkTraj = drive
-                .trajectorySequenceBuilder(backDropTraj.end())
-                .strafeTo(reflectX(AutoConstants.PARK_VECTOR))
-                .build();
-
         waitForStart();
 
         webcam.stopStreaming();
 
-        while (opModeIsActive() && !isStopRequested()) {
+        while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();
             slides.update();
             commandMachine.run(drive.isBusy());
