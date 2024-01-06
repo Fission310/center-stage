@@ -113,8 +113,8 @@ public class BackDropAuto extends LinearOpMode {
                     .strafeTo(reflectX(AutoConstants.PARK_VECTOR))
                     .build();
         }
-
-        while (!isStopRequested()) {
+        
+        while (opModeInInit()) {
             pos = webcam.getPosition();
             telemetry.addData("Position: ", pos);
             telemetry.update();

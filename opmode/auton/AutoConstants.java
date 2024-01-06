@@ -119,7 +119,7 @@ public class AutoConstants {
     // Truss Position
     public static double FR_TRUSS_HEADING = RIGHT;
     public static double FR_TRUSS_X = -WALL_POS + 5.0 * TILE_LENGTH / 2.0;
-    public static double FR_TRUSS_Y = WALL_POS - TILE_LENGTH / 2.0;
+    public static double FR_TRUSS_Y = WALL_POS - BOT_LENGTH / 2.0;
     public static Vector2d FR_TRUSS_VECTOR = new Vector2d(FR_TRUSS_X, FR_TRUSS_Y);
     /** ======= END CONSTANTS FOR BACK DROP ======= **/
 }
