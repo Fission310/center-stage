@@ -19,4 +19,6 @@ public class Controls {
     public static final Input OUTTAKE = Input.RIGHT_TRIGGER;
     public static final Input INTAKE_UP = Input.DPAD_UP;
     public static final Input INTAKE_DOWN = Input.DPAD_DOWN;
+    public static final Input WRIST_UP = Input.DPAD_UP;
+    public static final Input WRIST_DOWN = Input.DPAD_DOWN;
 }

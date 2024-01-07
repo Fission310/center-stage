@@ -13,8 +13,7 @@ import org.firstinspires.ftc.teamcode.opmode.teleop.Controls;
 @Config
 public class Intake extends Mechanism {
 
-    private DcMotorSimple lowerMotor;
-    private DcMotorSimple upperMotor;
+    private DcMotorSimple intakeMotor;
 
     private Servo leftServo;
     private Servo rightServo;
@@ -30,8 +29,7 @@ public class Intake extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        lowerMotor = hwMap.get(DcMotorSimple.class, "lowerIntakeMotor");
-        upperMotor = hwMap.get(DcMotorSimple.class, "upperIntakeMotor");
+        intakeMotor = hwMap.get(DcMotorSimple.class, "intakeMotor");
 
         leftServo = hwMap.get(Servo.class, "leftIntakeServo");
         rightServo = hwMap.get(Servo.class, "rightIntakeServo");
@@ -42,18 +40,15 @@ public class Intake extends Mechanism {
     }
 
     public void intake() {
-        lowerMotor.setPower(-SPEED);
-        upperMotor.setPower(SPEED);
+        intakeMotor.setPower(SPEED);
     }
 
     public void outtake() {
-        lowerMotor.setPower(SPEED);
-        upperMotor.setPower(-SPEED);
+        intakeMotor.setPower(-SPEED);
     }
 
     public void stop() {
-        lowerMotor.setPower(0);
-        upperMotor.setPower(0);
+        intakeMotor.setPower(0);
     }
 
     public void up() {
