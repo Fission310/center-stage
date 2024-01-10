@@ -42,8 +42,8 @@ public class Slides2 extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        motors[0] = hwMap.get(DcMotorEx.class, "leftSlidesMotor");
-        motors[1] = hwMap.get(DcMotorEx.class, "rightSlidesMotor");
+        motors[0] = hwMap.get(DcMotorEx.class, "slidesLeftMotor");
+        motors[1] = hwMap.get(DcMotorEx.class, "slidesRightMotor");
 
         motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

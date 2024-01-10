@@ -25,8 +25,8 @@ public class Arm extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        leftServo = hwMap.get(Servo.class, "leftArmServo");
-        rightServo = hwMap.get(Servo.class, "rightArmServo");
+        leftServo = hwMap.get(Servo.class, "armLeftServo");
+        rightServo = hwMap.get(Servo.class, "armRightServo");
 
         leftServo.setDirection(Servo.Direction.REVERSE);
 

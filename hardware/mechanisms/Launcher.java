@@ -32,9 +32,9 @@ public class Launcher extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        launchServo = hwMap.get(Servo.class, "launchServo");
-        leftAngleServo = hwMap.get(Servo.class, "leftLaunchServo");
-        rightAngleServo = hwMap.get(Servo.class, "rightLaunchServo");
+        launchServo = hwMap.get(Servo.class, "launcherServo");
+        leftAngleServo = hwMap.get(Servo.class, "launcherLeftServo");
+        rightAngleServo = hwMap.get(Servo.class, "launcherRightServo");
 
         rightAngleServo.setDirection(Servo.Direction.REVERSE);
 

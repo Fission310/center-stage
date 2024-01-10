@@ -25,8 +25,8 @@ public class Claw extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        leftServo = hwMap.get(Servo.class, "leftClaw");
-        rightServo = hwMap.get(Servo.class, "rightClaw");
+        leftServo = hwMap.get(Servo.class, "clawLeftServo");
+        rightServo = hwMap.get(Servo.class, "clawRightServo");
 
         leftServo.setDirection(Servo.Direction.REVERSE);
 
@@ -55,7 +55,7 @@ public class Claw extends Mechanism {
         if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_RIGHT)) {
             rightOpen();
         }
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
             close();
         }
     }

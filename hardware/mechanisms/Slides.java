@@ -42,8 +42,8 @@ public class Slides extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        leftMotor = new MotionProfiledDcMotor(hwMap, "leftSlidesMotor");
-        rightMotor = new MotionProfiledDcMotor(hwMap, "rightSlidesMotor");
+        leftMotor = new MotionProfiledDcMotor(hwMap, "slidesLeftMotor");
+        rightMotor = new MotionProfiledDcMotor(hwMap, "slidesRightMotor");
 
         for (MotionProfiledDcMotor motor : new MotionProfiledDcMotor[] { leftMotor, rightMotor }) {
             motor.setWheelConstants(WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_REV);

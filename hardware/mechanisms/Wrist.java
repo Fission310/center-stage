@@ -15,8 +15,13 @@ public class Wrist extends Mechanism {
 
     private Servo wristServo;
 
-    public static double SCORE_POS = 0.0;
-    public static double INTAKE_POS = 0.0;
+    public static double VERTICAL_UP_POS = 0.0;
+    public static double HORIZONTAL_LEFT_POS = (VERTICAL_UP_POS + 0.25) % 1.0;
+    public static double VERTICAL_DOWN_POS = (VERTICAL_UP_POS + 0.5) % 1.0;
+    public static double HORIZONTAL_RIGHT_POS = (VERTICAL_UP_POS + 0.75) % 1.0;
+    public static double[] POSITIONS = {VERTICAL_UP_POS, HORIZONTAL_LEFT_POS, VERTICAL_DOWN_POS, HORIZONTAL_RIGHT_POS};
+
+    private int pos = 0;
 
     public Wrist(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -25,25 +30,33 @@ public class Wrist extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         wristServo = hwMap.get(Servo.class, "wristServo");
-
-        down();
     }
 
-    public void up() {
-        wristServo.setPosition(SCORE_POS);
+    public void left() {
+        if (pos == 3) {
+            pos = 0; 
+        } else {
+            pos++;
+        }
+        wristServo.setPosition(POSITIONS[pos]);
     }
 
-    public void down() {
-        wristServo.setPosition(INTAKE_POS);
+    public void right() {
+        if (pos == 0) {
+            pos = 3; 
+        } else {
+            pos--;
+        }
+        wristServo.setPosition(POSITIONS[pos]);
     }
 
     @Override
     public void loop(Gamepad gamepad) {
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_UP)) {
-            up();
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_LEFT)) {
+            left();
         }
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_DOWN)) {
-            down();
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_RIGHT)) {
+            right();
         }
     }
 }

@@ -24,8 +24,8 @@ public class Climb extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        leftRelease = hwMap.get(Servo.class, "leftClimbServo");
-        rightRelease = hwMap.get(Servo.class, "rightClimbServo");
+        leftRelease = hwMap.get(Servo.class, "climbLeftServo");
+        rightRelease = hwMap.get(Servo.class, "climbRightServo");
 
         leftRelease.setDirection(Servo.Direction.REVERSE);
 

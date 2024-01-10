@@ -17,11 +17,15 @@ public class Intake extends Mechanism {
 
     private Servo leftServo;
     private Servo rightServo;
+    private Servo pixelServo;
 
     public static double SPEED = 1;
     
     public static double UP_POS = 0;
     public static double DOWN_POS = 0.67;
+
+    public static double PIXEL_UP_POS = 0;
+    public static double PIXEL_DOWN_POS = 0.67;
 
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -31,8 +35,9 @@ public class Intake extends Mechanism {
     public void init(HardwareMap hwMap) {
         intakeMotor = hwMap.get(DcMotorSimple.class, "intakeMotor");
 
-        leftServo = hwMap.get(Servo.class, "leftIntakeServo");
-        rightServo = hwMap.get(Servo.class, "rightIntakeServo");
+        leftServo = hwMap.get(Servo.class, "intakeLeftServo");
+        rightServo = hwMap.get(Servo.class, "intakeRightServo");
+        rightServo = hwMap.get(Servo.class, "intakePixelServo");
 
         leftServo.setDirection(Servo.Direction.REVERSE);
 
@@ -59,6 +64,14 @@ public class Intake extends Mechanism {
     public void down() {
         leftServo.setPosition(DOWN_POS);
         rightServo.setPosition(DOWN_POS);
+    }
+
+    public void pixelUp() {
+        pixelServo.setPosition(PIXEL_UP_POS);
+    }
+
+    public void pixelDown() {
+        pixelServo.setPosition(PIXEL_DOWN_POS);
     }
 
     @Override
