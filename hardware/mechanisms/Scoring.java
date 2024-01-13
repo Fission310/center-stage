@@ -16,43 +16,74 @@ import com.stuyfission.fissionlib.util.Mechanism;
 public class Scoring extends Mechanism {
 
     private Arm arm = new Arm(opMode);
-    private Hopper hopper = new Hopper(opMode);
+    private Claw claw = new Claw(opMode);
+    private Intake intake = new Intake(opMode);
     private Slides2 slides = new Slides2(opMode);
+    private Wrist wrist = new Wrist(opMode);
 
     public static double SCORE_DELAY = 1;
+    public static double SLIDES_DELAY = 0.5;
     public static double ARM_DELAY = 0.5;
+    public static double PLATFORM_DELAY = 0.5;
+    public static double GRAB_DELAY = 0.5;
 
     public Scoring(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
-    private Command releaseCommand = () -> hopper.release();
+    private Command pixelPlatformUp = () -> intake.pixelUp();
+    private Command pixelPlatformDown = () -> {
+        claw.close();
+        intake.pixelDown();
+    };
+    private Command grabCommand = () -> intake.pixelUp();
+    private Command releaseLeftCommand = () -> claw.leftOpen();
+    private Command releaseRightCommand = () -> claw.rightOpen();
     private Command armCommand = () -> arm.scorePos();
+    private Command wristCommand = () -> wrist.left();
     private Command retractCommand = () -> {
-        hopper.release();
+        claw.leftOpen();
+        claw.rightOpen();
+
+        while (wrist.getPos() != 0) {
+            wrist.left();
+        }
+
         arm.intakePos();
         slides.intakePos();
-        hopper.close();
     };
 
-    private CommandSequence armSequence = new CommandSequence()
-            .addWaitCommand(ARM_DELAY)
-            .addCommand(armCommand)
+    private CommandSequence pixelSequence = new CommandSequence()
+            .addCommand(pixelPlatformUp)
+            .addWaitCommand(PLATFORM_DELAY)
+            .addCommand(grabCommand)
+            .addWaitCommand(GRAB_DELAY)
+            .addCommand(pixelPlatformDown)
             .build();
-    private CommandSequence scoreSequence = new CommandSequence()
-            .addCommand(releaseCommand)
-            .addWaitCommand(SCORE_DELAY)
-            .addCommand(retractCommand)
+    private CommandSequence armSequence = new CommandSequence()
+            .addWaitCommand(SLIDES_DELAY)
+            .addCommand(armCommand)
+            .addWaitCommand(ARM_DELAY)
+            .addCommand(wristCommand)
+            .build();
+    private CommandSequence scoreLeft = new CommandSequence()
+            .addCommand(releaseLeftCommand)
+            .build();
+    private CommandSequence scoreRight = new CommandSequence()
+            .addCommand(releaseRightCommand)
             .build();
     private CommandSequence retractSequence = new CommandSequence()
+            .addWaitCommand(SCORE_DELAY)
             .addCommand(retractCommand)
             .build();
 
     @Override
     public void init(HardwareMap hwMap) {
         arm.init(hwMap);
-        hopper.init(hwMap);
+        claw.init(hwMap);
+        intake.init(hwMap);
         slides.init(hwMap);
+        wrist.init(hwMap);
     }
 
     @Override
@@ -63,27 +94,38 @@ public class Scoring extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         slides.update();
+        intake.loop(gamepad);
 
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE)) {
-            scoreSequence.trigger();
+        if (intake.numPixels() > 1) {
+            pixelSequence.trigger();
+        }
+
+        if (claw.numPixels() == 0) {
+            retractSequence.trigger();
+        }
+
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_LEFT)) {
+            scoreLeft.trigger();
+        }
+
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_RIGHT)) {
+            scoreRight.trigger();
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
             retractSequence.trigger();
         }
 
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.LOW)) {
-            slides.lowPos();
-            armSequence.trigger();
-        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_LOW)) {
-            slides.mediumLowPos();
-            armSequence.trigger();
-        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_HIGH)) {
-            slides.mediumHighPos();
-            armSequence.trigger();
-        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
-            slides.highPos();
-            armSequence.trigger();
+        for (int i = 0; i < 4; i++) {
+            if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
+                if (intake.numPixels() < 2) {
+                    pixelSequence.trigger();
+                }
+
+                slides.goToPos(i);
+                armSequence.trigger();
+                break;
+            }
         }
     }
 }

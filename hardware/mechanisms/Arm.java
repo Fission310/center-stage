@@ -45,7 +45,7 @@ public class Arm extends Mechanism {
 
     @Override
     public void loop(Gamepad gamepad) {
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE)) {
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
             scorePos();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
             intakePos();

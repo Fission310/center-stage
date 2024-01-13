@@ -1,23 +1,23 @@
 package org.firstinspires.ftc.teamcode.opmode.dev;
 
-import org.firstinspires.ftc.teamcode.hardware.mechanisms.Hopper;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Hopper test", group = "dev")
-public class HopperDev extends LinearOpMode {
+@TeleOp(name = "Wrist test", group = "dev")
+public class WristDev extends LinearOpMode {
 
-    private Hopper hopper = new Hopper(this);
+    private Wrist wrist = new Wrist(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hopper.init(hardwareMap);
+        wrist.init(hardwareMap);
 
         waitForStart();
-
+        
         while (opModeIsActive() && !isStopRequested()) {
-            hopper.loop(gamepad1);
+            wrist.loop(gamepad1);
         }
     }
 }

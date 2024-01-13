@@ -23,6 +23,8 @@ public class Slides2 extends Mechanism {
     public static double HIGH_POS = 1145;
     public static double COLLECT_POS = -55;
 
+    private static double[] POSITIONS = {LOW_POS, MEDIUM_LOW_POS, MEDIUM_HIGH_POS, HIGH_POS};
+
     public static double KP = 0.003;
     public static double KI = 0;
     public static double KD = 0;
@@ -60,7 +62,6 @@ public class Slides2 extends Mechanism {
         intakePos();
     }
 
-
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("Current Position", getPosition());
         telemetry.addData("Target", target);
@@ -72,20 +73,8 @@ public class Slides2 extends Mechanism {
         setTarget(COLLECT_POS);
     }
 
-    public void lowPos() {
-        setTarget(LOW_POS);
-    }
-
-    public void mediumLowPos() {
-        setTarget(MEDIUM_LOW_POS);
-    }
-
-    public void mediumHighPos() {
-        setTarget(MEDIUM_HIGH_POS);
-    }
-
-    public void highPos() {
-        setTarget(HIGH_POS);
+    public void goToPos(int pos) {
+        setTarget(POSITIONS[pos]);
     }
 
     public void setTarget(double target) {
@@ -104,19 +93,19 @@ public class Slides2 extends Mechanism {
         }
         motors[0].setPower(power);
         motors[1].setPower(power);
-    }
-
+    }       
+    
     @Override
     public void loop(Gamepad gamepad) {
         update();
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
-            highPos();
-        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.LOW)) {
-            lowPos();
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.LOW)) {
+            goToPos(0);
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_LOW)) {
-            mediumLowPos();
+            goToPos(1);
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_HIGH)) {
-            mediumHighPos();
+            goToPos(2);
+        } else if(GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
+            goToPos(3);
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
             intakePos();
         }

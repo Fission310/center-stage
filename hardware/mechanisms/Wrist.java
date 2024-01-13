@@ -50,12 +50,16 @@ public class Wrist extends Mechanism {
         wristServo.setPosition(POSITIONS[pos]);
     }
 
+    public int getPos() {
+        return pos;
+    }
+
     @Override
     public void loop(Gamepad gamepad) {
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_LEFT)) {
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.WRIST_LEFT)) {
             left();
         }
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_RIGHT)) {
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.WRIST_RIGHT)) {
             right();
         }
     }

@@ -10,7 +10,7 @@ import com.stuyfission.fissionlib.command.AutoCommandMachine;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Arm;
-import org.firstinspires.ftc.teamcode.hardware.mechanisms.Hopper;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.Claw;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
@@ -24,8 +24,8 @@ public class BackDropAuto extends LinearOpMode {
     private Position pos = Position.CENTER;
 
     private Arm arm;
+    private Claw claw;
     private SampleMecanumDrive drive;
-    private Hopper hopper;
     private Slides2 slides;
     private Webcam webcam;
 
@@ -37,14 +37,14 @@ public class BackDropAuto extends LinearOpMode {
     private TrajectorySequence[] backDropTraj = new TrajectorySequence[3];
     private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
-    private Command releaseCommand = () -> hopper.release();
-    private Command slidesCommand = () -> slides.mediumLowPos();
+    private Command releaseCommand = () -> claw.rightOpen();
+    private Command slidesCommand = () -> slides.goToPos(1);
     private Command armCommand = () -> arm.scorePos();
     private Command retractCommand = () -> {
-        hopper.release();
+        claw.leftOpen();
         arm.intakePos();
         slides.intakePos();
-        hopper.close();
+        claw.close();
     };
 
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[pos.index]);
@@ -85,12 +85,12 @@ public class BackDropAuto extends LinearOpMode {
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
-        hopper = new Hopper(this);
+        claw = new Claw(this);
         slides = new Slides2(this);
         webcam = new Webcam(this, color);
 
         arm.init(hardwareMap);
-        hopper.init(hardwareMap);
+        claw.init(hardwareMap);
         slides.init(hardwareMap);
         webcam.init(hardwareMap);
 

@@ -13,6 +13,9 @@ import com.stuyfission.fissionlib.util.Mechanism;
 @Config
 public class Claw extends Mechanism {
 
+    private boolean leftOpen = true;
+    private boolean rightOpen = true;
+
     private Servo leftServo;
     private Servo rightServo;
 
@@ -36,15 +39,23 @@ public class Claw extends Mechanism {
 
     public void leftOpen() {
         leftServo.setPosition(OPEN_POS);
+        leftOpen = true;
     }
 
     public void rightOpen() {
         rightServo.setPosition(OPEN_POS);
+        rightOpen = true;
     }
 
     public void close() {
         leftServo.setPosition(CLOSE_POS);
         rightServo.setPosition(CLOSE_POS);
+        leftOpen = false;
+        rightOpen = false;
+    }
+
+    public int numPixels() {
+        return (leftOpen ? 1 : 0) + (rightOpen ? 1 : 0);
     }
 
     @Override
