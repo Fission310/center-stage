@@ -19,8 +19,10 @@ public class Claw extends Mechanism {
     private Servo leftServo;
     private Servo rightServo;
 
-    public static double OPEN_POS = 0.5;
-    public static double CLOSE_POS = 0.0;
+    public static double OPEN_POS_R = 0.6;
+    public static double OPEN_POS_L = 1;
+    public static double CLOSE_POS_R = 0.4;
+    public static double CLOSE_POS_L = 0.85;
 
     public Claw(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -38,24 +40,24 @@ public class Claw extends Mechanism {
     }
 
     public void leftOpen() {
-        leftServo.setPosition(OPEN_POS);
+        leftServo.setPosition(OPEN_POS_L);
         leftOpen = true;
     }
 
     public void rightOpen() {
-        rightServo.setPosition(OPEN_POS);
+        rightServo.setPosition(OPEN_POS_R);
         rightOpen = true;
     }
 
     public void close() {
-        leftServo.setPosition(CLOSE_POS);
-        rightServo.setPosition(CLOSE_POS);
+        leftServo.setPosition(CLOSE_POS_L);
+        rightServo.setPosition(CLOSE_POS_R);
         leftOpen = false;
         rightOpen = false;
     }
 
     public int numPixels() {
-        return (leftOpen ? 1 : 0) + (rightOpen ? 1 : 0);
+        return (leftOpen ? 0 : 1) + (rightOpen ? 0 : 1);
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware.mechanisms;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.opmode.teleop.Controls;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -21,10 +22,12 @@ public class Scoring extends Mechanism {
     private Slides2 slides = new Slides2(opMode);
     private Wrist wrist = new Wrist(opMode);
 
+    public static double SLIDES_INTAKE = 70;
+
     public static double SCORE_DELAY = 1;
     public static double SLIDES_DELAY = 0.5;
     public static double ARM_DELAY = 0.5;
-    public static double PLATFORM_DELAY = 0.5;
+    public static double PLATFORM_DELAY = 2;
     public static double GRAB_DELAY = 0.5;
 
     public Scoring(LinearOpMode opMode) {
@@ -36,7 +39,8 @@ public class Scoring extends Mechanism {
         claw.close();
         intake.pixelDown();
     };
-    private Command grabCommand = () -> intake.pixelUp();
+    private Command grabCommand = () -> claw.close();
+    private Command slidesUp = () -> slides.setTarget(SLIDES_INTAKE);
     private Command releaseLeftCommand = () -> claw.leftOpen();
     private Command releaseRightCommand = () -> claw.rightOpen();
     private Command armCommand = () -> arm.scorePos();
@@ -54,6 +58,7 @@ public class Scoring extends Mechanism {
     };
 
     private CommandSequence pixelSequence = new CommandSequence()
+            .addCommand(slidesUp)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
@@ -96,12 +101,17 @@ public class Scoring extends Mechanism {
         slides.update();
         intake.loop(gamepad);
 
-        if (intake.numPixels() > 1) {
+        //if (intake.numPixels() > 1) {
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
             pixelSequence.trigger();
         }
 
-        if (claw.numPixels() == 0) {
+        if (claw.numPixels() == 0 && arm.isUp()) {
             retractSequence.trigger();
+        }
+
+        if (arm.isUp()) {
+            wrist.loop(gamepad);
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_LEFT)) {
@@ -118,9 +128,9 @@ public class Scoring extends Mechanism {
 
         for (int i = 0; i < 4; i++) {
             if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                if (intake.numPixels() < 2) {
-                    pixelSequence.trigger();
-                }
+                //if (intake.numPixels() < 2) {
+                //    pixelSequence.trigger();
+                //}
 
                 slides.goToPos(i);
                 armSequence.trigger();

@@ -16,8 +16,8 @@ public class Arm extends Mechanism {
     private Servo leftServo;
     private Servo rightServo;
 
-    public static double INTAKE_POS = 0.98;
-    public static double SCORE_POS = 0.71;
+    public static double INTAKE_POS = 0.8;
+    public static double SCORE_POS = 0.28;
 
     public Arm(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -41,6 +41,10 @@ public class Arm extends Mechanism {
     public void intakePos() {
         leftServo.setPosition(INTAKE_POS);
         rightServo.setPosition(INTAKE_POS);
+    }
+
+    public boolean isUp() {
+        return leftServo.getPosition() < 0.34;
     }
 
     @Override

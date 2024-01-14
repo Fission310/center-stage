@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.hardware.mechanisms;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.stuyfission.fissionlib.util.Mechanism;
@@ -12,6 +13,8 @@ import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
 import com.stuyfission.fissionlib.input.GamepadStatic;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.opmode.teleop.Controls;
 
 @Config
@@ -25,37 +28,58 @@ public class Intake extends Mechanism {
 
     private IntakeSensor sensor;
 
-    public static double SPEED = 1;
+    public static double SPEED = 0.7;
+    public static double SLOW_SPEED = 0.1;
 
-    public static double UP_POS = 0;
-    public static double DOWN_POS = 0.67;
+    public double servoSpeed = SPEED;
 
-    public static double PIXEL_UP_POS = 0.55;
-    public static double PIXEL_DOWN_POS = 0.23;
+    public static double UP_POS = 0.9;
+    public static double DOWN_POS = 0.7;
 
-    public static double OUTTAKE_WAIT = 0.67;
+    public static double PIXEL_UP_POS = 0.89;
+    public static double PIXEL_DOWN_POS = 0.4;
+
+    public static double INTAKE_DELAY = 0.67;
 
     public static int GREEN = 100;
     public static int YELLOW = 100;
     public static int WHITE = 100;
     public static int PURPLE = 100;
 
+    public static int FAR = 100;
+
     private Command pixelDown = () -> {
+        servoSpeed = SLOW_SPEED;
         outtake();
         pixelServo.setPosition(PIXEL_DOWN_POS);
     };
 
-    private Command intakeStop = () -> stop();
+    private Command pixelUp = () -> {
+        servoSpeed = SLOW_SPEED;
+        intake();
+        pixelServo.setPosition(PIXEL_UP_POS);
+    };
 
-    private CommandSequence pixelSequence = new CommandSequence()
+    private Command intakeStop = () -> {
+        stop();
+        servoSpeed = SPEED;
+    };
+
+    private CommandSequence pixelDownSequence = new CommandSequence()
             .addCommand(pixelDown)
-            .addWaitCommand(OUTTAKE_WAIT)
+            .addWaitCommand(INTAKE_DELAY)
+            .addCommand(intakeStop)
+            .build();
+
+    private CommandSequence pixelUpSequence = new CommandSequence()
+            .addCommand(pixelUp)
+            .addWaitCommand(INTAKE_DELAY)
             .addCommand(intakeStop)
             .build();
 
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
-        sensor = new IntakeSensor(opMode);
+        //sensor = new IntakeSensor(opMode);
     }
 
     @Override
@@ -68,17 +92,18 @@ public class Intake extends Mechanism {
 
         leftServo.setDirection(Servo.Direction.REVERSE);
 
-        sensor.init(hwMap);
+        //sensor.init(hwMap);
 
+        pixelServo.setPosition(PIXEL_DOWN_POS);
         down();
     }
 
     public void intake() {
-        intakeMotor.setPower(SPEED);
+        intakeMotor.setPower(-SPEED);
     }
 
     public void outtake() {
-        intakeMotor.setPower(-SPEED);
+        intakeMotor.setPower(SPEED);
     }
 
     public void stop() {
@@ -96,12 +121,12 @@ public class Intake extends Mechanism {
     }
 
     public void pixelUp() {
-        pixelServo.setPosition(PIXEL_UP_POS);
+        pixelUpSequence.trigger();
     }
 
     public void pixelDown() {
-        pixelSequence.trigger();
-        sensor.reset();
+        pixelDownSequence.trigger();
+        //sensor.reset();
     }
 
     public int numPixels() {
@@ -110,11 +135,14 @@ public class Intake extends Mechanism {
 
     @Override
     public void loop(Gamepad gamepad) {
-        sensor.loop(gamepad);
+        if (servoSpeed == SLOW_SPEED) return;
+        //sensor.loop(gamepad);
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_UP)) {
-            up();
+            //up();
+            pixelUp();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_DOWN)) {
-            down();
+            //down();
+            pixelDown();
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
@@ -131,7 +159,7 @@ public class Intake extends Mechanism {
         private int numPixels = 0;
         private boolean detecting = false;
 
-        private ColorSensor sensor;
+        private ColorRangeSensor sensor;
 
         public IntakeSensor(LinearOpMode opMode) {
             this.opMode = opMode;
@@ -139,7 +167,7 @@ public class Intake extends Mechanism {
 
         @Override
         public void init(HardwareMap hwMap) {
-            sensor = hwMap.get(ColorSensor.class, "intakeSensor");
+            sensor = hwMap.get(ColorRangeSensor.class, "intakeSensor");
         }
 
         public boolean isGreen() {
@@ -159,7 +187,10 @@ public class Intake extends Mechanism {
         }
 
         public boolean isPixel() {
-            return isGreen() || isWhite() || isPurple() || isYellow();
+            Telemetry t = FtcDashboard.getInstance().getTelemetry();
+            t.addData("dist", sensor.getDistance(DistanceUnit.MM));
+            t.update();
+            return sensor.getDistance(DistanceUnit.MM) < FAR;
         }
 
         public int getNumPixels() {

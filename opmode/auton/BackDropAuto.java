@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.auton;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
@@ -11,8 +12,10 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Arm;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Claw;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.Intake;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
 import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
 
@@ -25,6 +28,7 @@ public class BackDropAuto extends LinearOpMode {
 
     private Arm arm;
     private Claw claw;
+    private Intake intake;
     private SampleMecanumDrive drive;
     private Slides2 slides;
     private Webcam webcam;
@@ -37,8 +41,12 @@ public class BackDropAuto extends LinearOpMode {
     private TrajectorySequence[] backDropTraj = new TrajectorySequence[3];
     private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
-    private Command releaseCommand = () -> claw.rightOpen();
-    private Command slidesCommand = () -> slides.goToPos(1);
+    private Command releaseCommand = () -> {
+        claw.leftOpen();
+        claw.rightOpen();
+    };
+    private Command intakeCommand = () -> intake.up();
+    private Command slidesCommand = () -> slides.goToPos(0);
     private Command armCommand = () -> arm.scorePos();
     private Command retractCommand = () -> {
         claw.leftOpen();
@@ -55,6 +63,7 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(spikeMarkCommand)
             .build();
     private CommandSequence scoreSequence = new CommandSequence()
+            .addCommand(intakeCommand)
             .addCommand(backDropCommand)
             // .addWaitCommand(10)
             .addWaitCommand(SLIDES_DELAY)
@@ -85,14 +94,18 @@ public class BackDropAuto extends LinearOpMode {
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
+        intake = new Intake(this);
         claw = new Claw(this);
         slides = new Slides2(this);
         webcam = new Webcam(this, color);
 
         arm.init(hardwareMap);
         claw.init(hardwareMap);
+        intake.init(hardwareMap);
         slides.init(hardwareMap);
         webcam.init(hardwareMap);
+
+        claw.close();
 
         for (int i = 0; i < 3; i++) {
             drive.setPoseEstimate(reflectX(AutoConstants.BD_START_POSE));
