@@ -6,6 +6,6 @@ import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
 @Autonomous(name = "FrontAutoRed", preselectTeleOp = "Main")
 public class FrontAutoRed extends FrontAuto {
     public FrontAutoRed() {
-        super(Color.BLUE);
+        super(Color.RED);
     }
 }

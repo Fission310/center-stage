@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.auton;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
@@ -21,6 +22,8 @@ import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
 
 @Config
 public class BackDropAuto extends LinearOpMode {
+
+    //private MultipleTelemetry telemetry = new MultipleTelemetry(telemetry);
 
     private boolean reflect;
     private Color color;
@@ -153,7 +156,7 @@ public class BackDropAuto extends LinearOpMode {
 
     public Vector2d reflectX(Vector2d vector) {
         if (reflect) {
-            return new Vector2d(vector.getX() * -1, vector.getY());
+            return new Vector2d(vector.getX(), vector.getY() * -1);
         }
         return vector;
     }

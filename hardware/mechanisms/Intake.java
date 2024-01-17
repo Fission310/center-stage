@@ -28,18 +28,18 @@ public class Intake extends Mechanism {
 
     private IntakeSensor sensor;
 
-    public static double SPEED = 0.7;
-    public static double SLOW_SPEED = 0.1;
+    public static double SPEED = 1;
+    public static double SLOW_SPEED = 0.6;
 
-    public double servoSpeed = SPEED;
+    public double motorSpeed = SPEED;
 
     public static double UP_POS = 0.9;
     public static double DOWN_POS = 0.7;
 
     public static double PIXEL_UP_POS = 0.89;
-    public static double PIXEL_DOWN_POS = 0.4;
+    public static double PIXEL_DOWN_POS = 0.38;
 
-    public static double INTAKE_DELAY = 0.67;
+    public static double INTAKE_DELAY = 1;
 
     public static int GREEN = 100;
     public static int YELLOW = 100;
@@ -49,20 +49,19 @@ public class Intake extends Mechanism {
     public static int FAR = 100;
 
     private Command pixelDown = () -> {
-        servoSpeed = SLOW_SPEED;
         outtake();
         pixelServo.setPosition(PIXEL_DOWN_POS);
     };
 
     private Command pixelUp = () -> {
-        servoSpeed = SLOW_SPEED;
+        motorSpeed = SLOW_SPEED;
         intake();
         pixelServo.setPosition(PIXEL_UP_POS);
     };
 
     private Command intakeStop = () -> {
         stop();
-        servoSpeed = SPEED;
+        motorSpeed = SPEED;
     };
 
     private CommandSequence pixelDownSequence = new CommandSequence()
@@ -99,11 +98,11 @@ public class Intake extends Mechanism {
     }
 
     public void intake() {
-        intakeMotor.setPower(-SPEED);
+        intakeMotor.setPower(-motorSpeed);
     }
 
     public void outtake() {
-        intakeMotor.setPower(SPEED);
+        intakeMotor.setPower(motorSpeed);
     }
 
     public void stop() {
@@ -135,7 +134,7 @@ public class Intake extends Mechanism {
 
     @Override
     public void loop(Gamepad gamepad) {
-        if (servoSpeed == SLOW_SPEED) return;
+        if (motorSpeed == SLOW_SPEED) return;
         //sensor.loop(gamepad);
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_UP)) {
             //up();

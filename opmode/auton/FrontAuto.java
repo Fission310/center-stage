@@ -173,7 +173,7 @@ public class FrontAuto extends LinearOpMode {
 
         webcam.stopStreaming();
 
-        while (opModeIsActive() && !isStopRequested()) {
+        while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();
             slides.update();
             commandMachine.run(drive.isBusy());
@@ -189,7 +189,7 @@ public class FrontAuto extends LinearOpMode {
 
     public Vector2d reflectX(Vector2d vector) {
         if (reflect) {
-            return new Vector2d(vector.getX() * -1, vector.getY());
+            return new Vector2d(vector.getX(), vector.getY() * -1);
         }
         return vector;
     }
