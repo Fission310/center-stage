@@ -19,10 +19,10 @@ public class Claw extends Mechanism {
     private Servo leftServo;
     private Servo rightServo;
 
-    public static double OPEN_POS_R = 0.6;
-    public static double OPEN_POS_L = 1;
-    public static double CLOSE_POS_R = 0.4;
-    public static double CLOSE_POS_L = 0.85;
+    public static double OPEN_POS_R = 0.55;
+    public static double OPEN_POS_L = 0.96;
+    public static double CLOSE_POS_R = 0.36;
+    public static double CLOSE_POS_L = 0.76;
 
     public Claw(LinearOpMode opMode) {
         this.opMode = opMode;

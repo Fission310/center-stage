@@ -26,7 +26,8 @@ public class Intake extends Mechanism {
     private Servo rightServo;
     private Servo pixelServo;
 
-    private IntakeSensor sensor;
+    private IntakeSensor topSensor;
+    private IntakeSensor bottomSensor;
 
     public static double SPEED = 1;
     public static double SLOW_SPEED = 0.6;
@@ -78,7 +79,8 @@ public class Intake extends Mechanism {
 
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
-        //sensor = new IntakeSensor(opMode);
+        topSensor = new IntakeSensor(opMode);
+        bottomSensor = new IntakeSensor(opMode);
     }
 
     @Override
@@ -91,7 +93,8 @@ public class Intake extends Mechanism {
 
         leftServo.setDirection(Servo.Direction.REVERSE);
 
-        //sensor.init(hwMap);
+        topSensor.init(hwMap);
+        bottomSensor.init(hwMap);
 
         pixelServo.setPosition(PIXEL_DOWN_POS);
         down();
@@ -125,17 +128,15 @@ public class Intake extends Mechanism {
 
     public void pixelDown() {
         pixelDownSequence.trigger();
-        //sensor.reset();
     }
 
     public int numPixels() {
-        return sensor.getNumPixels();
+        return (topSensor.isPixel() ? 1 : 0) + (bottomSensor.isPixel() ? 1 : 0);
     }
 
     @Override
     public void loop(Gamepad gamepad) {
         if (motorSpeed == SLOW_SPEED) return;
-        //sensor.loop(gamepad);
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_UP)) {
             //up();
             pixelUp();
@@ -155,9 +156,6 @@ public class Intake extends Mechanism {
 
     private class IntakeSensor extends Mechanism {
 
-        private int numPixels = 0;
-        private boolean detecting = false;
-
         private ColorRangeSensor sensor;
 
         public IntakeSensor(LinearOpMode opMode) {
@@ -174,7 +172,7 @@ public class Intake extends Mechanism {
         }
 
         public boolean isYellow() {
-            return sensor.green() + sensor.red() > YELLOW;
+            return (sensor.green() + sensor.red()) / 2 > YELLOW;
         }
 
         public boolean isWhite() {
@@ -190,27 +188,6 @@ public class Intake extends Mechanism {
             t.addData("dist", sensor.getDistance(DistanceUnit.MM));
             t.update();
             return sensor.getDistance(DistanceUnit.MM) < FAR;
-        }
-
-        public int getNumPixels() {
-            return numPixels;
-        }
-
-        public void reset() {
-            numPixels = 0;
-            detecting = false;
-        }
-
-        @Override
-        public void loop(Gamepad gamepad) {
-            if (isPixel()) {
-                if (!detecting) {
-                    detecting = true;
-                    numPixels++;
-                }
-            } else {
-                detecting = false;
-            }
         }
     }
 }
