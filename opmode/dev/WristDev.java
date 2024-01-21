@@ -10,11 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class WristDev extends LinearOpMode {
 
     private Wrist wrist = new Wrist(this);
-    private Arm arm = new Arm(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
-        arm.init(hardwareMap);
         wrist.init(hardwareMap);
 
         waitForStart();

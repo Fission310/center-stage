@@ -22,7 +22,7 @@ public class Main extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            robot.loop(gamepad1);
+            robot.loop(gamepad1, gamepad2);
 
             robot.telemetry(telemetry);
         }

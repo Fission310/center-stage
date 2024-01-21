@@ -21,7 +21,7 @@ public class Scoring extends Mechanism {
     private Slides2 slides = new Slides2(opMode);
     private Wrist wrist = new Wrist(opMode);
 
-    public static double SLIDES_INTAKE = 70;
+    public static double SLIDES_INTAKE = -55;
 
     public static double SCORE_DELAY = 1;
     public static double SLIDES_DELAY = 0.5;
@@ -100,7 +100,7 @@ public class Scoring extends Mechanism {
         slides.update();
         intake.loop(gamepad);
 
-        if (intake.numPixels() > 1) {
+        if (intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
             pixelSequence.trigger();
         }
 
@@ -117,6 +117,11 @@ public class Scoring extends Mechanism {
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_RIGHT)) {
+            scoreRight.trigger();
+        }
+
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE)) {
+            scoreLeft.trigger();
             scoreRight.trigger();
         }
 

@@ -19,14 +19,11 @@ public class Wrist extends Mechanism {
     private boolean right = false;
 
     public static double VERTICAL_UP_POS = 0.49;
-    private static double HORIZONTAL_LEFT_POS = (VERTICAL_UP_POS + 0.25) % 1.0;
-    private static double VERTICAL_DOWN_POS = (VERTICAL_UP_POS + 0.5) % 1.0;
-    private static double HORIZONTAL_RIGHT_POS = (VERTICAL_UP_POS + 0.75) % 1.0;
+    public static double HORIZONTAL_LEFT_POS = (VERTICAL_UP_POS + 0.25) % 1.0;
+    public static double VERTICAL_DOWN_POS = (VERTICAL_UP_POS + 0.5) % 1.0;
+    public static double HORIZONTAL_RIGHT_POS = (VERTICAL_UP_POS + 0.75) % 1.0;
     public static double[] POSITIONS = {
-            VERTICAL_UP_POS,
-            HORIZONTAL_LEFT_POS,
-            VERTICAL_DOWN_POS,
-            HORIZONTAL_RIGHT_POS
+        0.25, 0.5, 0.75, 0
     };
 
     private int pos = 0;
@@ -80,12 +77,12 @@ public class Wrist extends Mechanism {
         } else {
             right = false;
         }
-        HORIZONTAL_LEFT_POS = (VERTICAL_UP_POS + 0.25) % 1.0;
-        VERTICAL_DOWN_POS = (VERTICAL_UP_POS + 0.5) % 1.0;
-        HORIZONTAL_RIGHT_POS = (VERTICAL_UP_POS + 0.75) % 1.0;
-        POSITIONS[0] = VERTICAL_UP_POS;
-        POSITIONS[1] = HORIZONTAL_LEFT_POS;
-        POSITIONS[2] = VERTICAL_DOWN_POS;
-        POSITIONS[3] = HORIZONTAL_RIGHT_POS;
+        //HORIZONTAL_LEFT_POS = (VERTICAL_UP_POS + 0.25) % 1.0;
+        //VERTICAL_DOWN_POS = (VERTICAL_UP_POS + 0.5) % 1.0;
+        //HORIZONTAL_RIGHT_POS = (VERTICAL_UP_POS + 0.75) % 1.0;
+        //POSITIONS[0] = VERTICAL_UP_POS;
+        //POSITIONS[1] = HORIZONTAL_LEFT_POS;
+        //POSITIONS[2] = VERTICAL_DOWN_POS;
+        //POSITIONS[3] = HORIZONTAL_RIGHT_POS;
     }
 }

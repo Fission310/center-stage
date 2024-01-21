@@ -29,16 +29,16 @@ public class Intake extends Mechanism {
     private IntakeSensor topSensor;
     private IntakeSensor bottomSensor;
 
-    public static double SPEED = 1;
+    public static double SPEED = 0.9;
     public static double SLOW_SPEED = 0.6;
 
     public double motorSpeed = SPEED;
 
     public static double UP_POS = 0.9;
-    public static double DOWN_POS = 0.7;
+    public static double DOWN_POS = 0.55;
 
-    public static double PIXEL_UP_POS = 0.89;
-    public static double PIXEL_DOWN_POS = 0.38;
+    public static double PIXEL_UP_POS = 0.65;
+    public static double PIXEL_DOWN_POS = 0.23;
 
     public static double INTAKE_DELAY = 1;
 
@@ -79,8 +79,8 @@ public class Intake extends Mechanism {
 
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
-        topSensor = new IntakeSensor(opMode);
-        bottomSensor = new IntakeSensor(opMode);
+        topSensor = new IntakeSensor(opMode, "intakeTopSensor");
+        bottomSensor = new IntakeSensor(opMode, "intakeBottomSensor");
     }
 
     @Override
@@ -157,14 +157,15 @@ public class Intake extends Mechanism {
     private class IntakeSensor extends Mechanism {
 
         private ColorRangeSensor sensor;
+        private String name;
 
-        public IntakeSensor(LinearOpMode opMode) {
+        public IntakeSensor(LinearOpMode opMode, String name) {
             this.opMode = opMode;
+            this.name = name;
         }
 
-        @Override
         public void init(HardwareMap hwMap) {
-            sensor = hwMap.get(ColorRangeSensor.class, "intakeSensor");
+            sensor = hwMap.get(ColorRangeSensor.class, name);
         }
 
         public boolean isGreen() {

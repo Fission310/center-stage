@@ -27,7 +27,7 @@ public class Robot extends Mechanism {
         drivetrain.init(hwMap);
         scoring.init(hwMap);
         climb.init(hwMap);
-        launcher.init(hwMap);
+    //    launcher.init(hwMap);
     }
 
     @Override
@@ -36,10 +36,10 @@ public class Robot extends Mechanism {
     }
 
     @Override
-    public void loop(Gamepad gamepad) {
-        drivetrain.loop(gamepad);
-        scoring.loop(gamepad);
-        climb.loop(gamepad);
-        launcher.loop(gamepad);
+    public void loop(Gamepad gamepad1, Gamepad gamepad2) {
+        drivetrain.loop(gamepad1);
+        scoring.loop(gamepad1);
+        climb.loop(gamepad2);
+    //    launcher.loop(gamepad2);
     }
 }

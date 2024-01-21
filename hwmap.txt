@@ -1,27 +1,26 @@
 Control hub:
 Motors:
-0 - leftSlidesMotor
-1 - lowerIntakeMotor
+1 - slidesLeftMotor
 2 - leftFront
 3 - leftRear
 
 Servos:
-2 - launchServo
-3 - leftLaunchServo
-4 - leftClimbServo
-5 - leftIntakeServo
+0 - climbRightServo
+1 - intakePixelServo
+2 - clawLeftServo
+3 - clawRightServo
+4 - climbLeftServo
+5 - intakeLeftServo
 
 Expansion hub:
 Motors:
-0 - rightFront
+0 - slidesRightMotor
 1 - rightRear
-2 - upperIntakeMotor
-3 - rightSlidesMotor
+2 - intakeMotor
+3 - rightFront
 
 Servos:
-0 - hopperServo
-1 - leftArmServo
-2 - rightArmServo
-3 - rightIntakeServo
-4 - rightClimbServo
-5 - rightLaunchServo
+2 - wristServo
+3 - armLeftServo
+4 - armRightServo
+5 - intakeRightServo
