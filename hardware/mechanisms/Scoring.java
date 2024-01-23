@@ -98,7 +98,6 @@ public class Scoring extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         slides.update();
-        intake.loop(gamepad);
 
         if (intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
             pixelSequence.trigger();
@@ -131,12 +130,14 @@ public class Scoring extends Mechanism {
 
         for (int i = 0; i < 4; i++) {
             if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                //if (intake.numPixels() < 2) {
-                //    pixelSequence.trigger();
-                //}
+                // if (intake.numPixels() < 2) {
+                //     pixelSequence.trigger();
+                // }
 
                 slides.goToPos(i);
-                armSequence.trigger();
+                if (!arm.isUp()) {
+                    armSequence.trigger();
+                }
                 break;
             }
         }

@@ -29,27 +29,30 @@ public class Intake extends Mechanism {
     private IntakeSensor topSensor;
     private IntakeSensor bottomSensor;
 
-    public static double SPEED = 0.9;
+    public static double SPEED = 0.75;
     public static double SLOW_SPEED = 0.6;
 
     public double motorSpeed = SPEED;
 
-    public static double UP_POS = 0.9;
-    public static double DOWN_POS = 0.55;
+    public static double UP_POS = 0.75;
+    public static double DOWN_POS = 0.6;
 
-    public static double PIXEL_UP_POS = 0.65;
-    public static double PIXEL_DOWN_POS = 0.23;
+    public static double PIXEL_UP_POS = 0.9;
+    public static double PIXEL_MIDDLE_POS = 0.8;
+    public static double PIXEL_DOWN_POS = 0.5;
 
-    public static double INTAKE_DELAY = 1;
+    public static double INTAKE_DOWN_DELAY = 3;
+    public static double INTAKE_UP_DELAY = 1;
 
     public static int GREEN = 100;
     public static int YELLOW = 100;
     public static int WHITE = 100;
     public static int PURPLE = 100;
 
-    public static int FAR = 100;
+    public static int FAR = 0;
 
     private Command pixelDown = () -> {
+        motorSpeed = SLOW_SPEED;
         outtake();
         pixelServo.setPosition(PIXEL_DOWN_POS);
     };
@@ -57,8 +60,10 @@ public class Intake extends Mechanism {
     private Command pixelUp = () -> {
         motorSpeed = SLOW_SPEED;
         intake();
-        pixelServo.setPosition(PIXEL_UP_POS);
+        pixelServo.setPosition(PIXEL_MIDDLE_POS);
     };
+
+    private Command pixelFullyUp = () -> pixelServo.setPosition(PIXEL_UP_POS);
 
     private Command intakeStop = () -> {
         stop();
@@ -67,13 +72,14 @@ public class Intake extends Mechanism {
 
     private CommandSequence pixelDownSequence = new CommandSequence()
             .addCommand(pixelDown)
-            .addWaitCommand(INTAKE_DELAY)
+            .addWaitCommand(INTAKE_DOWN_DELAY)
             .addCommand(intakeStop)
             .build();
 
     private CommandSequence pixelUpSequence = new CommandSequence()
             .addCommand(pixelUp)
-            .addWaitCommand(INTAKE_DELAY)
+            .addWaitCommand(INTAKE_UP_DELAY)
+            .addCommand(pixelFullyUp)
             .addCommand(intakeStop)
             .build();
 
@@ -166,6 +172,8 @@ public class Intake extends Mechanism {
 
         public void init(HardwareMap hwMap) {
             sensor = hwMap.get(ColorRangeSensor.class, name);
+
+            sensor.enableLed(false);
         }
 
         public boolean isGreen() {
@@ -186,7 +194,10 @@ public class Intake extends Mechanism {
 
         public boolean isPixel() {
             Telemetry t = FtcDashboard.getInstance().getTelemetry();
-            t.addData("dist", sensor.getDistance(DistanceUnit.MM));
+            t.addData(name + " dist", sensor.getDistance(DistanceUnit.MM));
+            t.addData(name + " red", sensor.red());
+            t.addData(name + " green", sensor.green());
+            t.addData(name + " blue", sensor.blue());
             t.update();
             return sensor.getDistance(DistanceUnit.MM) < FAR;
         }
