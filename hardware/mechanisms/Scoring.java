@@ -111,15 +111,15 @@ public class Scoring extends Mechanism {
             wrist.loop(gamepad);
         }
 
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_LEFT)) {
-            scoreLeft.trigger();
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_ONE)) {
+            if (claw.numPixels() == 2) {
+                scoreLeft.trigger();
+            } else {
+                scoreRight.trigger();
+            }
         }
 
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_RIGHT)) {
-            scoreRight.trigger();
-        }
-
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE)) {
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {
             scoreLeft.trigger();
             scoreRight.trigger();
         }
@@ -130,10 +130,6 @@ public class Scoring extends Mechanism {
 
         for (int i = 0; i < 4; i++) {
             if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                // if (intake.numPixels() < 2) {
-                //     pixelSequence.trigger();
-                // }
-
                 slides.goToPos(i);
                 if (!arm.isUp()) {
                     armSequence.trigger();

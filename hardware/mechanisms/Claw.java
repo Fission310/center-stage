@@ -62,11 +62,16 @@ public class Claw extends Mechanism {
 
     @Override
     public void loop(Gamepad gamepad) {
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_LEFT)) {
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {
             leftOpen();
-        }
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_RIGHT)) {
             rightOpen();
+        }
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_ONE)) {
+            if (numPixels() == 2) {
+                leftOpen();
+            } else {
+                rightOpen();
+            }
         }
         if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
             close();

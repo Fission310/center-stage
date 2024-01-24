@@ -5,9 +5,8 @@ import com.stuyfission.fissionlib.input.GamepadStatic.Input;
 public class Controls {
 
     public static final Input CLIMB = Input.Y;
-    public static final Input SCORE = Input.LEFT_BUMPER;
-    public static final Input SCORE_LEFT = Input.DPAD_LEFT;
-    public static final Input SCORE_RIGHT = Input.DPAD_RIGHT;
+    public static final Input SCORE_ONE = Input.RIGHT_BUMPER;
+    public static final Input SCORE_TWO = Input.LEFT_BUMPER;
     public static final Input GRAB = Input.RIGHT_STICK_BUTTON;
     public static final Input LOW = Input.X; // Square
     public static final Input MEDIUM_LOW = Input.A; // Cross
@@ -20,8 +19,8 @@ public class Controls {
     public static final Input OUTTAKE = Input.LEFT_TRIGGER;
     public static final Input INTAKE_UP = Input.NONE;
     public static final Input INTAKE_DOWN = Input.NONE;
-    public static final Input WRIST_LEFT = Input.RIGHT_BUMPER;
-    public static final Input WRIST_RIGHT = Input.NONE;
+    public static final Input WRIST_LEFT = Input.DPAD_LEFT;
+    public static final Input WRIST_RIGHT = Input.DPAD_RIGHT;
     public static final Input SLIDES_UP = Input.DPAD_UP;
     public static final Input SLIDES_DOWN = Input.DPAD_DOWN;
 }
