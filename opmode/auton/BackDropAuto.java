@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.auton;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
@@ -23,8 +21,6 @@ import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
 @Config
 public class BackDropAuto extends LinearOpMode {
 
-    //private MultipleTelemetry telemetry = new MultipleTelemetry(telemetry);
-
     private boolean reflect;
     private Color color;
     private Position pos = Position.CENTER;
@@ -35,6 +31,7 @@ public class BackDropAuto extends LinearOpMode {
     private SampleMecanumDrive drive;
     private Slides2 slides;
     private Webcam webcam;
+    private Wrist wrist;
 
     public static double ARM_DELAY = 1;
     public static double SCORE_DELAY = 1;
@@ -51,11 +48,13 @@ public class BackDropAuto extends LinearOpMode {
     private Command intakeCommand = () -> intake.up();
     private Command slidesCommand = () -> slides.goToPos(0);
     private Command armCommand = () -> arm.scorePos();
+    private Command wristCommand = () -> wrist.scorePos();
     private Command retractCommand = () -> {
         claw.leftOpen();
+        claw.rightOpen();
+        wrist.intakePos();
         arm.intakePos();
         slides.intakePos();
-        claw.close();
     };
 
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[pos.index]);
@@ -71,6 +70,8 @@ public class BackDropAuto extends LinearOpMode {
             // .addWaitCommand(10)
             .addWaitCommand(SLIDES_DELAY)
             .addCommand(slidesCommand)
+            .addWaitCommand(0.1)
+            .addCommand(wristCommand)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
             .addCommand(releaseCommand)
@@ -101,12 +102,14 @@ public class BackDropAuto extends LinearOpMode {
         claw = new Claw(this);
         slides = new Slides2(this);
         webcam = new Webcam(this, color);
+        wrist = new Wrist(this);
 
         arm.init(hardwareMap);
         claw.init(hardwareMap);
         intake.init(hardwareMap);
         slides.init(hardwareMap);
         webcam.init(hardwareMap);
+        wrist.init(hardwareMap);
 
         claw.close();
 
@@ -129,7 +132,7 @@ public class BackDropAuto extends LinearOpMode {
                     .strafeTo(reflectX(AutoConstants.PARK_VECTOR))
                     .build();
         }
-        
+
         while (opModeInInit()) {
             pos = webcam.getPosition();
             telemetry.addData("Position: ", pos);

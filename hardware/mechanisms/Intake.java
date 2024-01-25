@@ -34,7 +34,6 @@ public class Intake extends Mechanism {
     public static double SLOW_SPEED = 0.6;
 
     public double motorSpeed = SPEED;
-    public boolean intakeClicked = false;
 
     public static double UP_POS = 0.75;
     public static double DOWN_POS = 0.69;
@@ -47,7 +46,7 @@ public class Intake extends Mechanism {
     public static double INTAKE_UP_DELAY = 0.4;
     public static double SENSOR_DELAY = 0.2;
 
-    public static int FAR = 10;
+    public static int FAR = 13;
 
     private Command pixelDown = () -> {
         motorSpeed = SLOW_SPEED;
@@ -103,7 +102,6 @@ public class Intake extends Mechanism {
 
         pixelServo.setPosition(PIXEL_DOWN_POS);
         down();
-        intake();
     }
 
     public void intake() {
@@ -152,21 +150,11 @@ public class Intake extends Mechanism {
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
-            if (intakeMotor.getPower() == -motorSpeed && !intakeClicked) {
-                stop();
-                intakeClicked = true;
-            } else if (!intakeClicked) {
-                intake();
-                intakeClicked = true;
-            }
+            intake();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.OUTTAKE)) {
             outtake();
-        } else if (intakeMotor.getPower() == motorSpeed) {
+        } else {
             stop();
-        }
-
-        if (!GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
-            intakeClicked = false;
         }
     }
 

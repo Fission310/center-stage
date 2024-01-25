@@ -36,10 +36,7 @@ public class Scoring extends Mechanism {
     }
 
     private Command pixelPlatformUp = () -> intake.pixelUp();
-    private Command pixelPlatformDown = () -> {
-        claw.close();
-        intake.pixelDown();
-    };
+    private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command slidesUp = () -> slides.setTarget(SLIDES_INTAKE);
     private Command releaseLeftCommand = () -> claw.leftOpen();
@@ -102,12 +99,10 @@ public class Scoring extends Mechanism {
         }
 
         if (intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
-            intake.stop();
             pixelSequence.trigger();
         }
 
         if (claw.numPixels() == 0 && arm.isUp()) {
-            intake.intake();
             retractSequence.trigger();
         }
 
