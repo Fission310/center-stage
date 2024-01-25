@@ -41,7 +41,7 @@ public class Wrist extends Mechanism {
     }
 
     public void scorePos() {
-        wristServo.setPosition(POSITIONS[0]);
+        wristServo.setPosition(POSITIONS[2]);
     }
 
     public void intakePos() {

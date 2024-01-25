@@ -23,11 +23,11 @@ public class Scoring extends Mechanism {
 
     public static double SLIDES_INTAKE = -55;
 
-    public static double SCORE_DELAY = 1;
+    public static double SCORE_DELAY = 0.4;
     public static double SLIDES_DELAY = 0.2;
     public static double ARM_DELAY = 0.1;
-    public static double PLATFORM_DELAY = 0.7;
-    public static double GRAB_DELAY = 0.2;
+    public static double PLATFORM_DELAY = 0.9;
+    public static double GRAB_DELAY = 0.4;
 
     private boolean clawClicked = false;
 
@@ -96,13 +96,18 @@ public class Scoring extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         slides.update();
-        intake.loop(gamepad);
+
+        if (!arm.isUp()) {
+            intake.loop(gamepad);
+        }
 
         if (intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
+            intake.stop();
             pixelSequence.trigger();
         }
 
         if (claw.numPixels() == 0 && arm.isUp()) {
+            intake.intake();
             retractSequence.trigger();
         }
 

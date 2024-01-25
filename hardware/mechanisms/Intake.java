@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.stuyfission.fissionlib.util.Mechanism;
+
 import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
 import com.stuyfission.fissionlib.input.GamepadStatic;
@@ -33,6 +34,7 @@ public class Intake extends Mechanism {
     public static double SLOW_SPEED = 0.6;
 
     public double motorSpeed = SPEED;
+    public boolean intakeClicked = false;
 
     public static double UP_POS = 0.75;
     public static double DOWN_POS = 0.69;
@@ -43,13 +45,9 @@ public class Intake extends Mechanism {
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.4;
+    public static double SENSOR_DELAY = 0.2;
 
-    public static int GREEN = 100;
-    public static int YELLOW = 100;
-    public static int WHITE = 100;
-    public static int PURPLE = 100;
-
-    public static int FAR = 0;
+    public static int FAR = 10;
 
     private Command pixelDown = () -> {
         motorSpeed = SLOW_SPEED;
@@ -77,6 +75,7 @@ public class Intake extends Mechanism {
             .build();
 
     private CommandSequence pixelUpSequence = new CommandSequence()
+            .addWaitCommand(SENSOR_DELAY)
             .addCommand(pixelUp)
             .addWaitCommand(INTAKE_UP_DELAY)
             .addCommand(pixelFullyUp)
@@ -104,6 +103,7 @@ public class Intake extends Mechanism {
 
         pixelServo.setPosition(PIXEL_DOWN_POS);
         down();
+        intake();
     }
 
     public void intake() {
@@ -152,11 +152,21 @@ public class Intake extends Mechanism {
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
-            intake();
+            if (intakeMotor.getPower() == -motorSpeed && !intakeClicked) {
+                stop();
+                intakeClicked = true;
+            } else if (!intakeClicked) {
+                intake();
+                intakeClicked = true;
+            }
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.OUTTAKE)) {
             outtake();
-        } else {
+        } else if (intakeMotor.getPower() == motorSpeed) {
             stop();
+        }
+
+        if (!GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
+            intakeClicked = false;
         }
     }
 
@@ -176,28 +186,9 @@ public class Intake extends Mechanism {
             sensor.enableLed(false);
         }
 
-        public boolean isGreen() {
-            return sensor.green() > GREEN;
-        }
-
-        public boolean isYellow() {
-            return (sensor.green() + sensor.red()) / 2 > YELLOW;
-        }
-
-        public boolean isWhite() {
-            return (sensor.red() + sensor.green() + sensor.blue()) / 3 > WHITE;
-        }
-
-        public boolean isPurple() {
-            return (sensor.red() + sensor.blue()) / 2 > PURPLE;
-        }
-
         public boolean isPixel() {
             Telemetry t = FtcDashboard.getInstance().getTelemetry();
             t.addData(name + " dist", sensor.getDistance(DistanceUnit.MM));
-            t.addData(name + " red", sensor.red());
-            t.addData(name + " green", sensor.green());
-            t.addData(name + " blue", sensor.blue());
             t.update();
             return sensor.getDistance(DistanceUnit.MM) < FAR;
         }
