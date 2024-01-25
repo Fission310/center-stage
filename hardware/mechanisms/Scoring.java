@@ -24,10 +24,12 @@ public class Scoring extends Mechanism {
     public static double SLIDES_INTAKE = -55;
 
     public static double SCORE_DELAY = 1;
-    public static double SLIDES_DELAY = 0.5;
-    public static double ARM_DELAY = 0.5;
-    public static double PLATFORM_DELAY = 2;
-    public static double GRAB_DELAY = 0.5;
+    public static double SLIDES_DELAY = 0.2;
+    public static double ARM_DELAY = 0.1;
+    public static double PLATFORM_DELAY = 0.7;
+    public static double GRAB_DELAY = 0.2;
+
+    private boolean clawClicked = false;
 
     public Scoring(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -43,15 +45,11 @@ public class Scoring extends Mechanism {
     private Command releaseLeftCommand = () -> claw.leftOpen();
     private Command releaseRightCommand = () -> claw.rightOpen();
     private Command armCommand = () -> arm.scorePos();
-    private Command wristCommand = () -> wrist.left();
+    private Command wristCommand = () -> wrist.scorePos();
     private Command retractCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
-
-        while (wrist.getPos() != 0) {
-            wrist.left();
-        }
-
+        wrist.intakePos();
         arm.intakePos();
         slides.intakePos();
     };
@@ -98,6 +96,7 @@ public class Scoring extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         slides.update();
+        intake.loop(gamepad);
 
         if (intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
             pixelSequence.trigger();
@@ -112,11 +111,23 @@ public class Scoring extends Mechanism {
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_ONE)) {
-            if (claw.numPixels() == 2) {
+            if (!clawClicked && claw.numPixels() == 2) {
                 scoreLeft.trigger();
-            } else {
+                clawClicked = true;
+            } else if (!clawClicked) {
                 scoreRight.trigger();
+                clawClicked = true;
             }
+        } else {
+            clawClicked = false;
+        }
+
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_UP)) {
+            slides.upABit();
+        }
+
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_DOWN)) {
+            slides.downABit();
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {

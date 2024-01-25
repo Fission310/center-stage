@@ -22,6 +22,7 @@ public class Slides2 extends Mechanism {
     public static double MEDIUM_HIGH_POS = 600;
     public static double HIGH_POS = 845;
     public static double COLLECT_POS = -55;
+    public static int SPEED = 50;
 
     private static double[] POSITIONS = {LOW_POS, MEDIUM_LOW_POS, MEDIUM_HIGH_POS, HIGH_POS};
 
@@ -83,6 +84,14 @@ public class Slides2 extends Mechanism {
 
     public double getPosition() {
         return motors[0].getCurrentPosition();
+    }
+
+    public void upABit() {
+        setTarget(target + SPEED);
+    }
+
+    public void downABit() {
+        setTarget(target - SPEED);
     }
 
     public void update() {

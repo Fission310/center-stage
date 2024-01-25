@@ -18,12 +18,13 @@ public class Wrist extends Mechanism {
     private boolean left = false;
     private boolean right = false;
 
+    public static double START_POS = 0.29;
     public static double VERTICAL_UP_POS = 0.49;
     public static double HORIZONTAL_LEFT_POS = (VERTICAL_UP_POS + 0.25) % 1.0;
     public static double VERTICAL_DOWN_POS = (VERTICAL_UP_POS + 0.5) % 1.0;
     public static double HORIZONTAL_RIGHT_POS = (VERTICAL_UP_POS + 0.75) % 1.0;
     public static double[] POSITIONS = {
-        0.25, 0.5, 0.75, 0
+        0.01, 0.19, 0.57, 0.76
     };
 
     private int pos = 0;
@@ -36,7 +37,15 @@ public class Wrist extends Mechanism {
     public void init(HardwareMap hwMap) {
         wristServo = hwMap.get(Servo.class, "wristServo");
 
-        wristServo.setPosition(POSITIONS[pos]);
+        intakePos();
+    }
+
+    public void scorePos() {
+        wristServo.setPosition(POSITIONS[0]);
+    }
+
+    public void intakePos() {
+        wristServo.setPosition(START_POS);
     }
 
     public void right() {
