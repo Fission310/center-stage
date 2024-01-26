@@ -101,8 +101,6 @@ public class Slides extends Mechanism {
             mediumLowPos();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_HIGH)) {
             mediumHighPos();
-        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
-            intakePos();
         }
     }
 }

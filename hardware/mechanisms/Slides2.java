@@ -115,8 +115,6 @@ public class Slides2 extends Mechanism {
             goToPos(2);
         } else if(GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
             goToPos(3);
-        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
-            intakePos();
         }
     }
 }

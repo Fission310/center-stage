@@ -13,7 +13,7 @@ public class Controls {
     public static final Input MEDIUM_HIGH = Input.B; // Circle
     public static final Input HIGH = Input.Y; // Triangle
     public static final Input[] SLIDES = { LOW, MEDIUM_LOW, MEDIUM_HIGH, HIGH };
-    public static final Input RESET = Input.LEFT_STICK_BUTTON;
+    public static final Input INTAKE_TOGGLE = Input.LEFT_STICK_BUTTON;
     public static final Input LAUNCH = Input.DPAD_UP;
     public static final Input INTAKE = Input.RIGHT_TRIGGER;
     public static final Input OUTTAKE = Input.LEFT_TRIGGER;

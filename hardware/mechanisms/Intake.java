@@ -35,11 +35,11 @@ public class Intake extends Mechanism {
 
     public double motorSpeed = SPEED;
 
-    public static double UP_POS = 0.8;
-    public static double DOWN_POS = 0.69;
+    public static double UP_POS = 0.82;
+    public static double DOWN_POS = 0.6;
 
     public static double PIXEL_UP_POS = 0.9;
-    public static double PIXEL_MIDDLE_POS = 0.74;
+    public static double PIXEL_MIDDLE_POS = 0.77;
     public static double PIXEL_DOWN_POS = 0.5;
 
     public static double INTAKE_DOWN_DELAY = 1;
@@ -49,6 +49,7 @@ public class Intake extends Mechanism {
     public static int FAR = 13;
 
     private boolean isPixelUp = false;
+    private boolean isUp = false;
 
     private boolean lock = false;
 
@@ -124,14 +125,24 @@ public class Intake extends Mechanism {
         intakeMotor.setPower(0);
     }
 
+    public void toggle() {
+        if (isUp) {
+            down();
+        } else {
+            up();
+        }
+    }
+
     public void up() {
         leftServo.setPosition(UP_POS);
         rightServo.setPosition(UP_POS);
+        isUp = true;
     }
 
     public void down() {
         leftServo.setPosition(DOWN_POS);
         rightServo.setPosition(DOWN_POS);
+        isUp = false;
     }
 
     public void pixelUp() {

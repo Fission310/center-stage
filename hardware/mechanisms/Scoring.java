@@ -30,6 +30,7 @@ public class Scoring extends Mechanism {
     public static double GRAB_DELAY = 0.4;
 
     private boolean clawClicked = false;
+    private boolean stackClicked = false;
 
     public Scoring(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -96,9 +97,7 @@ public class Scoring extends Mechanism {
     public void loop(Gamepad gamepad) {
         slides.update();
 
-        if (!arm.isUp() && intake.numPixels() <= 1) {
-            intake.loop(gamepad);
-        }
+        intake.loop(gamepad);
 
         if ((intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) && !intake.isPixelUp()
                 && !arm.isUp()) {
@@ -138,8 +137,11 @@ public class Scoring extends Mechanism {
             scoreRight.trigger();
         }
 
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.RESET)) {
-            retractSequence.trigger();
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_TOGGLE) && !stackClicked) {
+            intake.toggle();
+            stackClicked = true;
+        } else {
+            stackClicked = false;
         }
 
         for (int i = 0; i < 4; i++) {

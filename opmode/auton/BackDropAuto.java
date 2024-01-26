@@ -64,10 +64,11 @@ public class BackDropAuto extends LinearOpMode {
     private CommandSequence spikeMarkSequence = new CommandSequence()
             .addCommand(spikeMarkCommand)
             .build();
-    private CommandSequence scoreSequence = new CommandSequence()
+    private CommandSequence backDropSequence = new CommandSequence()
             .addCommand(intakeCommand)
             .addCommand(backDropCommand)
-            // .addWaitCommand(10)
+            .build();
+    private CommandSequence scoreSequence = new CommandSequence()
             .addWaitCommand(SLIDES_DELAY)
             .addCommand(slidesCommand)
             .addWaitCommand(0.1)
@@ -79,11 +80,13 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(retractCommand)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
+            .addWaitCommand(3)
             .addCommand(parkCommand)
             .build();
 
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
+            .addCommandSequence(backDropSequence)
             .addCommandSequence(scoreSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
@@ -114,8 +117,6 @@ public class BackDropAuto extends LinearOpMode {
         claw.close();
 
         for (int i = 0; i < 3; i++) {
-            drive.setPoseEstimate(reflectX(AutoConstants.BD_START_POSE));
-
             spikeMarkTraj[i] = drive
                     .trajectorySequenceBuilder(reflectX(AutoConstants.BD_START_POSE))
                     .splineTo(reflectX(AutoConstants.BD_SPIKE_VECTORS[i]),
@@ -138,6 +139,8 @@ public class BackDropAuto extends LinearOpMode {
             telemetry.addData("Position: ", pos);
             telemetry.update();
         }
+
+        drive.setPoseEstimate(reflectX(AutoConstants.BD_START_POSE));
 
         waitForStart();
 
