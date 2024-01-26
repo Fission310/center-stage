@@ -35,20 +35,25 @@ public class Intake extends Mechanism {
 
     public double motorSpeed = SPEED;
 
-    public static double UP_POS = 0.75;
+    public static double UP_POS = 0.8;
     public static double DOWN_POS = 0.69;
 
     public static double PIXEL_UP_POS = 0.9;
-    public static double PIXEL_MIDDLE_POS = 0.8;
+    public static double PIXEL_MIDDLE_POS = 0.74;
     public static double PIXEL_DOWN_POS = 0.5;
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.4;
-    public static double SENSOR_DELAY = 0.2;
+    public static double SENSOR_DELAY = 0.3;
 
     public static int FAR = 13;
 
+    private boolean isPixelUp = false;
+
+    private boolean lock = false;
+
     private Command pixelDown = () -> {
+        lock = true;
         motorSpeed = SLOW_SPEED;
         outtake();
         pixelServo.setPosition(PIXEL_DOWN_POS);
@@ -62,6 +67,8 @@ public class Intake extends Mechanism {
 
     private Command pixelFullyUp = () -> pixelServo.setPosition(PIXEL_UP_POS);
 
+    private Command setPixelUp = () -> isPixelUp = false;
+
     private Command intakeStop = () -> {
         stop();
         motorSpeed = SPEED;
@@ -70,6 +77,7 @@ public class Intake extends Mechanism {
     private CommandSequence pixelDownSequence = new CommandSequence()
             .addCommand(pixelDown)
             .addWaitCommand(INTAKE_DOWN_DELAY)
+            .addCommand(setPixelUp)
             .addCommand(intakeStop)
             .build();
 
@@ -127,11 +135,16 @@ public class Intake extends Mechanism {
     }
 
     public void pixelUp() {
+        isPixelUp = true;
         pixelUpSequence.trigger();
     }
 
     public void pixelDown() {
         pixelDownSequence.trigger();
+    }
+
+    public boolean isPixelUp() {
+        return isPixelUp;
     }
 
     public int numPixels() {
@@ -150,10 +163,11 @@ public class Intake extends Mechanism {
         }
 
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
+            lock = false;
             intake();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.OUTTAKE)) {
             outtake();
-        } else {
+        } else if (!lock) {
             stop();
         }
     }

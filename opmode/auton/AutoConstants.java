@@ -114,7 +114,7 @@ public class AutoConstants {
 
     // Stack Position
     public static double FR_STACK_HEADING = LEFT;
-    public static double FR_STACK_X = -WALL_POS + BOT_LENGTH / 2.0;
+    public static double FR_STACK_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
     public static double FR_STACK_Y = WALL_POS - 3.0 * TILE_LENGTH / 2.0;
     public static Vector2d FR_STACK_VECTOR = new Vector2d(FR_STACK_X, FR_STACK_Y);
     /** ======= END CONSTANTS FOR BACK DROP ======= **/

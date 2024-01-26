@@ -37,16 +37,17 @@ public class FrontAuto extends LinearOpMode {
     public static double INTAKE_DELAY = 0.5;
     public static double SCORE_DELAY = 0.5;
     public static double SLIDES_DELAY = 0.5;
+    public static double TRUSS_DELAY = 6;
     public static double PLATFORM_DELAY = 0.9;
     public static double GRAB_DELAY = 0.4;
 
-    private TrajectorySequence[] spikeMarkTraj;
-    private TrajectorySequence[] backTraj;
-    private TrajectorySequence[] stackTraj;
-    private TrajectorySequence[] trussTraj;
-    private TrajectorySequence[] backDropTraj;
-    private TrajectorySequence[] backTrussTraj;
-    private TrajectorySequence[] parkTraj;
+    private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] backTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] stackTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] trussTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] backDropTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] backTrussTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
     private Command releaseCommand = () -> claw.leftOpen();
     private Command slidesCommand = () -> slides.goToPos(1);
@@ -58,6 +59,7 @@ public class FrontAuto extends LinearOpMode {
         intake.stop();
         intake.down();
     };
+    private Command intakeUp = () -> intake.up();
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
@@ -91,20 +93,24 @@ public class FrontAuto extends LinearOpMode {
             .addCommand(spikeMarkCommand)
             .build();
     private CommandSequence backSequence = new CommandSequence()
+            .addCommand(intakeUp)
             .addCommand(backCommand)
             .build();
     private CommandSequence stackSequence = new CommandSequence()
             .addCommand(stackCommand)
+            .build();
+    private CommandSequence trussSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
             .addWaitCommand(INTAKE_DELAY)
             .addCommand(intakeStopCommand)
-            .build();
-    private CommandSequence trussSequence = new CommandSequence()
             .addCommand(trussCommand)
             .build();
-    private CommandSequence scoreSequence = new CommandSequence()
+    private CommandSequence backDropSequence = new CommandSequence()
             .addCommand(backDropCommand)
-            // .addWaitCommand(10)
+            .addWaitCommand(TRUSS_DELAY)
+            .build();
+    private CommandSequence scoreSequence = new CommandSequence()
+            .addWaitCommand(TRUSS_DELAY)
             .addCommand(slidesCommand)
             .addWaitCommand(0.1)
             .addCommand(wristCommand)
@@ -128,13 +134,16 @@ public class FrontAuto extends LinearOpMode {
             .addCommandSequence(stackSequence)
             .addCommandSequence(pixelSequence)
             .addCommandSequence(trussSequence)
+            //.addCommandSequence(backDropSequence)
             .addCommandSequence(scoreSequence)
-            .addCommandSequence(backTrussSequence)
-            .addCommandSequence(stackSequence)
+            .addCommandSequence(trussSequence)
+            /*.addCommandSequence(stackSequence)
             .addCommandSequence(pixelSequence)
             .addCommandSequence(trussSequence)
+            // .addCommandSequence(backDropSequence)
             .addCommandSequence(scoreSequence)
             .addCommandSequence(parkSequence)
+            */
             .build();
 
     public FrontAuto(Color color) {
@@ -162,8 +171,8 @@ public class FrontAuto extends LinearOpMode {
         for (int i = 0; i < 3; i++) {
             spikeMarkTraj[i] = drive
                     .trajectorySequenceBuilder(reflectX(AutoConstants.FR_START_POSE))
-                    .splineTo(reflectX(AutoConstants.FR_SPIKE_VECTORS[pos.index]),
-                            reflectX(AutoConstants.FR_SPIKE_HEADINGS[pos.index]))
+                    .splineTo(reflectX(AutoConstants.FR_SPIKE_VECTORS[i]),
+                            reflectX(AutoConstants.FR_SPIKE_HEADINGS[i]))
                     .build();
             backTraj[i] = drive
                     .trajectorySequenceBuilder(spikeMarkTraj[i].end())
@@ -182,20 +191,22 @@ public class FrontAuto extends LinearOpMode {
                     .setReversed(true)
                     .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
+                    .splineTo(reflectX(AutoConstants.TAG_VECTORS[i]),
+                            reflectX(AutoConstants.TAG_HEADINGS[i]))
                     .build();
-            backDropTraj[i] = drive
-                    .trajectorySequenceBuilder(trussTraj[i].end())
-                    .splineTo(reflectX(AutoConstants.TAG_VECTORS[pos.index]),
-                            reflectX(AutoConstants.TAG_HEADINGS[pos.index]))
-                    .build();
+            // backDropTraj[i] = drive
+            // .trajectorySequenceBuilder(trussTraj[i].end())
+            // .build();
+            /*
             backTrussTraj[i] = drive
-                    .trajectorySequenceBuilder(stackTraj[i].end())
-                    .setReversed(true)
+                    .trajectorySequenceBuilder(trussTraj[i].end())
+                    .setReversed(false)
                     .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .build();
+            */
             parkTraj[i] = drive
-                    .trajectorySequenceBuilder(backDropTraj[i].end())
+                    .trajectorySequenceBuilder(trussTraj[i].end())
                     .strafeTo(reflectX(AutoConstants.PARK_VECTOR))
                     .build();
         }

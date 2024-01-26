@@ -42,6 +42,7 @@ public class Scoring extends Mechanism {
     private Command releaseLeftCommand = () -> claw.leftOpen();
     private Command releaseRightCommand = () -> claw.rightOpen();
     private Command armCommand = () -> arm.scorePos();
+    private Command intakeCommand = () -> intake.intake();
     private Command wristCommand = () -> wrist.scorePos();
     private Command retractCommand = () -> {
         claw.leftOpen();
@@ -49,17 +50,18 @@ public class Scoring extends Mechanism {
         wrist.intakePos();
         arm.intakePos();
         slides.intakePos();
+        intake.intake();
     };
 
     private CommandSequence pixelSequence = new CommandSequence()
             .addCommand(slidesUp)
+            .addCommand(intakeCommand)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .addWaitCommand(GRAB_DELAY)
-            .addCommand(pixelPlatformDown)
             .build();
     private CommandSequence armSequence = new CommandSequence()
+            .addCommand(pixelPlatformDown)
             .addWaitCommand(SLIDES_DELAY)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
@@ -94,11 +96,12 @@ public class Scoring extends Mechanism {
     public void loop(Gamepad gamepad) {
         slides.update();
 
-        if (!arm.isUp()) {
+        if (!arm.isUp() && intake.numPixels() <= 1) {
             intake.loop(gamepad);
         }
 
-        if (intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
+        if ((intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) && !intake.isPixelUp()
+                && !arm.isUp()) {
             pixelSequence.trigger();
         }
 
