@@ -24,18 +24,22 @@ public class Scoring extends Mechanism {
     public static double SLIDES_INTAKE = -55;
 
     public static double SCORE_DELAY = 0.4;
-    public static double SLIDES_DELAY = 0.2;
+    public static double SLIDES_DELAY = 0.1;
     public static double ARM_DELAY = 0.1;
-    public static double PLATFORM_DELAY = 0.9;
-    public static double GRAB_DELAY = 0.4;
+    public static double PLATFORM_DELAY = 1;
+    public static double PLATFORM_DOWN_DELAY = 0.1;
+    public static double GRAB_DELAY = 0.38;
 
     private boolean clawClicked = false;
     private boolean stackClicked = false;
+
+    private int slidesPos = 0;
 
     public Scoring(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
+    private Command slidesScore = () -> slides.goToPos(slidesPos);
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
@@ -45,6 +49,7 @@ public class Scoring extends Mechanism {
     private Command armCommand = () -> arm.scorePos();
     private Command intakeCommand = () -> intake.intake();
     private Command wristCommand = () -> wrist.scorePos();
+    private Command intakeUp = () -> intake.up();
     private Command retractCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
@@ -52,6 +57,7 @@ public class Scoring extends Mechanism {
         arm.intakePos();
         slides.intakePos();
         intake.intake();
+        intake.down();
     };
 
     private CommandSequence pixelSequence = new CommandSequence()
@@ -60,9 +66,12 @@ public class Scoring extends Mechanism {
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
+            .addCommand(intakeUp)
             .build();
     private CommandSequence armSequence = new CommandSequence()
             .addCommand(pixelPlatformDown)
+            .addWaitCommand(PLATFORM_DOWN_DELAY)
+            .addCommand(slidesScore)
             .addWaitCommand(SLIDES_DELAY)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
@@ -137,18 +146,22 @@ public class Scoring extends Mechanism {
             scoreRight.trigger();
         }
 
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_TOGGLE) && !stackClicked) {
-            intake.toggle();
-            stackClicked = true;
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_TOGGLE)) {
+            if (!stackClicked) {
+                intake.toggle();
+                stackClicked = true;
+            }
         } else {
             stackClicked = false;
         }
 
         for (int i = 0; i < 4; i++) {
             if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                slides.goToPos(i);
+                slidesPos = i;
                 if (!arm.isUp()) {
                     armSequence.trigger();
+                } else {
+                    slides.goToPos(i);
                 }
                 break;
             }

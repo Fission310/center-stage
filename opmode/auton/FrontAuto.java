@@ -87,6 +87,7 @@ public class FrontAuto extends LinearOpMode {
     private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[pos.index]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
+            .addWaitCommand(5)
             .addCommand(spikeMarkCommand)
             .build();
     private CommandSequence backSequence = new CommandSequence()
