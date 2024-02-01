@@ -31,24 +31,24 @@ public class AutoConstants {
 
     /** ======= TAG POSITIONS ======= **/
     public static double TAG_HEADING = RIGHT;
-    public static double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0 + 5;
+    public static double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0 + 4;
 
     public static double TAG_CENTER_Y = WALL_POS - 3.0 * TILE_LENGTH / 2.0;
     public static Vector2d TAG_CENTER_VECTOR = new Vector2d(TAG_X, TAG_CENTER_Y);
 
-    public static double TAG_RIGHT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0;
-    public static Vector2d TAG_RIGHT_VECTOR = new Vector2d(TAG_X, TAG_RIGHT_Y);
-
-    public static double TAG_LEFT_Y = WALL_POS - 5.0 * TILE_LENGTH / 4.0;
+    public static double TAG_LEFT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0;
     public static Vector2d TAG_LEFT_VECTOR = new Vector2d(TAG_X, TAG_LEFT_Y);
+
+    public static double TAG_RIGHT_Y = WALL_POS - 5.0 * TILE_LENGTH / 4.0;
+    public static Vector2d TAG_RIGHT_VECTOR = new Vector2d(TAG_X, TAG_RIGHT_Y);
 
     public static double[] TAG_HEADINGS = { TAG_HEADING, TAG_HEADING, TAG_HEADING };
     public static Vector2d[] TAG_VECTORS = { TAG_CENTER_VECTOR, TAG_RIGHT_VECTOR, TAG_LEFT_VECTOR };
     /** ======= END TAG POSITIONS ======= **/
 
     // Park Position
-    public static double PARK_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0 + 8;
-    public static double PARK_Y = WALL_POS - BOT_LENGTH / 2.0;
+    public static double PARK_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
+    public static double PARK_Y = WALL_POS - BOT_LENGTH / 2.0 + 8;
     public static Vector2d PARK_VECTOR = new Vector2d(PARK_X, PARK_Y);
 
     /** ======= CONSTANTS FOR BACK DROP ======= **/
@@ -64,15 +64,15 @@ public class AutoConstants {
     public static double BD_SPIKE_CENTER_Y = WALL_POS - 2.0 * TILE_LENGTH + BOT_LENGTH / 2.0 + 4;
     public static Vector2d BD_SPIKE_VECTOR = new Vector2d(BD_SPIKE_CENTER_X, BD_SPIKE_CENTER_Y);
 
-    public static double BD_SPIKE_RIGHT_HEADING = LEFT;
-    public static double BD_SPIKE_RIGHT_X = BOT_LENGTH / 2.0;
-    public static double BD_SPIKE_RIGHT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0;
-    public static Vector2d BD_SPIKE_RIGHT_VECTOR = new Vector2d(BD_SPIKE_RIGHT_X, BD_SPIKE_RIGHT_Y);
-
-    public static double BD_SPIKE_LEFT_HEADING = DOWN;
-    public static double BD_SPIKE_LEFT_X = TILE_LENGTH;
-    public static double BD_SPIKE_LEFT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0 + BOT_LENGTH / 2.0;
+    public static double BD_SPIKE_LEFT_HEADING = Math.toRadians(215);
+    public static double BD_SPIKE_LEFT_X = BOT_LENGTH / 2.0;
+    public static double BD_SPIKE_LEFT_Y = WALL_POS - 3.0 * TILE_LENGTH / 2.0;
     public static Vector2d BD_SPIKE_LEFT_VECTOR = new Vector2d(BD_SPIKE_LEFT_X, BD_SPIKE_LEFT_Y);
+
+    public static double BD_SPIKE_RIGHT_HEADING = DOWN;
+    public static double BD_SPIKE_RIGHT_X = TILE_LENGTH;
+    public static double BD_SPIKE_RIGHT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0 + BOT_LENGTH / 2.0;
+    public static Vector2d BD_SPIKE_RIGHT_VECTOR = new Vector2d(BD_SPIKE_RIGHT_X, BD_SPIKE_RIGHT_Y);
 
     public static double[] BD_SPIKE_HEADINGS = { BD_SPIKE_CENTER_HEADING, BD_SPIKE_RIGHT_HEADING,
             BD_SPIKE_LEFT_HEADING };
@@ -92,15 +92,15 @@ public class AutoConstants {
     public static double FR_SPIKE_CENTER_Y = WALL_POS - 2.0 * TILE_LENGTH + BOT_LENGTH / 2.0 + 4;
     public static Vector2d FR_SPIKE_VECTOR = new Vector2d(FR_SPIKE_CENTER_X, FR_SPIKE_CENTER_Y);
 
-    public static double FR_SPIKE_RIGHT_HEADING = DOWN;
-    public static double FR_SPIKE_RIGHT_X = -2.0 * TILE_LENGTH;
-    public static double FR_SPIKE_RIGHT_Y = WALL_POS - 2.0 * TILE_LENGTH + BOT_LENGTH / 2.0;
-    public static Vector2d FR_SPIKE_RIGHT_VECTOR = new Vector2d(FR_SPIKE_RIGHT_X, FR_SPIKE_RIGHT_Y);
-
-    public static double FR_SPIKE_LEFT_HEADING = Math.toRadians(-45);
-    public static double FR_SPIKE_LEFT_X = -TILE_LENGTH - BOT_LENGTH / 2.0;
-    public static double FR_SPIKE_LEFT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0 + BOT_LENGTH / 2.0;
+    public static double FR_SPIKE_LEFT_HEADING = DOWN;
+    public static double FR_SPIKE_LEFT_X = -2.0 * TILE_LENGTH;
+    public static double FR_SPIKE_LEFT_Y = WALL_POS - 2.0 * TILE_LENGTH + BOT_LENGTH / 2.0;
     public static Vector2d FR_SPIKE_LEFT_VECTOR = new Vector2d(FR_SPIKE_LEFT_X, FR_SPIKE_LEFT_Y);
+
+    public static double FR_SPIKE_RIGHT_HEADING = Math.toRadians(-45);
+    public static double FR_SPIKE_RIGHT_X = -TILE_LENGTH - BOT_LENGTH / 2.0;
+    public static double FR_SPIKE_RIGHT_Y = WALL_POS - 7.0 * TILE_LENGTH / 4.0 + BOT_LENGTH / 2.0;
+    public static Vector2d FR_SPIKE_RIGHT_VECTOR = new Vector2d(FR_SPIKE_RIGHT_X, FR_SPIKE_RIGHT_Y);
 
     public static double[] FR_SPIKE_HEADINGS = { FR_SPIKE_CENTER_HEADING, FR_SPIKE_RIGHT_HEADING,
             FR_SPIKE_LEFT_HEADING };
@@ -121,7 +121,7 @@ public class AutoConstants {
 
     // Truss Position
     public static double TRUSS_HEADING = RIGHT;
-    public static double TRUSS_X_1 = -3.0 * TILE_LENGTH / 2.0;
+    public static double TRUSS_X_1 = -2.0 * TILE_LENGTH;
     public static double TRUSS_Y_1 = BOT_LENGTH / 2.0;
     public static Vector2d TRUSS_VECTOR_1 = new Vector2d(TRUSS_X_1, TRUSS_Y_1);
 
