@@ -14,6 +14,7 @@ import com.stuyfission.fissionlib.util.Mechanism;
 public class Drivetrain extends Mechanism {
 
     public static double TURN_SPEED = 0.9;
+    public static double POWER = 2;
 
     private SampleMecanumDrive drivetrain;
 
@@ -30,7 +31,12 @@ public class Drivetrain extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         drivetrain.setWeightedDrivePower(
-                new Pose2d(-gamepad.left_stick_y, -gamepad.left_stick_x, -gamepad.right_stick_x * TURN_SPEED));
+                new Pose2d(pow(-gamepad.left_stick_y, POWER), pow(-gamepad.left_stick_x, POWER),
+                        pow(-gamepad.right_stick_x * TURN_SPEED, POWER)));
         drivetrain.update();
+    }
+
+    private static double pow(double base, double power) {
+        return Math.signum(base) * Math.pow(Math.abs(base), power);
     }
 }
