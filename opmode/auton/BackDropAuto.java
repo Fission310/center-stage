@@ -57,9 +57,9 @@ public class BackDropAuto extends LinearOpMode {
         slides.intakePos();
     };
 
-    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[pos.index]);
-    private Command backDropCommand = () -> drive.followTrajectorySequenceAsync(backDropTraj[pos.index]);
-    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[pos.index]);
+    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
+    private Command backDropCommand = () -> drive.followTrajectorySequenceAsync(backDropTraj[reflectPos(pos)]);
+    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
             .addCommand(spikeMarkCommand)
@@ -172,5 +172,12 @@ public class BackDropAuto extends LinearOpMode {
             return -theta;
         }
         return theta;
+    }
+
+    public int reflectPos(Position pos) {
+        if (!reflect) {
+            return 2 - pos.index;
+        }
+        return pos.index;
     }
 }

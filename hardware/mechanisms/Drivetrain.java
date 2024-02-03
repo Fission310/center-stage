@@ -29,11 +29,22 @@ public class Drivetrain extends Mechanism {
     }
 
     @Override
-    public void loop(Gamepad gamepad) {
+    public void loop(Gamepad gamepad1, Gamepad gamepad2) {
+        double leftStickY = max(gamepad1.left_stick_y, gamepad2.left_stick_y);
+        double leftStickX = max(gamepad1.left_stick_x, gamepad2.left_stick_x);
+        double rightStickX = max(gamepad1.right_stick_x, gamepad2.right_stick_x);
         drivetrain.setWeightedDrivePower(
-                new Pose2d(pow(-gamepad.left_stick_y, POWER), pow(-gamepad.left_stick_x, POWER),
-                        pow(-gamepad.right_stick_x * TURN_SPEED, POWER)));
+                new Pose2d(pow(-leftStickY, POWER), pow(-leftStickX, POWER),
+                        pow(-rightStickX * TURN_SPEED, POWER)));
         drivetrain.update();
+    }
+
+    private static double max(double num1, double num2) {
+        if (Math.abs(num1) > Math.abs(num2)) {
+            return num1;
+        } else {
+            return num2;
+        }
     }
 
     private static double pow(double base, double power) {

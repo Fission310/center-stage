@@ -33,7 +33,7 @@ public class FrontAuto extends LinearOpMode {
     private Webcam webcam;
     private Wrist wrist;
 
-    public static double ARM_DELAY = 0.5;
+    public static double ARM_DELAY = 0.1;
     public static double SCORE_DELAY = 0.5;
     public static double SLIDES_DELAY = 0.5;
     public static double TRUSS_DELAY = 6;
@@ -79,12 +79,12 @@ public class FrontAuto extends LinearOpMode {
         claw.close();
     };
 
-    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[pos.index]);
-    private Command backCommand = () -> drive.followTrajectorySequenceAsync(backTraj[pos.index]);
-    private Command stackCommand = () -> drive.followTrajectorySequenceAsync(stackTraj[pos.index]);
-    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[pos.index]);
-    private Command backTrussCommand = () -> drive.followTrajectorySequenceAsync(backTrussTraj[pos.index]);
-    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[pos.index]);
+    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
+    private Command backCommand = () -> drive.followTrajectorySequenceAsync(backTraj[reflectPos(pos)]);
+    private Command stackCommand = () -> drive.followTrajectorySequenceAsync(stackTraj[reflectPos(pos)]);
+    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[reflectPos(pos)]);
+    private Command backTrussCommand = () -> drive.followTrajectorySequenceAsync(backTrussTraj[reflectPos(pos)]);
+    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
             .addCommand(spikeMarkCommand)
@@ -112,9 +112,9 @@ public class FrontAuto extends LinearOpMode {
             .addWaitCommand(0.1)
             .addCommand(slidesCommand)
             .addWaitCommand(0.1)
-            .addCommand(wristCommand)
-            .addWaitCommand(ARM_DELAY)
             .addCommand(armCommand)
+            .addWaitCommand(ARM_DELAY)
+            .addCommand(wristCommand)
             .addWaitCommand(SLIDES_DELAY)
             .addCommand(releaseCommand)
             .addWaitCommand(SCORE_DELAY)
@@ -186,7 +186,7 @@ public class FrontAuto extends LinearOpMode {
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .splineTo(reflectX(AutoConstants.TRUSS_VECTOR_2),
                             reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i].plus(new Vector2d(3, 0))),
+                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i].plus(new Vector2d(11, 0))),
                             reflectX(AutoConstants.TAG_HEADINGS[i]))
                     .build();
             backTrussTraj[i] = drive
@@ -241,5 +241,12 @@ public class FrontAuto extends LinearOpMode {
             return -theta;
         }
         return theta;
+    }
+
+    public int reflectPos(Position pos) {
+        if (!reflect) {
+            return 2 - pos.index;
+        }
+        return pos.index;
     }
 }
