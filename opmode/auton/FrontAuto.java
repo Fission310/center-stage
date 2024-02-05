@@ -132,11 +132,11 @@ public class FrontAuto extends LinearOpMode {
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(backSequence)
-            .addCommandSequence(stackSequence)
-            .addCommandSequence(trussSequence)
-            .addCommandSequence(scoreSequence)
-            .addCommandSequence(parkSequence)
-            .addCommandSequence(parkSequence)
+            //.addCommandSequence(stackSequence)
+            //.addCommandSequence(trussSequence)
+            //.addCommandSequence(scoreSequence)
+            //.addCommandSequence(parkSequence)
+            //.addCommandSequence(parkSequence)
             .build();
 
     public FrontAuto(Color color) {
@@ -186,7 +186,7 @@ public class FrontAuto extends LinearOpMode {
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .splineTo(reflectX(AutoConstants.TRUSS_VECTOR_2),
                             reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i].plus(new Vector2d(11, 0))),
+                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i].plus(new Vector2d(2, 0))),
                             reflectX(AutoConstants.TAG_HEADINGS[i]))
                     .build();
             backTrussTraj[i] = drive

@@ -20,6 +20,7 @@ public class Scoring extends Mechanism {
     private Intake intake = new Intake(opMode);
     private Slides2 slides = new Slides2(opMode);
     private Wrist wrist = new Wrist(opMode);
+    private Climb climb = new Climb(opMode);
 
     public static double SLIDES_INTAKE = -55;
 
@@ -89,6 +90,7 @@ public class Scoring extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
+        climb.init(hwMap);
         arm.init(hwMap);
         claw.init(hwMap);
         intake.init(hwMap);
@@ -102,7 +104,11 @@ public class Scoring extends Mechanism {
     }
 
     @Override
-    public void loop(Gamepad gamepad) {
+    public void loop(Gamepad gamepad, Gamepad gamepad2) {
+        if (gamepad2.y) {
+            intake.up();
+            climb.release();
+        }
         slides.update();
 
         intake.loop(gamepad);

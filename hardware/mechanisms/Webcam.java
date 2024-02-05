@@ -65,9 +65,9 @@ public class Webcam extends Mechanism {
     }
 
     public enum Position {
-        CENTER(0),
-        RIGHT(1),
-        LEFT(2);
+        CENTER(1),
+        RIGHT(2),
+        LEFT(0);
 
         public int index;
 

@@ -15,7 +15,6 @@ public class Robot extends Mechanism {
 
     private Drivetrain drivetrain = new Drivetrain(opMode);
     private Scoring scoring = new Scoring(opMode);
-    private Climb climb = new Climb(opMode);
     private Launcher launcher = new Launcher(opMode);
 
     public Robot(LinearOpMode opMode) {
@@ -26,7 +25,6 @@ public class Robot extends Mechanism {
     public void init(HardwareMap hwMap) {
         drivetrain.init(hwMap);
         scoring.init(hwMap);
-        climb.init(hwMap);
         launcher.init(hwMap);
     }
 
@@ -38,8 +36,7 @@ public class Robot extends Mechanism {
     @Override
     public void loop(Gamepad gamepad1, Gamepad gamepad2) {
         drivetrain.loop(gamepad1, gamepad2);
-        scoring.loop(gamepad1);
-        climb.loop(gamepad2);
+        scoring.loop(gamepad1, gamepad2);
         launcher.loop(gamepad2);
     }
 }
