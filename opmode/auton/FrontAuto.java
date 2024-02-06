@@ -145,6 +145,7 @@ public class FrontAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        AutoConstants.init();
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
@@ -182,9 +183,9 @@ public class FrontAuto extends LinearOpMode {
             trussTraj[i] = drive
                     .trajectorySequenceBuilder(stackTraj[i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR_1),
+                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR_2),
+                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i].plus(new Vector2d(2, 0))),
                             reflectX(AutoConstants.TAG_HEADINGS[i]))
@@ -192,9 +193,9 @@ public class FrontAuto extends LinearOpMode {
             backTrussTraj[i] = drive
                     .trajectorySequenceBuilder(trussTraj[i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(AutoConstants.TRUSS_VECTOR_2),
+                    .splineToConstantHeading(reflectX(AutoConstants.TRUSS_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR_1),
+                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .build();
             parkTraj[i] = drive

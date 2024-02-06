@@ -98,6 +98,7 @@ public class BackDropAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        AutoConstants.init();
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
