@@ -30,14 +30,14 @@ public class Intake extends Mechanism {
     private IntakeSensor topSensor;
     private IntakeSensor bottomSensor;
 
-    public static double SPEED = 0.82;
+    public static double SPEED = 1;
     public static double SLOW_SPEED = 0.6;
 
     public double motorSpeed = SPEED;
 
     public static double UP_AUTO_POS = 1;
     public static double UP_POS = 0.88;
-    public static double DOWN_POS = 0.72;
+    public static double DOWN_POS = 0.74;
 
     public static double PIXEL_UP_POS = 0.85;
     public static double PIXEL_MIDDLE_POS = 0.7;

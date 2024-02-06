@@ -18,6 +18,7 @@ public class Arm extends Mechanism {
 
     public static double INTAKE_POS = 0.782;
     public static double SCORE_POS = 0.2;
+    public static double AUTO_POS = 0;
 
     public Arm(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -31,6 +32,11 @@ public class Arm extends Mechanism {
         leftServo.setDirection(Servo.Direction.REVERSE);
 
         intakePos();
+    }
+
+    public void autoPos() {
+        leftServo.setPosition(AUTO_POS);
+        rightServo.setPosition(AUTO_POS);
     }
 
     public void scorePos() {
