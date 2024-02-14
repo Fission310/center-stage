@@ -16,6 +16,9 @@ public class Drivetrain extends Mechanism {
     public static double TURN_SPEED = 0.9;
     public static double POWER = 2;
 
+    private double speed = 1;
+    private int reverse = 1;
+
     private SampleMecanumDrive drivetrain;
 
     public Drivetrain(LinearOpMode opMode) {
@@ -28,14 +31,26 @@ public class Drivetrain extends Mechanism {
         drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void setReverse(boolean reverse) {
+        if (reverse) {
+            this.reverse = -1;
+        } else {
+            this.reverse = 1;
+        }
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
     @Override
     public void loop(Gamepad gamepad1, Gamepad gamepad2) {
         double leftStickY = max(gamepad1.left_stick_y, gamepad2.left_stick_y);
         double leftStickX = max(gamepad1.left_stick_x, gamepad2.left_stick_x);
         double rightStickX = max(gamepad1.right_stick_x, gamepad2.right_stick_x);
         drivetrain.setWeightedDrivePower(
-                new Pose2d(pow(-leftStickY, POWER), pow(-leftStickX, POWER),
-                        pow(-rightStickX * TURN_SPEED, POWER)));
+                new Pose2d(pow(-leftStickY * speed, POWER), pow(-leftStickX * speed, POWER),
+                        pow(-rightStickX * TURN_SPEED * speed, POWER)));
         drivetrain.update();
     }
 

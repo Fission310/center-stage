@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.stuyfission.fissionlib.input.GamepadStatic;
 import com.stuyfission.fissionlib.util.Mechanism;
 
@@ -22,6 +23,7 @@ public class Slides2 extends Mechanism {
     public static double MEDIUM_HIGH_POS = 600;
     public static double HIGH_POS = 845;
     public static double COLLECT_POS = -55;
+    public static double LOW_VOLTAGE = 12;
     public static int SPEED = 50;
 
     private static double[] POSITIONS = {LOW_POS, MEDIUM_LOW_POS, MEDIUM_HIGH_POS, HIGH_POS};
@@ -39,6 +41,8 @@ public class Slides2 extends Mechanism {
 
     private final DcMotorEx[] motors = new DcMotorEx[2];
 
+    private VoltageSensor voltage;
+
     public Slides2(LinearOpMode opMode) {
         this.opMode = opMode;
     }
@@ -47,6 +51,8 @@ public class Slides2 extends Mechanism {
     public void init(HardwareMap hwMap) {
         motors[0] = hwMap.get(DcMotorEx.class, "slidesLeftMotor");
         motors[1] = hwMap.get(DcMotorEx.class, "slidesRightMotor");
+
+        voltage = hwMap.get(VoltageSensor.class, "Control Hub");
 
         motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -84,6 +90,12 @@ public class Slides2 extends Mechanism {
 
     public double getPosition() {
         return motors[0].getCurrentPosition();
+    }
+
+    public void downUntil() {
+        setTarget(-999999999);
+        while (voltage.getVoltage() > LOW_VOLTAGE) {}
+        intakePos();
     }
 
     public void upABit() {

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.hardware.mechanisms.Climb;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Launcher;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Scoring;
@@ -13,7 +12,6 @@ import com.stuyfission.fissionlib.util.Mechanism;
 
 public class Robot extends Mechanism {
 
-    private Drivetrain drivetrain = new Drivetrain(opMode);
     private Scoring scoring = new Scoring(opMode);
     private Launcher launcher = new Launcher(opMode);
 
@@ -23,7 +21,6 @@ public class Robot extends Mechanism {
 
     @Override
     public void init(HardwareMap hwMap) {
-        drivetrain.init(hwMap);
         scoring.init(hwMap);
         launcher.init(hwMap);
     }
@@ -35,7 +32,6 @@ public class Robot extends Mechanism {
 
     @Override
     public void loop(Gamepad gamepad1, Gamepad gamepad2) {
-        drivetrain.loop(gamepad1, gamepad2);
         scoring.loop(gamepad1, gamepad2);
         launcher.loop(gamepad2);
     }

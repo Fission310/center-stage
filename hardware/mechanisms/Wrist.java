@@ -19,6 +19,7 @@ public class Wrist extends Mechanism {
     private boolean right = false;
 
     public static double START_POS = 0.29;
+    public static double AUTO_POS = 0.29;
     public static double[] POSITIONS = {
         0.01, 0.2, 0.38, 0.57, 0.76, 0.94
     };
@@ -43,6 +44,10 @@ public class Wrist extends Mechanism {
 
     public void intakePos() {
         wristServo.setPosition(START_POS);
+    }
+
+    public void autoPos() {
+        wristServo.setPosition(AUTO_POS);
     }
 
     public void right() {

@@ -50,8 +50,14 @@ public class FrontAuto extends LinearOpMode {
         claw.rightOpen();
     };
     private Command slidesCommand = () -> slides.goToPos(0);
-    private Command armIntakeCommand = () -> arm.intakePos();
-    private Command armAutoCommand = () -> arm.autoPos();
+    private Command armIntakeCommand = () -> {
+        arm.intakePos();
+        wrist.intakePos();
+    };
+    private Command armAutoCommand = () -> {
+        arm.autoPos();
+        wrist.autoPos();
+    };
     private Command sensePixels = () -> {
         long start = System.nanoTime();
         while (intake.numPixels() < 2 && System.nanoTime() - start < 3000000) {
