@@ -10,7 +10,7 @@ Servos:
 2 - clawLeftServo
 3 - clawRightServo
 4 - climbLeftServo
-5 - intakeLeftServo
+5 - launcherServo
 
 Expansion hub:
 Motors:

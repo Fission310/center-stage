@@ -37,8 +37,8 @@ public class Intake extends Mechanism {
 
     public double motorSpeed = SPEED;
 
-    public static double UP_AUTO_POS = 0.25;
-    public static double UP_POS = 0.2;
+    public static double UP_AUTO_POS = 0.3;
+    public static double UP_POS = 0.23;
     public static double DOWN_POS = 0.03;
 
     public static double PIXEL_UP_POS = 0.5;
@@ -49,7 +49,8 @@ public class Intake extends Mechanism {
     public static double INTAKE_UP_DELAY = 0.6;
     public static double SENSOR_DELAY = 0.5;
 
-    public static int FAR = 18;
+    public static double FAR_PIXEL = 18;
+    public static double FAR_INTAKE = 10;
 
     private boolean isPixelUp = false;
     private boolean isUp = false;
@@ -98,10 +99,10 @@ public class Intake extends Mechanism {
 
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
-        topSensor = new IntakeSensor(opMode, "intakeTopSensor");
-        bottomSensor = new IntakeSensor(opMode, "intakeBottomSensor");
-        leftSensor = new IntakeSensor(opMode, "intakeLeftSensor");
-        rightSensor = new IntakeSensor(opMode, "intakeRightSensor");
+        topSensor = new IntakeSensor(opMode, "intakeTopSensor", FAR_PIXEL);
+        bottomSensor = new IntakeSensor(opMode, "intakeBottomSensor", FAR_PIXEL);
+        leftSensor = new IntakeSensor(opMode, "intakeLeftSensor", FAR_INTAKE);
+        rightSensor = new IntakeSensor(opMode, "intakeRightSensor", FAR_INTAKE);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class Intake extends Mechanism {
 
         topSensor.init(hwMap);
         bottomSensor.init(hwMap);
-        leftSensor.init(hwMap);
+        //leftSensor.init(hwMap);
         rightSensor.init(hwMap);
 
         pixelServo.setPosition(PIXEL_DOWN_POS);
@@ -182,7 +183,7 @@ public class Intake extends Mechanism {
     }
 
     public boolean isThirdPixel() {
-        return leftSensor.isPixel();// || rightSensor.isPixel();
+        return rightSensor.isPixel();// || leftSensor.isPixel();
     }
 
     @Override
@@ -211,9 +212,12 @@ public class Intake extends Mechanism {
         private ColorRangeSensor sensor;
         private String name;
 
-        public IntakeSensor(LinearOpMode opMode, String name) {
+        private double far;
+
+        public IntakeSensor(LinearOpMode opMode, String name, double far) {
             this.opMode = opMode;
             this.name = name;
+            this.far = far;
         }
 
         public void init(HardwareMap hwMap) {
@@ -226,7 +230,7 @@ public class Intake extends Mechanism {
             Telemetry t = FtcDashboard.getInstance().getTelemetry();
             t.addData(name + " dist", sensor.getDistance(DistanceUnit.MM));
             t.update();
-            return sensor.getDistance(DistanceUnit.MM) < FAR;
+            return sensor.getDistance(DistanceUnit.MM) < far;
         }
     }
 }

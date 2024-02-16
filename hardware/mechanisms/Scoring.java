@@ -74,6 +74,12 @@ public class Scoring extends Mechanism {
         intake.down();
     };
 
+    private CommandSequence waitOuttake = new CommandSequence()
+            .addWaitCommand(1)
+            .addCommand(outtakeCommand)
+            .addWaitCommand(2)
+            .addCommand(stopCommand)
+            .build();
     private CommandSequence outtakeABit = new CommandSequence()
             .addCommand(outtakeCommand)
             .addWaitCommand(2)
@@ -160,12 +166,23 @@ public class Scoring extends Mechanism {
                 } else {
                     stackClicked = false;
                 }
+
+                for (int i = 0; i < 4; i++) {
+                    if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
+                        slidesPos = i;
+                        armSequence.trigger();
+                        state = State.SCORING;
+                        doneOuttake = false;
+                        break;
+                    }
+                }
                 break;
             case TRANSFER:
                 drive.setSpeed(1);
                 drive.setReverse(false);
                 if (intake.numPixels() == 0) {
                     state = State.INTAKE;
+                    intake.down();
                     doneOuttake = false;
                 }
 
@@ -173,6 +190,7 @@ public class Scoring extends Mechanism {
                     claw.leftOpen();
                     claw.rightOpen();
                     pixelDown.trigger();
+                    intake.down();
                     state = State.INTAKE;
                     doneOuttake = false;
                 }
@@ -209,6 +227,7 @@ public class Scoring extends Mechanism {
 
                 if (claw.numPixels() == 0) {
                     retractSequence.trigger();
+                    intake.down();
                     state = State.INTAKE;
                 }
 
