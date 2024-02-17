@@ -56,17 +56,14 @@ public class FrontAuto extends LinearOpMode {
     };
     private Command armAutoCommand = () -> {
         arm.autoPos();
-        wrist.autoPos();
+        wrist.autoPos(reflectPos(pos));
     };
     private Command sensePixels = () -> {
         long start = System.nanoTime();
         while (intake.numPixels() < 2 && System.nanoTime() - start < 3000000) {
         }
     };
-    private Command intakeStartCommand = () -> {
-        intake.up();
-        intake.intake();
-    };
+    private Command intakeStartCommand = () -> intake.intake();
     private Command intakeStopCommand = () -> {
         intake.stop();
         intake.down();
@@ -78,11 +75,13 @@ public class FrontAuto extends LinearOpMode {
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
     private Command wristCommand = () -> wrist.scorePos();
-    private Command retractCommand = () -> {
+    private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
-        arm.intakePos();
         wrist.intakePos();
+    };
+    private Command retractSecondCommand = () -> {
+        arm.intakePos();
         slides.intakePos();
         claw.close();
     };
@@ -101,19 +100,19 @@ public class FrontAuto extends LinearOpMode {
             .addCommand(releaseCommand)
             .addWaitCommand(0.2)
             .addCommand(armIntakeCommand)
+            .addCommand(intakeUp)
             .build();
     private CommandSequence trussSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
             .addCommand(trussCommand)
             .addCommand(sensePixels)
             .addWaitCommand(0.5)
-            .addCommand(outtake)
+            .addCommand(intakeStopCommand)
             .addWaitCommand(0.4)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .build();
-    private CommandSequence scoreSequence = new CommandSequence()
+            .addWaitCommand(2)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
             .addCommand(slidesCommand)
@@ -121,22 +120,21 @@ public class FrontAuto extends LinearOpMode {
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
             .addCommand(wristCommand)
-            .addWaitCommand(SLIDES_DELAY)
-            .addCommand(releaseCommand)
-            .addWaitCommand(SCORE_DELAY)
-            .addCommand(retractCommand)
-            .addWaitCommand(0.6)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
-            .addWaitCommand(3)
+            .addCommand(releaseCommand)
+            .addWaitCommand(2)
             .addCommand(parkCommand)
+            .addWaitCommand(4)
+            .addCommand(retractFirstCommand)
+            .addWaitCommand(0.4)
+            .addCommand(retractSecondCommand)
             .build();
 
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(stackSequence)
             .addCommandSequence(trussSequence)
-            .addCommandSequence(scoreSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -196,7 +194,8 @@ public class FrontAuto extends LinearOpMode {
                     .build();
             parkTraj[i] = drive
                     .trajectorySequenceBuilder(trussTraj[i].end())
-                    .strafeTo(reflectX(AutoConstants.PARK_VECTOR))
+                    .splineToConstantHeading(reflectX(AutoConstants.PARK_VECTOR),
+                            reflectX(AutoConstants.PARK_HEADING))
                     .build();
         }
 
