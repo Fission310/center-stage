@@ -42,11 +42,16 @@ public class FrontAuto extends LinearOpMode {
     private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
     private TrajectorySequence[] stackTraj = new TrajectorySequence[3];
     private TrajectorySequence[] trussTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] tagBackTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] tagTraj = new TrajectorySequence[3];
     private TrajectorySequence[] backTrussTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] tagCenterTraj = new TrajectorySequence[3];
     private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
-    private Command releaseCommand = () -> {
+    private Command releaseLeftCommand = () -> {
         claw.leftOpen();
+    };
+    private Command releaseRightCommand = () -> {
         claw.rightOpen();
     };
     private Command slidesCommand = () -> slides.goToPos(0);
@@ -74,7 +79,7 @@ public class FrontAuto extends LinearOpMode {
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
-    private Command wristCommand = () -> wrist.scorePos();
+    private Command wristCommand = () -> wrist.autoPos();
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
@@ -89,6 +94,10 @@ public class FrontAuto extends LinearOpMode {
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
     private Command stackCommand = () -> drive.followTrajectorySequenceAsync(stackTraj[reflectPos(pos)]);
     private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[reflectPos(pos)]);
+    private Command tagBackCommand = () -> drive.followTrajectorySequenceAsync(tagBackTraj[reflectPos(pos)]);
+    private Command tagCommand = () -> drive.followTrajectorySequenceAsync(tagTraj[reflectPos(pos)]);
+    private Command backTrussCommand = () -> drive.followTrajectorySequenceAsync(backTrussTraj[reflectPos(pos)]);
+    private Command tagCenterCommand = () -> drive.followTrajectorySequenceAsync(tagCenterTraj[reflectPos(pos)]);
     private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
@@ -97,7 +106,8 @@ public class FrontAuto extends LinearOpMode {
             .build();
     private CommandSequence stackSequence = new CommandSequence()
             .addCommand(stackCommand)
-            .addCommand(releaseCommand)
+            .addCommand(releaseLeftCommand)
+            .addCommand(releaseRightCommand)
             .addWaitCommand(0.2)
             .addCommand(armIntakeCommand)
             .addCommand(intakeUp)
@@ -120,9 +130,43 @@ public class FrontAuto extends LinearOpMode {
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
             .addCommand(wristCommand)
+            .addWaitCommand(SCORE_DELAY)
+            .addCommand(releaseRightCommand)
+            .build();
+    private CommandSequence tagBackSequence = new CommandSequence()
+            .addCommand(tagBackCommand)
+            .build();
+    private CommandSequence tagSequence = new CommandSequence()
+            .addCommand(tagCommand)
+            .addCommand(releaseLeftCommand)
+            .build();
+    private CommandSequence backTrussSequence = new CommandSequence()
+            .addCommand(backTrussCommand)
+            .build();
+    private CommandSequence tagCenterSequence = new CommandSequence()
+            .addCommand(intakeStartCommand)
+            .addCommand(tagCenterCommand)
+            .addCommand(trussCommand)
+            .addCommand(sensePixels)
+            .addWaitCommand(0.5)
+            .addCommand(intakeStopCommand)
+            .addWaitCommand(0.4)
+            .addCommand(pixelPlatformUp)
+            .addWaitCommand(PLATFORM_DELAY)
+            .addCommand(grabCommand)
+            .addWaitCommand(2)
+            .addCommand(pixelPlatformDown)
+            .addWaitCommand(0.1)
+            .addCommand(slidesCommand)
+            .addWaitCommand(0.1)
+            .addCommand(armCommand)
+            .addWaitCommand(ARM_DELAY)
+            .addCommand(wristCommand)
+            .addWaitCommand(SCORE_DELAY)
+            .addCommand(releaseRightCommand)
+            .addCommand(releaseLeftCommand)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
-            .addCommand(releaseCommand)
             .addWaitCommand(2)
             .addCommand(parkCommand)
             .addWaitCommand(4)
@@ -135,6 +179,10 @@ public class FrontAuto extends LinearOpMode {
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(stackSequence)
             .addCommandSequence(trussSequence)
+            .addCommandSequence(tagBackSequence)
+            .addCommandSequence(tagSequence)
+            .addCommandSequence(backTrussSequence)
+            .addCommandSequence(tagCenterSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -186,14 +234,37 @@ public class FrontAuto extends LinearOpMode {
                     .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i]),
                             reflectX(AutoConstants.TAG_HEADINGS[i]))
                     .build();
-            backTrussTraj[i] = drive
+            tagBackTraj[i] = drive
                     .trajectorySequenceBuilder(trussTraj[i].end())
                     .setReversed(false)
+                    .splineToConstantHeading(reflectX(AutoConstants.FR_TAG_BACK_VECTOR),
+                            reflectX(AutoConstants.FR_TAG_BACK_HEADING))
+                    .build();
+            tagTraj[i] = drive
+                    .trajectorySequenceBuilder(tagBackTraj[i].end())
+                    .setReversed(true)
+                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[2 - i + i % 2]),
+                            reflectX(AutoConstants.TAG_HEADINGS[2 - i + i % 2]))
+                    .build();
+            backTrussTraj[i] = drive
+                    .trajectorySequenceBuilder(tagTraj[i].end())
+                    .setReversed(false)
                     .splineToConstantHeading(reflectX(AutoConstants.TRUSS_VECTOR),
+                            reflectX(AutoConstants.TRUSS_BACK_HEADING))
+                    .splineTo(reflectX(AutoConstants.FR_STACK_VECTOR),
+                            reflectX(AutoConstants.FR_STACK_HEADING))
+                    .build();
+            tagCenterTraj[i] = drive
+                    .trajectorySequenceBuilder(backTrussTraj[i].end())
+                    .setReversed(true)
+                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
+                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[1]),
+                            reflectX(AutoConstants.TAG_HEADINGS[1]))
                     .build();
             parkTraj[i] = drive
                     .trajectorySequenceBuilder(trussTraj[i].end())
+                    .setReversed(false)
                     .splineToConstantHeading(reflectX(AutoConstants.PARK_VECTOR),
                             reflectX(AutoConstants.PARK_HEADING))
                     .build();

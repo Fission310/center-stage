@@ -118,10 +118,17 @@ public class AutoConstants {
     public static double FR_STACK_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
     public static double FR_STACK_Y = WALL_POS - 5.0 * TILE_LENGTH / 2.0 + 2;
     public static Vector2d FR_STACK_VECTOR;
+
+    // Tag Back Position
+    public static double FR_TAG_BACK_HEADING = LEFT;
+    public static double FR_TAG_BACK_X = WALL_POS - TILE_LENGTH;
+    public static double FR_TAG_BACK_Y = WALL_POS - 7.0 * TILE_LENGTH / 5.0 + 4;
+    public static Vector2d FR_TAG_BACK_VECTOR;
     /** ======= END CONSTANTS FOR BACK DROP ======= **/
 
     // Truss Position
     public static double TRUSS_HEADING = RIGHT;
+    public static double TRUSS_BACK_HEADING = LEFT;
     public static double TRUSS_X = 3.0 * TILE_LENGTH / 2.0;
     public static double TRUSS_Y = TILE_LENGTH / 2.0;
     public static Vector2d TRUSS_VECTOR;
@@ -150,6 +157,7 @@ public class AutoConstants {
         FR_SPIKE_VECTORS = new Vector2d[] { FR_SPIKE_LEFT_VECTOR, FR_SPIKE_CENTER_VECTOR, FR_SPIKE_RIGHT_VECTOR };
         FR_BACK_VECTOR = new Vector2d(FR_BACK_X, FR_BACK_Y);
         FR_STACK_VECTOR = new Vector2d(FR_STACK_X, FR_STACK_Y);
+        FR_TAG_BACK_VECTOR = new Vector2d(FR_TAG_BACK_X, FR_TAG_BACK_Y);
 
         TRUSS_VECTOR = new Vector2d(TRUSS_X, TRUSS_Y);
     }
