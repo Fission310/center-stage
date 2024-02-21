@@ -139,10 +139,15 @@ public class FrontWallAuto extends LinearOpMode {
             .build();
     private CommandSequence tagSequence = new CommandSequence()
             .addCommand(tagCommand)
+            .addWaitCommand(0.3)
             .addCommand(releaseLeftCommand)
             .build();
     private CommandSequence backTrussSequence = new CommandSequence()
             .addCommand(backTrussCommand)
+            .addWaitCommand(0.2)
+            .addCommand(retractFirstCommand)
+            .addWaitCommand(0.4)
+            .addCommand(retractSecondCommand)
             .build();
     private CommandSequence tagCenterSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
