@@ -32,35 +32,29 @@ public class Meep {
                         drive -> drive.trajectorySequenceBuilder(reflectX(AutoConstants.FR_START_POSE))
                                 .lineToLinearHeading(reflectX(new Pose2d(AutoConstants.FR_SPIKE_VECTORS[pos.index],
                                         AutoConstants.FR_SPIKE_HEADINGS[pos.index])))
-                                .setTangent(AutoConstants.FR_SPIKE_TANGENT)
+                                .setTangent(Math.toRadians(180))
                                 .splineToLinearHeading(
-                                        reflectX(new Pose2d(AutoConstants.FR_STACK_VECTOR,
+                                        reflectX(new Pose2d(AutoConstants.FR_WALL_STACK_VECTOR,
                                                 AutoConstants.FR_STACK_HEADING)),
                                         reflectX(AutoConstants.FR_STACK_HEADING))
                                 .setReversed(true)
-                                .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
+                                .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR), reflectX(AutoConstants.TRUSS_HEADING))
+                                .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
                                         reflectX(AutoConstants.TRUSS_HEADING))
-                                .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[pos.index]),
-                                        reflectX(AutoConstants.TAG_HEADINGS[pos.index]))
-                                .setReversed(false)
-                                .splineToConstantHeading(reflectX(AutoConstants.FR_TAG_BACK_VECTOR),
-                                        reflectX(AutoConstants.FR_TAG_BACK_HEADING))
-                                .setReversed(true)
+                                .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[pos.index]), AutoConstants.TAG_HEADING)
+                                .back(reflectX(2))
                                 .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[2 - pos.index + pos.index % 2]),
                                         reflectX(AutoConstants.TAG_HEADINGS[2 - pos.index + pos.index % 2]))
                                 .setReversed(false)
-                                .splineToConstantHeading(reflectX(AutoConstants.TRUSS_VECTOR),
-                                        reflectX(AutoConstants.TRUSS_BACK_HEADING))
-                                .splineTo(reflectX(AutoConstants.FR_STACK_VECTOR),
-                                        reflectX(AutoConstants.FR_STACK_HEADING))
-                                .setReversed(true)
-                                .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
-                                        reflectX(AutoConstants.TRUSS_HEADING))
-                                .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[1]),
-                                        reflectX(AutoConstants.TAG_HEADINGS[1]))
-                                .setReversed(false)
-                                .splineToConstantHeading(reflectX(AutoConstants.PARK_VECTOR),
-                                        reflectX(AutoConstants.PARK_HEADING))
+//                                .splineToConstantHeading(reflectX(TRUSS_VECTOR), reflectX(LEFT))
+//                                .splineToConstantHeading(reflectX(new Vector2d(FR_START_X, TRUSS_Y)), reflectX(LEFT))
+//                                .splineToConstantHeading(reflectX(FR_STACK_VECTOR), FR_STACK_HEADING)
+//                                .setReversed(true)
+//                                .splineToConstantHeading(reflectX(new Vector2d(FR_START_X, TRUSS_Y)), reflectX(TRUSS_HEADING))
+//                                .splineToConstantHeading(reflectX(TRUSS_VECTOR),
+//                                        reflectX(TRUSS_HEADING))
+//                                .splineToConstantHeading(reflectX(WP_VECTORS[Math.abs(numPos - 1)]), WP_HEADING)
+//                                .setReversed(false)
                                 .build());
 
         meepMeep.setDarkMode(true)

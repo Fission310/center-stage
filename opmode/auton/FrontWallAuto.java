@@ -4,22 +4,23 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.stuyfission.fissionlib.command.AutoCommandMachine;
 import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
-import com.stuyfission.fissionlib.command.AutoCommandMachine;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Arm;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Claw;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Intake;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
-import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
-public class FrontAuto extends LinearOpMode {
+public class FrontWallAuto extends LinearOpMode {
 
     private boolean reflect;
     private Color color;
@@ -187,7 +188,7 @@ public class FrontAuto extends LinearOpMode {
             .addCommandSequence(parkSequence)
             .build();
 
-    public FrontAuto(Color color) {
+    public FrontWallAuto(Color color) {
         this.color = color;
     }
 
@@ -222,42 +223,41 @@ public class FrontAuto extends LinearOpMode {
                     .trajectorySequenceBuilder(spikeMarkTraj[i].end())
                     .setTangent(AutoConstants.FR_SPIKE_TANGENT)
                     .splineToLinearHeading(
-                            reflectX(new Pose2d(AutoConstants.FR_STACK_VECTOR,
+                            reflectX(new Pose2d(AutoConstants.FR_WALL_STACK_VECTOR,
                                     AutoConstants.FR_STACK_HEADING)),
                             reflectX(AutoConstants.FR_STACK_HEADING))
                     .build();
             trussTraj[i] = drive
                     .trajectorySequenceBuilder(stackTraj[i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
+                    .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR),
+                            reflectX(AutoConstants.TRUSS_HEADING))
+                    .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i]),
                             reflectX(AutoConstants.TAG_HEADINGS[i]))
                     .build();
-            tagBackTraj[i] = drive
-                    .trajectorySequenceBuilder(trussTraj[i].end())
-                    .setReversed(false)
-                    .splineToConstantHeading(reflectX(AutoConstants.FR_TAG_BACK_VECTOR),
-                            reflectX(AutoConstants.FR_TAG_BACK_HEADING))
-                    .build();
             tagTraj[i] = drive
-                    .trajectorySequenceBuilder(tagBackTraj[i].end())
-                    .setReversed(true)
+                    .trajectorySequenceBuilder(trussTraj[i].end())
                     .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[2 - i + i % 2]),
                             reflectX(AutoConstants.TAG_HEADINGS[2 - i + i % 2]))
                     .build();
             backTrussTraj[i] = drive
                     .trajectorySequenceBuilder(tagTraj[i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(AutoConstants.TRUSS_VECTOR),
+                    .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
+                            AutoConstants.TRUSS_BACK_HEADING)
+                    .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR),
                             reflectX(AutoConstants.TRUSS_BACK_HEADING))
-                    .splineTo(reflectX(AutoConstants.FR_STACK_VECTOR),
-                            reflectX(AutoConstants.FR_STACK_HEADING))
+                    .splineToConstantHeading(reflectX(AutoConstants.FR_WALL_STACK_VECTOR),
+                            AutoConstants.FR_STACK_HEADING)
                     .build();
             tagCenterTraj[i] = drive
                     .trajectorySequenceBuilder(backTrussTraj[i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(AutoConstants.TRUSS_VECTOR),
+                    .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR),
+                            reflectX(AutoConstants.TRUSS_HEADING))
+                    .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[1]),
                             reflectX(AutoConstants.TAG_HEADINGS[1]))
