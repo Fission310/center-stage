@@ -75,7 +75,8 @@ public class FrontWallAuto extends LinearOpMode {
         intake.down();
     };
     private Command outtake = () -> intake.outtake();
-    private Command intakeUp = () -> intake.upAuto();
+    private Command intakeUpFirst = () -> intake.upAuto(1);
+    private Command intakeUpSecond = () -> intake.upAuto(2);
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
@@ -111,7 +112,7 @@ public class FrontWallAuto extends LinearOpMode {
             .addCommand(releaseRightCommand)
             .addWaitCommand(0.2)
             .addCommand(armIntakeCommand)
-            .addCommand(intakeUp)
+            .addCommand(intakeUpFirst)
             .build();
     private CommandSequence trussSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
@@ -148,6 +149,7 @@ public class FrontWallAuto extends LinearOpMode {
             .addCommand(retractFirstCommand)
             .addWaitCommand(0.4)
             .addCommand(retractSecondCommand)
+            .addCommand(intakeUpSecond)
             .build();
     private CommandSequence tagCenterSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
@@ -228,7 +230,7 @@ public class FrontWallAuto extends LinearOpMode {
                     .trajectorySequenceBuilder(spikeMarkTraj[i].end())
                     .setTangent(AutoConstants.FR_SPIKE_TANGENT)
                     .splineToLinearHeading(
-                            reflectX(new Pose2d(AutoConstants.FR_WALL_STACK_VECTOR,
+                            reflectX(new Pose2d(AutoConstants.FR_WALL_STACK_VECTOR[0],
                                     AutoConstants.FR_STACK_HEADING)),
                             reflectX(AutoConstants.FR_STACK_HEADING))
                     .build();
@@ -254,7 +256,7 @@ public class FrontWallAuto extends LinearOpMode {
                             AutoConstants.TRUSS_BACK_HEADING)
                     .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR),
                             reflectX(AutoConstants.TRUSS_BACK_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.FR_WALL_STACK_VECTOR),
+                    .splineToConstantHeading(reflectX(AutoConstants.FR_WALL_STACK_VECTOR[1]),
                             AutoConstants.FR_STACK_HEADING)
                     .build();
             tagCenterTraj[i] = drive
@@ -264,7 +266,7 @@ public class FrontWallAuto extends LinearOpMode {
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[1]),
+                    .splineToConstantHeading(reflectX(i == 1 ? AutoConstants.TAG_VECTORS[2]: AutoConstants.TAG_VECTORS[1]),
                             reflectX(AutoConstants.TAG_HEADINGS[1]))
                     .build();
             parkTraj[i] = drive

@@ -31,19 +31,18 @@ public class AutoConstants {
 
     /** ======= TAG POSITIONS ======= **/
     public static double TAG_HEADING = RIGHT;
-    public static double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0 + 8;
-
-    public static double TAG_CENTER_Y = WALL_POS - 7.0 * TILE_LENGTH / 5.0 + 4;
+    public static double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0 + 5;
+    public static double TAG_LEFT_Y = TILE_LENGTH + 5.6;
+    public static Vector2d TAG_LEFT_VECTOR;
+    public static double TAG_CENTER_Y = WALL_POS - 8.8 * TILE_LENGTH / 5.0 + 7;
     public static Vector2d TAG_CENTER_VECTOR;
 
-    public static double TAG_LEFT_Y = WALL_POS - 8.8 * TILE_LENGTH / 5.0 + 7;
-    public static Vector2d TAG_LEFT_VECTOR;
-
-    public static double TAG_RIGHT_Y = WALL_POS - 6.0 * TILE_LENGTH / 5.0 + 6;
+    public static double TAG_RIGHT_Y = WALL_POS - 7.0 * TILE_LENGTH / 5.0 + 4;
     public static Vector2d TAG_RIGHT_VECTOR;
 
     public static double[] TAG_HEADINGS;
     public static Vector2d[] TAG_VECTORS;
+
     /** ======= END TAG POSITIONS ======= **/
 
     // Park Position
@@ -115,11 +114,13 @@ public class AutoConstants {
 
     // Stack Position
     public static double FR_STACK_HEADING = LEFT;
-    public static double FR_STACK_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
+    public static double FR_STACK_FIRST_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
+    public static double FR_STACK_SECOND_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0 + 3;
+    public static double[] FR_STACK_X = {FR_STACK_FIRST_X, FR_STACK_SECOND_X};
     public static double FR_TRUSS_STACK_Y = WALL_POS - 5.0 * TILE_LENGTH / 2.0 + 2;
     public static double FR_WALL_STACK_Y = TILE_LENGTH * 1.5;
-    public static Vector2d FR_TRUSS_STACK_VECTOR;
-    public static Vector2d FR_WALL_STACK_VECTOR;
+    public static Vector2d[] FR_TRUSS_STACK_VECTOR = new Vector2d[FR_STACK_X.length];
+    public static Vector2d[] FR_WALL_STACK_VECTOR = new Vector2d[FR_STACK_X.length];
 
     // Tag Back Position
     public static double FR_TAG_BACK_HEADING = LEFT;
@@ -139,7 +140,7 @@ public class AutoConstants {
 
     public static double WALL_HEADING = RIGHT;
     public static double WALL_START_X = FR_START_X;
-    public static double WALL_END_X = TRUSS_X;
+    public static double WALL_END_X = TRUSS_X - 7;
     public static double WALL_Y = TILE_LENGTH * 2.5;
     public static Vector2d WALL_START_VECTOR;
     public static Vector2d WALL_END_VECTOR;
@@ -167,8 +168,10 @@ public class AutoConstants {
         FR_SPIKE_HEADINGS = new double[] { FR_SPIKE_LEFT_HEADING, FR_SPIKE_CENTER_HEADING, FR_SPIKE_RIGHT_HEADING };
         FR_SPIKE_VECTORS = new Vector2d[] { FR_SPIKE_LEFT_VECTOR, FR_SPIKE_CENTER_VECTOR, FR_SPIKE_RIGHT_VECTOR };
         FR_BACK_VECTOR = new Vector2d(FR_BACK_X, FR_BACK_Y);
-        FR_TRUSS_STACK_VECTOR = new Vector2d(FR_STACK_X, FR_TRUSS_STACK_Y);
-        FR_WALL_STACK_VECTOR = new Vector2d(FR_STACK_X, FR_WALL_STACK_Y);
+        for(int i = 0; i < FR_STACK_X.length; i++){
+            FR_TRUSS_STACK_VECTOR[i] = new Vector2d(FR_STACK_X[i], FR_TRUSS_STACK_Y);
+            FR_WALL_STACK_VECTOR[i] = new Vector2d(FR_STACK_X[i], FR_WALL_STACK_Y);
+        }
         FR_TAG_BACK_VECTOR = new Vector2d(FR_TAG_BACK_X, FR_TAG_BACK_Y);
 
         TRUSS_VECTOR = new Vector2d(TRUSS_X, TRUSS_Y);

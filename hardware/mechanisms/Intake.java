@@ -37,7 +37,8 @@ public class Intake extends Mechanism {
 
     public double motorSpeed = SPEED;
 
-    public static double UP_AUTO_POS = 0.3;
+    public static double UP_AUTO_POS_FIRST_CYCLE = 0.3;
+    public static double UP_AUTO_POS_SECOND_CYCLE = 0.265;
     public static double UP_POS = 0.23;
     public static double DOWN_POS = 0.03;
 
@@ -154,9 +155,10 @@ public class Intake extends Mechanism {
         isUp = true;
     }
 
-    public void upAuto() {
-        leftServo.setPosition( UP_AUTO_POS);
-        rightServo.setPosition(UP_AUTO_POS);
+    public void upAuto(int cycle) {
+        double upPos = cycle == 1 ? UP_AUTO_POS_FIRST_CYCLE : UP_AUTO_POS_SECOND_CYCLE;
+        leftServo.setPosition(upPos);
+        rightServo.setPosition(upPos);
         isUp = true;
     }
 
