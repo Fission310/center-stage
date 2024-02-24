@@ -133,7 +133,6 @@ public class FrontWallAuto extends LinearOpMode {
             .addWaitCommand(ARM_DELAY)
             .addCommand(wristCommand)
             .addWaitCommand(SCORE_DELAY)
-            .addCommand(releaseRightCommand)
             .build();
     private CommandSequence tagBackSequence = new CommandSequence()
             .addCommand(tagBackCommand)
@@ -141,7 +140,6 @@ public class FrontWallAuto extends LinearOpMode {
     private CommandSequence tagSequence = new CommandSequence()
             .addCommand(tagCommand)
             .addWaitCommand(0.3)
-            .addCommand(releaseLeftCommand)
             .build();
     private CommandSequence backTrussSequence = new CommandSequence()
             .addCommand(backTrussCommand)
@@ -152,6 +150,8 @@ public class FrontWallAuto extends LinearOpMode {
             .addCommand(intakeUpSecond)
             .build();
     private CommandSequence tagCenterSequence = new CommandSequence()
+            .addCommand(releaseRightCommand)
+            .addCommand(releaseLeftCommand)
             .addCommand(intakeStartCommand)
             .addCommand(tagCenterCommand)
             .addCommand(trussCommand)
