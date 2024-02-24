@@ -47,7 +47,7 @@ public class Intake extends Mechanism {
     public static double PIXEL_DOWN_POS = 0.055;
 
     public static double INTAKE_DOWN_DELAY = 1;
-    public static double INTAKE_UP_DELAY = 0.6;
+    public static double INTAKE_UP_DELAY = 0.55;
     public static double SENSOR_DELAY = 0.4;
 
     public static double FAR_PIXEL = 18;
