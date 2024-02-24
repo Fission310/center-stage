@@ -18,7 +18,7 @@ public class Wrist extends Mechanism {
     private boolean left = false;
     private boolean right = false;
 
-    public static double START_POS = 0.29;
+    public static double START_POS = 0.305;
     public static double AUTO_SCORE_POS = 0.86;
     public static double[] AUTO_POSITIONS = { 0.1, 0.1, 0.1 };
     public static double[] POSITIONS = {
