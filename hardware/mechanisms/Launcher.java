@@ -34,5 +34,8 @@ public class Launcher extends Mechanism {
         if (GamepadStatic.isButtonPressed(gamepad, Controls.LAUNCH)) {
             launchServo.setPosition(LAUNCH_POS);
         }
+        if (GamepadStatic.isButtonPressed(gamepad, Controls.RETRACT)) {
+            launchServo.setPosition(CLOSE_POS);
+        }
     }
 }

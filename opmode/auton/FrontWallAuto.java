@@ -35,10 +35,10 @@ public class FrontWallAuto extends LinearOpMode {
     private Wrist wrist;
 
     public static double ARM_DELAY = 0.1;
-    public static double SCORE_DELAY = 0.5;
+    public static double SCORE_DELAY = 1;
     public static double SLIDES_DELAY = 0.5;
     public static double TRUSS_DELAY = 6;
-    public static double PLATFORM_DELAY = 1.4;
+    public static double PLATFORM_DELAY = 1.6;
 
     private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
     private TrajectorySequence[] stackTraj = new TrajectorySequence[3];
@@ -82,12 +82,14 @@ public class FrontWallAuto extends LinearOpMode {
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
     private Command wristCommand = () -> wrist.autoPos();
+    private Command wristIntake = () -> wrist.intakePos();
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
-        wrist.intakePos();
+
     };
     private Command retractSecondCommand = () -> {
+        wrist.intakePos();
         arm.intakePos();
         slides.intakePos();
         claw.close();
@@ -135,6 +137,9 @@ public class FrontWallAuto extends LinearOpMode {
             .addWaitCommand(SCORE_DELAY)
             .build();
     private CommandSequence tagBackSequence = new CommandSequence()
+            .addCommand(retractFirstCommand)
+            .addWaitCommand(0.4)
+            .addCommand(retractSecondCommand)
             .addCommand(tagBackCommand)
             .build();
     private CommandSequence tagSequence = new CommandSequence()
@@ -173,6 +178,11 @@ public class FrontWallAuto extends LinearOpMode {
             .addWaitCommand(SCORE_DELAY)
             .addCommand(releaseRightCommand)
             .addCommand(releaseLeftCommand)
+            .addWaitCommand(1)
+            .addCommand(wristIntake)
+            .addWaitCommand(.2)
+            .addCommand(armIntakeCommand)
+            .addCommand(slidesCommand)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
             .addWaitCommand(2)
@@ -246,7 +256,7 @@ public class FrontWallAuto extends LinearOpMode {
                     .build();
             tagTraj[i] = drive
                     .trajectorySequenceBuilder(trussTraj[i].end())
-                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[2 - i + i % 2]),
+                    .splineToConstantHeading(reflectX(i == 1 ? AutoConstants.TAG_VECTORS[2] : AutoConstants.TAG_VECTORS[2 - i]),
                             reflectX(AutoConstants.TAG_HEADINGS[2 - i + i % 2]))
                     .build();
             backTrussTraj[i] = drive
@@ -266,7 +276,7 @@ public class FrontWallAuto extends LinearOpMode {
                             reflectX(AutoConstants.TRUSS_HEADING))
                     .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
                             reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(i == 1 ? AutoConstants.TAG_VECTORS[2]: AutoConstants.TAG_VECTORS[1]),
+                    .splineToConstantHeading(reflectX(i == 1 ? AutoConstants.TAG_VECTORS[0] : AutoConstants.TAG_VECTORS[1]),
                             reflectX(AutoConstants.TAG_HEADINGS[1]))
                     .build();
             parkTraj[i] = drive
