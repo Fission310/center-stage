@@ -24,7 +24,7 @@ public class Slides2 extends Mechanism {
     public static double HIGH_POS = 845;
     public static double COLLECT_POS = -55;
     public static double LOW_VOLTAGE = 12;
-    public static int SPEED = 50;
+    public static int ABIT = 140;
 
     private static double[] POSITIONS = {LOW_POS, MEDIUM_LOW_POS, MEDIUM_HIGH_POS, HIGH_POS};
 
@@ -99,11 +99,11 @@ public class Slides2 extends Mechanism {
     }
 
     public void upABit() {
-        setTarget(target + SPEED);
+        setTarget(target + ABIT);
     }
 
     public void downABit() {
-        setTarget(target - SPEED);
+        setTarget(target - ABIT);
     }
 
     public void update() {

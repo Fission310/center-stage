@@ -36,6 +36,9 @@ public class Scoring extends Mechanism {
     private boolean clawClicked = false;
     private boolean stackClicked = false;
     private boolean doneOuttake = false;
+    private boolean hasTwo = false;
+    private boolean up = false;
+    private boolean down = false;
 
     private int slidesPos = 0;
 
@@ -63,6 +66,10 @@ public class Scoring extends Mechanism {
     private Command wristCommand = () -> wrist.scorePos();
     private Command intakeUp = () -> intake.up();
     private Command outtakeCommand = () -> intake.outtake();
+    private Command setPixels = () -> {
+        if (intake.numPixels() == 2)
+            hasTwo = true;
+    };
     private Command stopCommand = () -> intake.stop();
     private Command retractCommand = () -> {
         claw.leftOpen();
@@ -74,18 +81,19 @@ public class Scoring extends Mechanism {
         intake.down();
     };
 
-    private CommandSequence waitOuttake = new CommandSequence()
-            .addWaitCommand(1)
-            .addCommand(outtakeCommand)
-            .addWaitCommand(2)
-            .addCommand(stopCommand)
+    private CommandSequence countPixels = new CommandSequence()
+            .addWaitCommand(0.1)
+            .addCommand(setPixels)
             .build();
     private CommandSequence outtakeABit = new CommandSequence()
             .addCommand(outtakeCommand)
-            .addWaitCommand(2)
+            .addWaitCommand(0.6)
             .addCommand(stopCommand)
             .build();
     private CommandSequence pixelSequence = new CommandSequence()
+            .addCommand(outtakeCommand)
+            .addWaitCommand(0.3)
+            .addCommand(stopCommand)
             .addCommand(slidesUp)
             .addCommand(intakeCommand)
             .addCommand(pixelPlatformUp)
@@ -154,8 +162,14 @@ public class Scoring extends Mechanism {
                 drive.setReverse(false);
                 intake.loop(gamepad);
 
-                if (intake.numPixels() > 1 || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
+                if ((hasTwo && !intake.isThirdPixel()) || GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
                     state = State.TRANSFER;
+                    hasTwo = false;
+                    break;
+                }
+
+                if (intake.numPixels() > 1 && !hasTwo) {
+                    countPixels.trigger();
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_TOGGLE)) {
@@ -170,6 +184,7 @@ public class Scoring extends Mechanism {
                 for (int i = 0; i < 4; i++) {
                     if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
                         slidesPos = i;
+                        claw.close();
                         armSequence.trigger();
                         state = State.SCORING;
                         doneOuttake = false;
@@ -232,11 +247,19 @@ public class Scoring extends Mechanism {
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_UP)) {
-                    slides.upABit();
+                    if (!up)
+                        slides.upABit();
+                    up = true;
+                } else {
+                    up = false;
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_DOWN)) {
-                    slides.downABit();
+                    if (!down)
+                        slides.downABit();
+                    down = true;
+                } else {
+                    down = false;
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_ONE)) {

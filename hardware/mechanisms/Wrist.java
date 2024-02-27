@@ -47,8 +47,11 @@ public class Wrist extends Mechanism {
         wristServo.setPosition(START_POS);
     }
 
+    public void goToPos(int i) {
+    }
+
     public void autoPos(int i) {
-        wristServo.setPosition(AUTO_POSITIONS[i]);
+        wristServo.setPosition(POSITIONS[i]);
     }
 
     public void autoPos() {

@@ -53,6 +53,11 @@ public class Intake extends Mechanism {
     public static double FAR_PIXEL = 18;
     public static double FAR_INTAKE = 10;
 
+    public static int YELLOW = 10;
+    public static int PURPLE = 10;
+    public static int GREEN = 10;
+    public static int WHITE = 10;
+
     private boolean isPixelUp = false;
     private boolean isUp = false;
 
@@ -233,6 +238,24 @@ public class Intake extends Mechanism {
             t.addData(name + " dist", sensor.getDistance(DistanceUnit.MM));
             t.update();
             return sensor.getDistance(DistanceUnit.MM) < far;
+        }
+
+        public boolean isPixelColor() {
+            int blue = sensor.blue();
+            int red = sensor.red();
+            int green = sensor.green();
+            int white = (blue + red + green) / 3;
+            int yellow = (red + green) / 2;
+            int purple = (red + blue) / 2;
+            boolean isPixel = white > WHITE || yellow > YELLOW || purple > PURPLE || green > GREEN;
+            Telemetry t = FtcDashboard.getInstance().getTelemetry();
+            t.addData(name + " white", white);
+            t.addData(name + " yellow", yellow);
+            t.addData(name + " purple", purple);
+            t.addData(name + " green", green);
+            t.addData(name + " isPixel", isPixel);
+            t.update();
+            return isPixel;
         }
     }
 }
