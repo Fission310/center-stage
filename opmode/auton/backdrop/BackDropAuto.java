@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auton;
+package org.firstinspires.ftc.teamcode.opmode.auton.backdrop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -16,7 +16,8 @@ import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
-import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
+import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.Constants.*;
+import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 
 @Config
 public class BackDropAuto extends LinearOpMode {
@@ -33,32 +34,54 @@ public class BackDropAuto extends LinearOpMode {
     private Webcam webcam;
     private Wrist wrist;
 
-    public static double ARM_DELAY = 1;
-    public static double SCORE_DELAY = 1;
-    public static double SLIDES_DELAY = 1;
+    public static double ARM_DELAY = 0.1;
+    public static double SCORE_DELAY = 0.5;
+    public static double SLIDES_DELAY = 0.5;
+    public static double PLATFORM_DELAY = 1.4;
 
     private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
     private TrajectorySequence[] backDropTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] trussBackTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] trussTraj = new TrajectorySequence[3];
     private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
     private Command releaseCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
     };
+    private Command sensePixels = () -> {
+        long start = System.nanoTime();
+        while (intake.numPixels() < 2 && System.nanoTime() - start < 3000000) {
+        }
+    };
+    private Command intakeStartCommand = () -> intake.intake();
+    private Command intakeStopCommand = () -> {
+        intake.stop();
+        intake.down();
+    };
     private Command intakeCommand = () -> intake.up();
+    private Command pixelPlatformUp = () -> intake.pixelUp();
+    private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command slidesCommand = () -> slides.goToPos(0);
     private Command armCommand = () -> arm.scorePos();
     private Command wristCommand = () -> wrist.scorePos();
-    private Command retractCommand = () -> {
+    private Command grabCommand = () -> claw.close();
+    private Command intakeUpSecond = () -> intake.upAuto(2);
+    private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
         wrist.intakePos();
+    };
+    private Command retractSecondCommand = () -> {
         arm.intakePos();
         slides.intakePos();
+        claw.close();
     };
 
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
     private Command backDropCommand = () -> drive.followTrajectorySequenceAsync(backDropTraj[reflectPos(pos)]);
+    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[reflectPos(pos)]);
+    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[reflectPos(pos)]);
     private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
@@ -68,26 +91,49 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(intakeCommand)
             .addCommand(backDropCommand)
             .build();
-    private CommandSequence scoreSequence = new CommandSequence()
-            .addWaitCommand(SLIDES_DELAY)
+    private CommandSequence trussBackSequence = new CommandSequence()
+            .addCommand(trussBackCommand)
+            .addWaitCommand(0.2)
+            .addCommand(retractFirstCommand)
+            .addWaitCommand(0.4)
+            .addCommand(retractSecondCommand)
+            .addCommand(intakeUpSecond)
+            .build();
+    private CommandSequence trussSequence = new CommandSequence()
+            .addCommand(intakeStartCommand)
+            .addCommand(trussCommand)
+            .addCommand(sensePixels)
+            .addWaitCommand(0.5)
+            .addCommand(intakeStopCommand)
+            .addWaitCommand(0.4)
+            .addCommand(pixelPlatformUp)
+            .addWaitCommand(PLATFORM_DELAY)
+            .addCommand(grabCommand)
+            .addWaitCommand(2)
+            .addCommand(pixelPlatformDown)
+            .addWaitCommand(0.1)
             .addCommand(slidesCommand)
             .addWaitCommand(0.1)
-            .addCommand(wristCommand)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
-            .addCommand(releaseCommand)
+            .addCommand(wristCommand)
             .addWaitCommand(SCORE_DELAY)
-            .addCommand(retractCommand)
+            .addCommand(releaseCommand)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
-            .addWaitCommand(3)
+            .addWaitCommand(2)
             .addCommand(parkCommand)
+            .addWaitCommand(4)
+            .addCommand(retractFirstCommand)
+            .addWaitCommand(0.4)
+            .addCommand(retractSecondCommand)
             .build();
 
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(backDropSequence)
-            .addCommandSequence(scoreSequence)
+            .addCommandSequence(trussBackSequence)
+            .addCommandSequence(trussSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -98,7 +144,7 @@ public class BackDropAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        AutoConstants.init();
+        Constants.init();
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
@@ -119,19 +165,35 @@ public class BackDropAuto extends LinearOpMode {
 
         for (int i = 0; i < 3; i++) {
             spikeMarkTraj[i] = drive
-                    .trajectorySequenceBuilder(reflectX(AutoConstants.BD_START_POSE))
-                    .splineTo(reflectX(AutoConstants.BD_SPIKE_VECTORS[i]),
-                            reflectX(AutoConstants.BD_SPIKE_HEADINGS[i]))
+                    .trajectorySequenceBuilder(reflectX(START_POSE))
+                    .setReversed(true)
+                    .splineTo(reflectX(SPIKE.getV(i)),
+                            reflectX(SPIKE.getH(i)))
                     .build();
             backDropTraj[i] = drive
                     .trajectorySequenceBuilder(spikeMarkTraj[i].end())
+                    .splineTo(reflectX(TAG_1.getV(i)),
+                            reflectX(TAG_1.getH(i)))
+                    .build();
+            trussBackTraj[i] = drive
+                    .trajectorySequenceBuilder(backDropTraj[i].end())
+                    .setReversed(false)
+                    .splineToConstantHeading(reflectX(BACK_TRUSS.getV(i)),
+                            reflectX(BACK_TRUSS.getH(i)))
+                    .splineTo(reflectX(STACK.getV(i)),
+                            reflectX(STACK.getH(i)))
+                    .build();
+            trussTraj[i] = drive
+                    .trajectorySequenceBuilder(trussBackTraj[i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(AutoConstants.TAG_VECTORS[i]),
-                            reflectX(AutoConstants.TAG_HEADINGS[i]))
+                    .splineTo(reflectX(TRUSS.getV(i)),
+                            reflectX(TRUSS.getH(i)))
+                    .splineToConstantHeading(reflectX(TAG_2.getV(i)),
+                            reflectX(TAG_2.getH(i)))
                     .build();
             parkTraj[i] = drive
-                    .trajectorySequenceBuilder(backDropTraj[i].end())
-                    .strafeTo(reflectX(AutoConstants.PARK_VECTOR))
+                    .trajectorySequenceBuilder(trussTraj[i].end())
+                    .splineToConstantHeading(reflectX(PARK.getV(i)), reflectX(PARK.getH(i)))
                     .build();
         }
 
@@ -141,7 +203,7 @@ public class BackDropAuto extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.setPoseEstimate(reflectX(AutoConstants.BD_START_POSE));
+        drive.setPoseEstimate(reflectX(START_POSE));
 
         waitForStart();
 

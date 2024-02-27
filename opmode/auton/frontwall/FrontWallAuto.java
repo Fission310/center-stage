@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auton;
+package org.firstinspires.ftc.teamcode.opmode.auton.frontwall;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -16,7 +16,8 @@ import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
-import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
+import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
+import static org.firstinspires.ftc.teamcode.opmode.auton.frontwall.Constants.*;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
@@ -42,11 +43,9 @@ public class FrontWallAuto extends LinearOpMode {
 
     private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
     private TrajectorySequence[] stackTraj = new TrajectorySequence[3];
-    private TrajectorySequence[] trussTraj = new TrajectorySequence[3];
-    private TrajectorySequence[] tagBackTraj = new TrajectorySequence[3];
-    private TrajectorySequence[] tagTraj = new TrajectorySequence[3];
-    private TrajectorySequence[] backTrussTraj = new TrajectorySequence[3];
-    private TrajectorySequence[] tagCenterTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] trussFirstTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] trussBackTraj = new TrajectorySequence[3];
+    private TrajectorySequence[] trussSecondTraj = new TrajectorySequence[3];
     private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
     private Command releaseLeftCommand = () -> {
@@ -81,6 +80,7 @@ public class FrontWallAuto extends LinearOpMode {
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
+    private Command wristCommandFirst = () -> wrist.goToPos(pos.index + 1);
     private Command wristCommand = () -> wrist.autoPos();
     private Command wristIntake = () -> wrist.intakePos();
     private Command retractFirstCommand = () -> {
@@ -97,11 +97,9 @@ public class FrontWallAuto extends LinearOpMode {
 
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
     private Command stackCommand = () -> drive.followTrajectorySequenceAsync(stackTraj[reflectPos(pos)]);
-    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[reflectPos(pos)]);
-    private Command tagBackCommand = () -> drive.followTrajectorySequenceAsync(tagBackTraj[reflectPos(pos)]);
-    private Command tagCommand = () -> drive.followTrajectorySequenceAsync(tagTraj[reflectPos(pos)]);
-    private Command backTrussCommand = () -> drive.followTrajectorySequenceAsync(backTrussTraj[reflectPos(pos)]);
-    private Command tagCenterCommand = () -> drive.followTrajectorySequenceAsync(tagCenterTraj[reflectPos(pos)]);
+    private Command trussFirstCommand = () -> drive.followTrajectorySequenceAsync(trussFirstTraj[reflectPos(pos)]);
+    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[reflectPos(pos)]);
+    private Command trussSecondCommand = () -> drive.followTrajectorySequenceAsync(trussSecondTraj[reflectPos(pos)]);
     private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
@@ -116,9 +114,9 @@ public class FrontWallAuto extends LinearOpMode {
             .addCommand(armIntakeCommand)
             .addCommand(intakeUpFirst)
             .build();
-    private CommandSequence trussSequence = new CommandSequence()
+    private CommandSequence trussFirstSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
-            .addCommand(trussCommand)
+            .addCommand(trussFirstCommand)
             .addCommand(sensePixels)
             .addWaitCommand(0.5)
             .addCommand(intakeStopCommand)
@@ -133,33 +131,23 @@ public class FrontWallAuto extends LinearOpMode {
             .addWaitCommand(0.1)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
-            .addCommand(wristCommand)
+            .addCommand(wristCommandFirst)
             .addWaitCommand(SCORE_DELAY)
             .build();
-    private CommandSequence tagBackSequence = new CommandSequence()
-            .addCommand(retractFirstCommand)
-            .addWaitCommand(0.4)
-            .addCommand(retractSecondCommand)
-            .addCommand(tagBackCommand)
-            .build();
-    private CommandSequence tagSequence = new CommandSequence()
-            .addCommand(tagCommand)
-            .addWaitCommand(0.3)
-            .build();
-    private CommandSequence backTrussSequence = new CommandSequence()
-            .addCommand(backTrussCommand)
+    private CommandSequence trussBackSequence = new CommandSequence()
+            .addCommand(trussBackCommand)
             .addWaitCommand(0.2)
             .addCommand(retractFirstCommand)
             .addWaitCommand(0.4)
             .addCommand(retractSecondCommand)
             .addCommand(intakeUpSecond)
             .build();
-    private CommandSequence tagCenterSequence = new CommandSequence()
+    private CommandSequence trussSecondSequence = new CommandSequence()
             .addCommand(releaseRightCommand)
             .addCommand(releaseLeftCommand)
             .addCommand(intakeStartCommand)
-            .addCommand(tagCenterCommand)
-            .addCommand(trussCommand)
+            .addCommand(trussSecondCommand)
+            .addCommand(trussFirstCommand)
             .addCommand(sensePixels)
             .addWaitCommand(0.5)
             .addCommand(intakeStopCommand)
@@ -196,11 +184,9 @@ public class FrontWallAuto extends LinearOpMode {
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(stackSequence)
-            .addCommandSequence(trussSequence)
-            .addCommandSequence(tagBackSequence)
-            .addCommandSequence(tagSequence)
-            .addCommandSequence(backTrussSequence)
-            .addCommandSequence(tagCenterSequence)
+            .addCommandSequence(trussFirstSequence)
+            .addCommandSequence(trussBackSequence)
+            .addCommandSequence(trussSecondSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -211,7 +197,7 @@ public class FrontWallAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        AutoConstants.init();
+        Constants.init();
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
@@ -232,58 +218,53 @@ public class FrontWallAuto extends LinearOpMode {
 
         for (int i = 0; i < 3; i++) {
             spikeMarkTraj[i] = drive
-                    .trajectorySequenceBuilder(reflectX(AutoConstants.FR_START_POSE))
-                    .lineToLinearHeading(reflectX(new Pose2d(AutoConstants.FR_SPIKE_VECTORS[i],
-                            AutoConstants.FR_SPIKE_HEADINGS[i])))
+                    .trajectorySequenceBuilder(reflectX(START_POSE))
+                    .lineToLinearHeading(reflectX(new Pose2d(SPIKE.getV(i),
+                            SPIKE.getH(i))))
                     .build();
             stackTraj[i] = drive
                     .trajectorySequenceBuilder(spikeMarkTraj[i].end())
-                    .setTangent(AutoConstants.FR_SPIKE_TANGENT)
+                    .setTangent(SPIKE_TANGENT)
                     .splineToLinearHeading(
-                            reflectX(new Pose2d(AutoConstants.FR_WALL_STACK_VECTOR[0],
-                                    AutoConstants.FR_STACK_HEADING)),
-                            reflectX(AutoConstants.FR_STACK_HEADING))
+                            reflectX(new Pose2d(STACK_1.getV(0),
+                                    STACK_1.getH(i))),
+                            reflectX(STACK_1.getH(i)))
                     .build();
-            trussTraj[i] = drive
+            trussFirstTraj[i] = drive
                     .trajectorySequenceBuilder(stackTraj[i].end())
                     .setReversed(true)
-                    .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR),
-                            reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
-                            reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.TAG_VECTORS[i]),
-                            reflectX(AutoConstants.TAG_HEADINGS[i]))
+                    .splineToConstantHeading(reflectX(WALL_START_1.getV(i)),
+                            reflectX(WALL_START_1.getH(i)))
+                    .splineToConstantHeading(reflectX(WALL_END_1.getV(i)),
+                            reflectX(WALL_END_1.getH(i)))
+                    .splineToConstantHeading(reflectX(TAG_1.getV(i)),
+                            reflectX(TAG_1.getH(i)))
                     .build();
-            tagTraj[i] = drive
-                    .trajectorySequenceBuilder(trussTraj[i].end())
-                    .splineToConstantHeading(reflectX(i == 1 ? AutoConstants.TAG_VECTORS[2] : AutoConstants.TAG_VECTORS[2 - i]),
-                            reflectX(AutoConstants.TAG_HEADINGS[2 - i + i % 2]))
-                    .build();
-            backTrussTraj[i] = drive
-                    .trajectorySequenceBuilder(tagTraj[i].end())
+            trussBackTraj[i] = drive
+                    .trajectorySequenceBuilder(trussFirstTraj[i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
-                            AutoConstants.TRUSS_BACK_HEADING)
-                    .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR),
-                            reflectX(AutoConstants.TRUSS_BACK_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.FR_WALL_STACK_VECTOR[1]),
-                            AutoConstants.FR_STACK_HEADING)
+                    .splineToConstantHeading(reflectX(WALL_BACK_END.getV(i)),
+                            WALL_BACK_END.getH(i))
+                    .splineToConstantHeading(reflectX(WALL_BACK_START.getV(i)),
+                            reflectX(WALL_BACK_START.getH(i)))
+                    .splineToConstantHeading(reflectX(WALL_START_2.getV(i)),
+                            reflectX(WALL_START_2.getH(i)))
                     .build();
-            tagCenterTraj[i] = drive
-                    .trajectorySequenceBuilder(backTrussTraj[i].end())
+            trussSecondTraj[i] = drive
+                    .trajectorySequenceBuilder(trussBackTraj[i].end())
                     .setReversed(true)
-                    .splineToConstantHeading(reflectX(AutoConstants.WALL_START_VECTOR),
-                            reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(AutoConstants.WALL_END_VECTOR),
-                            reflectX(AutoConstants.TRUSS_HEADING))
-                    .splineToConstantHeading(reflectX(i == 1 ? AutoConstants.TAG_VECTORS[0] : AutoConstants.TAG_VECTORS[1]),
-                            reflectX(AutoConstants.TAG_HEADINGS[1]))
+                    .splineToConstantHeading(reflectX(WALL_START_2.getV(i)),
+                            reflectX(WALL_START_2.getH(i)))
+                    .splineToConstantHeading(reflectX(WALL_END_2.getV(i)),
+                            reflectX(WALL_END_2.getH(i)))
+                    .splineToConstantHeading(reflectX(TAG_2.getV(i)),
+                            reflectX(TAG_2.getH(i)))
                     .build();
             parkTraj[i] = drive
-                    .trajectorySequenceBuilder(trussTraj[i].end())
+                    .trajectorySequenceBuilder(trussFirstTraj[i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(AutoConstants.PARK_VECTOR),
-                            reflectX(AutoConstants.PARK_HEADING))
+                    .splineToConstantHeading(reflectX(PARK.getV(i)),
+                            reflectX(PARK.getH(i)))
                     .build();
         }
 
@@ -293,7 +274,7 @@ public class FrontWallAuto extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.setPoseEstimate(reflectX(AutoConstants.FR_START_POSE));
+        drive.setPoseEstimate(reflectX(START_POSE));
 
         waitForStart();
 

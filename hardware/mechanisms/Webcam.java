@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stuyfission.fissionlib.util.Mechanism;
 
-import org.firstinspires.ftc.teamcode.opmode.auton.AutoConstants.Color;
+import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 
 @Config
 public class Webcam extends Mechanism {
