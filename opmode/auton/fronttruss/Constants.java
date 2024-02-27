@@ -35,9 +35,9 @@ public class Constants {
     public static final double STACK_HEADING = LEFT;
 
     public static final double STACK_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
-    public static final double STACK_Y = TILE_LENGTH * 1.5;
+    public static final double STACK_Y = TILE_LENGTH * 0.5;
 
-    public static double STACK_Y_OFFSET = 2;
+    public static double STACK_Y_OFFSET = 5;
     public static double STACK_X_OFFSET_1 = 1;
     public static double STACK_X_OFFSET_2 = 5;
 
@@ -60,10 +60,10 @@ public class Constants {
     public static final double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
     public static final double TAG_Y = 3.0 * TILE_LENGTH / 2.0;
 
-    public static double TAG_X_OFFSET_1 = 4;
-    public static double TAG_X_OFFSET_2 = 4;
+    public static double TAG_X_OFFSET_1 = 8;
+    public static double TAG_X_OFFSET_2 = 8;
     public static double TAG_LEFT_OFFSET = -6.15;
-    public static double TAG_CENTER_OFFSET = -2.35;
+    public static double TAG_CENTER_OFFSET = -1;
     public static double TAG_RIGHT_OFFSET = 4.35;
 
     public static Constant TAG_1;
