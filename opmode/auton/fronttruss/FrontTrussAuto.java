@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
-import static org.firstinspires.ftc.teamcode.opmode.auton.fronttruss.Constants.*;
+import static org.firstinspires.ftc.teamcode.opmode.auton.fronttruss.TrussConstants.*;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 
 @Config
@@ -54,6 +54,7 @@ public class FrontTrussAuto extends LinearOpMode {
         claw.rightOpen();
     };
     private Command slidesCommand = () -> slides.goToPos(0);
+    private Command slidesSecondCommand = () -> slides.goToPos(1);
     private Command armIntakeCommand = () -> {
         arm.intakePos();
         wrist.intakePos();
@@ -79,7 +80,7 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
-    private Command wristCommand = () -> wrist.autoPos();
+    private Command wristCommand = () -> wrist.autoPos(reflectPos(pos));
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
@@ -88,7 +89,6 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command retractSecondCommand = () -> {
         arm.intakePos();
         slides.intakePos();
-        claw.close();
     };
 
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
@@ -120,7 +120,7 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .addWaitCommand(2)
+            .addWaitCommand(1.5)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
             .addCommand(slidesCommand)
@@ -151,10 +151,10 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .addWaitCommand(2)
+            .addWaitCommand(1.5)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
-            .addCommand(slidesCommand)
+            .addCommand(slidesSecondCommand)
             .addWaitCommand(0.1)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
@@ -164,9 +164,9 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(releaseLeftCommand)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
-            .addWaitCommand(2)
+            .addWaitCommand(0.6)
             .addCommand(parkCommand)
-            .addWaitCommand(4)
+            .addWaitCommand(2)
             .addCommand(retractFirstCommand)
             .addWaitCommand(0.4)
             .addCommand(retractSecondCommand)
@@ -176,8 +176,8 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(stackSequence)
             .addCommandSequence(trussFirstSequence)
-            .addCommandSequence(trussBackSequence)
-            .addCommandSequence(trussSecondSequence)
+            //.addCommandSequence(trussBackSequence)
+            //.addCommandSequence(trussSecondSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -188,7 +188,7 @@ public class FrontTrussAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Constants.init();
+        TrussConstants.init();
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
@@ -242,8 +242,8 @@ public class FrontTrussAuto extends LinearOpMode {
                     .setReversed(true)
                     .splineTo(reflectX(TRUSS.getV(i)),
                             reflectX(TRUSS.getH(i)))
-                    .splineToConstantHeading(reflectX(TAG_2.getV(i)),
-                            reflectX(TAG_2.getH(1)))
+                    .splineToConstantHeading(reflectX(TAG_2.getV(2 - i + i % 2)),
+                            reflectX(TAG_2.getH(2 - i + i % 2)))
                     .build();
             parkTraj[i] = drive
                     .trajectorySequenceBuilder(trussFirstTraj[i].end())

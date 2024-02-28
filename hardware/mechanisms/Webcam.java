@@ -101,7 +101,7 @@ public class Webcam extends Mechanism {
         private static final int SCREEN_WIDTH = 1280;
         private static final int SCREEN_HEIGHT = 720;
 
-        private static final Rect RIGHT_ROI = new Rect(
+        private static final Rect LEFT_ROI = new Rect(
                 new Point(0, 0),
                 new Point(SCREEN_WIDTH / 3.0, SCREEN_HEIGHT));
 
@@ -109,7 +109,7 @@ public class Webcam extends Mechanism {
                 new Point(SCREEN_WIDTH / 3.0, 0),
                 new Point(SCREEN_WIDTH / 3.0 * 2, SCREEN_HEIGHT));
 
-        private static final Rect LEFT_ROI = new Rect(
+        private static final Rect RIGHT_ROI = new Rect(
                 new Point(SCREEN_WIDTH / 3.0 * 2, 0),
                 new Point(SCREEN_WIDTH, SCREEN_HEIGHT));
 

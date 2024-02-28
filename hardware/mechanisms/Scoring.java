@@ -94,12 +94,12 @@ public class Scoring extends Mechanism {
             .addCommand(outtakeCommand)
             .addWaitCommand(0.3)
             .addCommand(stopCommand)
+            .addCommand(intakeUp)
             .addCommand(slidesUp)
             .addCommand(intakeCommand)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .addCommand(intakeUp)
             .build();
     private CommandSequence pixelDown = new CommandSequence()
             .addCommand(pixelPlatformDown)

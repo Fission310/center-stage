@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auton.backdrop;
+package org.firstinspires.ftc.teamcode.opmode.auton.fronttruss;
 
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Constant;
 import static org.firstinspires.ftc.teamcode.opmode.auton.util.GameConstants.*;
@@ -7,27 +7,31 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 @Config
-public class Constants {
+public class TrussConstants {
     // Start Pose
     public static final double START_HEADING = UP;
 
-    public static final double START_X = TILE_LENGTH / 2.0;
+    public static final double START_X = -3.0 * TILE_LENGTH / 2.0;
     public static final double START_Y = WALL_POS - BOT_LENGTH / 2.0;
 
     public static Pose2d START_POSE;
 
     // Spike Mark
-    public static final double SPIKE_LEFT_HEADING = RIGHT;
-    public static final double SPIKE_CENTER_HEADING = Math.toRadians(45);
-    public static final double SPIKE_RIGHT_HEADING = RIGHT;
+    public static final double SPIKE_LEFT_HEADING = Math.toRadians(315);
+    public static final double SPIKE_CENTER_HEADING = Math.toRadians(135);
+    public static final double SPIKE_RIGHT_HEADING = LEFT;
 
-    public static final double SPIKE_TANGENT = RIGHT;
+    public static final double SPIKE_TANGENT = LEFT;
 
-    public static final double SPIKE_X = TILE_LENGTH / 2.0;
+    public static final double SPIKE_X = -3.0 * TILE_LENGTH / 2.0;
     public static final double SPIKE_Y = 3.0 * TILE_LENGTH / 2.0;
 
-    public static double SPIKE_CENTER_OFFSET_X = 2;
+    public static double SPIKE_LEFT_OFFSET_X = 0;
+    public static double SPIKE_LEFT_OFFSET_Y = -4;
+    public static double SPIKE_CENTER_OFFSET_X = -2;
     public static double SPIKE_CENTER_OFFSET_Y = -2;
+    public static double SPIKE_RIGHT_OFFSET_X = 0;
+    public static double SPIKE_RIGHT_OFFSET_Y = 0;
 
     public static Constant SPIKE;
 
@@ -35,12 +39,15 @@ public class Constants {
     public static final double STACK_HEADING = LEFT;
 
     public static final double STACK_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
-    public static final double STACK_Y = TILE_LENGTH * 1.5;
+    public static final double STACK_Y = TILE_LENGTH * 0.5;
 
-    public static double STACK_Y_OFFSET = 2;
-    public static double STACK_X_OFFSET = 1;
+    public static double STACK_Y_OFFSET_1 = 5;
+    public static double STACK_Y_OFFSET_2 = 8;
+    public static double STACK_X_OFFSET_1 = 1;
+    public static double STACK_X_OFFSET_2 = 3;
 
-    public static Constant STACK;
+    public static Constant STACK_1;
+    public static Constant STACK_2;
 
     // Truss Position
     public static final double TRUSS_HEADING = RIGHT;
@@ -58,11 +65,11 @@ public class Constants {
     public static final double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
     public static final double TAG_Y = 3.0 * TILE_LENGTH / 2.0;
 
-    public static double TAG_X_OFFSET_1 = 4;
-    public static double TAG_X_OFFSET_2 = 4;
-    public static double TAG_LEFT_OFFSET = -6.15;
-    public static double TAG_CENTER_OFFSET = -2.35;
-    public static double TAG_RIGHT_OFFSET = 4.35;
+    public static double TAG_X_OFFSET_1 = 2;
+    public static double TAG_X_OFFSET_2 = -4;
+    public static double TAG_LEFT_OFFSET = -4;
+    public static double TAG_CENTER_OFFSET = 5;
+    public static double TAG_RIGHT_OFFSET = 10;
 
     public static Constant TAG_1;
     public static Constant TAG_2;
@@ -80,11 +87,12 @@ public class Constants {
 
         START_POSE = new Pose2d(START_X, START_Y, START_HEADING);
 
-        SPIKE = new Constant(SPIKE_X, SPIKE_Y, new double[] { 0, SPIKE_CENTER_OFFSET_X, 0 },
-                new double[] { 0, SPIKE_CENTER_OFFSET_Y, 0 },
+        SPIKE = new Constant(SPIKE_X, SPIKE_Y, new double[] { SPIKE_LEFT_OFFSET_X, SPIKE_CENTER_OFFSET_X, SPIKE_RIGHT_OFFSET_X },
+                new double[] { SPIKE_LEFT_OFFSET_Y, SPIKE_CENTER_OFFSET_Y, SPIKE_RIGHT_OFFSET_Y },
                 new double[] { SPIKE_LEFT_HEADING, SPIKE_CENTER_HEADING, SPIKE_RIGHT_HEADING });
 
-        STACK = new Constant(STACK_X, STACK_Y, array(STACK_X_OFFSET), array(STACK_Y_OFFSET), array(STACK_HEADING));
+        STACK_1 = new Constant(STACK_X, STACK_Y, array(STACK_X_OFFSET_1), array(STACK_Y_OFFSET_1), array(STACK_HEADING));
+        STACK_2 = new Constant(STACK_X, STACK_Y, array(STACK_X_OFFSET_2), array(STACK_Y_OFFSET_2), array(STACK_HEADING));
 
         TRUSS = new Constant(TRUSS_X, TRUSS_Y, ZERO, ZERO, array(TRUSS_HEADING));
         BACK_TRUSS = new Constant(TRUSS_X, TRUSS_Y, ZERO, ZERO, array(TRUSS_BACK_HEADING));

@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
-import static org.firstinspires.ftc.teamcode.opmode.auton.frontwall.Constants.*;
+import static org.firstinspires.ftc.teamcode.opmode.auton.frontwall.WallConstants.*;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
@@ -80,7 +80,7 @@ public class FrontWallAuto extends LinearOpMode {
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
-    private Command wristCommandFirst = () -> wrist.goToPos(pos.index + 1);
+    private Command wristCommandFirst = () -> wrist.autoPos(reflectPos(pos));
     private Command wristCommand = () -> wrist.autoPos();
     private Command wristIntake = () -> wrist.intakePos();
     private Command retractFirstCommand = () -> {
@@ -197,7 +197,7 @@ public class FrontWallAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Constants.init();
+        WallConstants.init();
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);

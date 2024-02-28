@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
-import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.Constants.*;
+import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstants.*;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 
 @Config
@@ -144,7 +144,7 @@ public class BackDropAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Constants.init();
+        BackDropConstants.init();
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);

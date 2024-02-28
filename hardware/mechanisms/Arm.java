@@ -18,7 +18,7 @@ public class Arm extends Mechanism {
 
     public static double INTAKE_POS = 0.86;
     public static double SCORE_POS = 0.285;
-    public static double AUTO_POS = 0;
+    public static double AUTO_POS = 0.1;
 
     public Arm(LinearOpMode opMode) {
         this.opMode = opMode;

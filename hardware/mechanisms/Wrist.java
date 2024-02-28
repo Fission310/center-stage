@@ -22,7 +22,7 @@ public class Wrist extends Mechanism {
     public static double AUTO_SCORE_POS = 0.86;
     public static double[] AUTO_POSITIONS = { 0.1, 0.1, 0.1 };
     public static double[] POSITIONS = {
-        0.01, 0.2, 0.38, 0.57, 0.76, 0.94
+            0.01, 0.2, 0.38, 0.57, 0.76, 0.94
     };
 
     private int pos = 0;
@@ -47,11 +47,12 @@ public class Wrist extends Mechanism {
         wristServo.setPosition(START_POS);
     }
 
-    public void goToPos(int i) {
-    }
-
     public void autoPos(int i) {
-        wristServo.setPosition(POSITIONS[i]);
+        if (i == 0) {
+            wristServo.setPosition(POSITIONS[0]);
+        } else {
+            wristServo.setPosition(POSITIONS[3]);
+        }
     }
 
     public void autoPos() {
@@ -59,7 +60,8 @@ public class Wrist extends Mechanism {
     }
 
     public void right() {
-        if (right) return;
+        if (right)
+            return;
         if (pos == 5) {
             pos = 0;
         } else {
@@ -69,7 +71,8 @@ public class Wrist extends Mechanism {
     }
 
     public void left() {
-        if (left) return;
+        if (left)
+            return;
         if (pos == 0) {
             pos = 5;
         } else {
