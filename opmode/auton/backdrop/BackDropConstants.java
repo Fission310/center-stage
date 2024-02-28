@@ -17,9 +17,9 @@ public class BackDropConstants {
     public static Pose2d START_POSE;
 
     // Spike Mark
-    public static final double SPIKE_LEFT_HEADING = RIGHT;
+    public static final double SPIKE_LEFT_HEADING = Math.toRadians(-45);
     public static final double SPIKE_CENTER_HEADING = Math.toRadians(45);
-    public static final double SPIKE_RIGHT_HEADING = RIGHT;
+    public static final double SPIKE_RIGHT_HEADING = LEFT;
 
     public static final double SPIKE_TANGENT = RIGHT;
 
@@ -35,9 +35,9 @@ public class BackDropConstants {
     public static final double STACK_HEADING = LEFT;
 
     public static final double STACK_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
-    public static final double STACK_Y = TILE_LENGTH * 1.5;
+    public static final double STACK_Y = TILE_LENGTH * 0.5;
 
-    public static double STACK_Y_OFFSET = 2;
+    public static double STACK_Y_OFFSET = 5;
     public static double STACK_X_OFFSET = 1;
 
     public static Constant STACK;
@@ -46,14 +46,15 @@ public class BackDropConstants {
     public static final double TRUSS_HEADING = RIGHT;
     public static final double TRUSS_BACK_HEADING = LEFT;
 
-    public static final double TRUSS_X = 3.0 * TILE_LENGTH / 2.0;
+    public static final double TRUSS_X = TILE_LENGTH;
     public static final double TRUSS_Y = TILE_LENGTH / 2.0;
 
     public static Constant TRUSS;
     public static Constant BACK_TRUSS;
 
     // Tag Positions
-    public static final double TAG_HEADING = RIGHT;
+    public static final double TAG_HEADING_1 = LEFT;
+    public static final double TAG_HEADING_2 = RIGHT;
 
     public static final double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
     public static final double TAG_Y = 3.0 * TILE_LENGTH / 2.0;
@@ -91,10 +92,10 @@ public class BackDropConstants {
 
         TAG_1 = new Constant(TAG_X, TAG_Y, new double[] { TAG_LEFT_OFFSET, TAG_CENTER_OFFSET, TAG_RIGHT_OFFSET },
                 array(TAG_X_OFFSET_1),
-                array(TAG_HEADING));
+                array(TAG_HEADING_1));
         TAG_2 = new Constant(TAG_X, TAG_Y, new double[] { TAG_LEFT_OFFSET, TAG_CENTER_OFFSET, TAG_RIGHT_OFFSET },
                 array(TAG_X_OFFSET_2),
-                array(TAG_HEADING));
+                array(TAG_HEADING_2));
 
         PARK = new Constant(PARK_X, PARK_Y, ZERO, ZERO, array(PARK_HEADING));
     }

@@ -166,14 +166,14 @@ public class BackDropAuto extends LinearOpMode {
         for (int i = 0; i < 3; i++) {
             spikeMarkTraj[i] = drive
                     .trajectorySequenceBuilder(reflectX(START_POSE))
-                    .setReversed(true)
-                    .splineTo(reflectX(SPIKE.getV(i)),
-                            reflectX(SPIKE.getH(i)))
+                    .lineToLinearHeading(new Pose2d(reflectX(SPIKE.getV(i)),
+                            reflectX(SPIKE.getH(i))))
                     .build();
             backDropTraj[i] = drive
                     .trajectorySequenceBuilder(spikeMarkTraj[i].end())
-                    .splineTo(reflectX(TAG_1.getV(i)),
-                            reflectX(TAG_1.getH(i)))
+                    .setReversed(true)
+                    .lineToLinearHeading(new Pose2d(reflectX(TAG_1.getV(i)),
+                            reflectX(TAG_1.getH(i))))
                     .build();
             trussBackTraj[i] = drive
                     .trajectorySequenceBuilder(backDropTraj[i].end())
@@ -193,6 +193,7 @@ public class BackDropAuto extends LinearOpMode {
                     .build();
             parkTraj[i] = drive
                     .trajectorySequenceBuilder(trussTraj[i].end())
+                    .setReversed(false)
                     .splineToConstantHeading(reflectX(PARK.getV(i)), reflectX(PARK.getH(i)))
                     .build();
         }
