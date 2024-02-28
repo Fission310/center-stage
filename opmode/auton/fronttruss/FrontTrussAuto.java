@@ -81,6 +81,7 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
     private Command wristCommand = () -> wrist.autoPos(reflectPos(pos));
+    private Command wristIntake = () -> wrist.intakePos();
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
@@ -170,6 +171,10 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(retractFirstCommand)
             .addWaitCommand(0.4)
             .addCommand(retractSecondCommand)
+            .addCommand(wristIntake)
+            .addCommand(slidesCommand)
+            .addWaitCommand(.3)
+            .addCommand(armIntakeCommand)
             .build();
 
     private AutoCommandMachine commandMachine = new AutoCommandMachine()

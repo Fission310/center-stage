@@ -68,7 +68,7 @@ public class TrussConstants {
     public static double TAG_X_OFFSET_1 = 2;
     public static double TAG_X_OFFSET_2 = -4;
     public static double TAG_LEFT_OFFSET = -4;
-    public static double TAG_CENTER_OFFSET = 5;
+    public static double TAG_CENTER_OFFSET = 0;
     public static double TAG_RIGHT_OFFSET = 10;
 
     public static Constant TAG_1;
