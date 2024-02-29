@@ -59,10 +59,6 @@ public class FrontTrussAuto extends LinearOpMode {
         arm.intakePos();
         wrist.intakePos();
     };
-    private Command armAutoCommand = () -> {
-        arm.autoPos();
-        wrist.autoPos(reflectPos(pos));
-    };
     private Command sensePixels = () -> {
         long start = System.nanoTime();
         while (intake.numPixels() < 2 && System.nanoTime() - start < 3000000) {
@@ -72,6 +68,10 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command intakeStopCommand = () -> {
         intake.stop();
         intake.down();
+    };
+    private Command armAutoCommand = () -> {
+        arm.autoPos();
+        wrist.autoPos(reflectPos(pos));
     };
     private Command outtake = () -> intake.outtake();
     private Command intakeUpFirst = () -> intake.upAuto(1);

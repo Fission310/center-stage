@@ -6,6 +6,9 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
+
+import kotlin.jvm.internal.ShortCompanionObject;
+
 import com.stuyfission.fissionlib.command.AutoCommandMachine;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -59,11 +62,17 @@ public class BackDropAuto extends LinearOpMode {
         intake.stop();
         intake.down();
     };
+    private Command armAutoCommand = () -> {
+        arm.autoPos();
+        wrist.autoPos(reflectPos(pos));
+    };
+    private Command releaseLeft = () -> claw.leftOpen();
     private Command intakeCommand = () -> intake.up();
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command slidesCommand = () -> slides.goToPos(0);
     private Command armCommand = () -> arm.scorePos();
+    private Command armIntakeCommand = () -> arm.intakePos();
     private Command wristCommand = () -> wrist.scorePos();
     private Command grabCommand = () -> claw.close();
     private Command intakeUpSecond = () -> intake.upAuto(2);
@@ -86,10 +95,17 @@ public class BackDropAuto extends LinearOpMode {
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
             .addCommand(spikeMarkCommand)
+            .addCommand(armAutoCommand)
             .build();
     private CommandSequence backDropSequence = new CommandSequence()
-            .addCommand(intakeCommand)
             .addCommand(backDropCommand)
+            .addCommand(releaseLeft)
+            .addWaitCommand(0.2)
+            .addCommand(slidesCommand)
+            .addWaitCommand(0.1)
+            .addCommand(armCommand)
+            .addWaitCommand(ARM_DELAY)
+            .addCommand(wristCommand)
             .build();
     private CommandSequence trussBackSequence = new CommandSequence()
             .addCommand(trussBackCommand)
@@ -121,7 +137,8 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(releaseCommand)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
-            .addWaitCommand(2)
+            .addCommand(releaseCommand)
+            .addWaitCommand(SCORE_DELAY)
             .addCommand(parkCommand)
             .addWaitCommand(4)
             .addCommand(retractFirstCommand)
@@ -132,8 +149,8 @@ public class BackDropAuto extends LinearOpMode {
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(backDropSequence)
-            .addCommandSequence(trussBackSequence)
-            .addCommandSequence(trussSequence)
+            // .addCommandSequence(trussBackSequence)
+            // .addCommandSequence(trussSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
