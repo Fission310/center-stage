@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Slides2 extends Mechanism {
 
+    public static double AUTO_POS = 100;
     public static double LOW_POS = 220;
     public static double MEDIUM_LOW_POS = 350;
     public static double MEDIUM_HIGH_POS = 600;
@@ -78,6 +79,10 @@ public class Slides2 extends Mechanism {
 
     public void intakePos() {
         setTarget(COLLECT_POS);
+    }
+
+    public void autoPos() {
+        setTarget(AUTO_POS);
     }
 
     public void goToPos(int pos) {

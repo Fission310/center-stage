@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
 
-import kotlin.jvm.internal.ShortCompanionObject;
-
 import com.stuyfission.fissionlib.command.AutoCommandMachine;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -64,16 +62,26 @@ public class BackDropAuto extends LinearOpMode {
     };
     private Command armAutoCommand = () -> {
         arm.autoPos();
-        wrist.autoPos(reflectPos(pos));
+        if (reflect) {
+            wrist.autoPos(reflectPos(pos));
+        } else {
+            wrist.autoPos(pos.index % 2 + 1);
+        }
     };
     private Command releaseLeft = () -> claw.leftOpen();
     private Command intakeCommand = () -> intake.up();
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
-    private Command slidesCommand = () -> slides.goToPos(0);
+    private Command slidesCommand = () -> slides.autoPos();
     private Command armCommand = () -> arm.scorePos();
     private Command armIntakeCommand = () -> arm.intakePos();
-    private Command wristCommand = () -> wrist.scorePos();
+    private Command wristCommand = () -> {
+        if (!reflect) {
+            wrist.autoPos(0);
+        } else {
+            wrist.scorePos();
+        }
+    };
     private Command grabCommand = () -> claw.close();
     private Command intakeUpSecond = () -> intake.upAuto(2);
     private Command retractFirstCommand = () -> {
@@ -84,7 +92,6 @@ public class BackDropAuto extends LinearOpMode {
     private Command retractSecondCommand = () -> {
         arm.intakePos();
         slides.intakePos();
-        claw.close();
     };
 
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
@@ -144,6 +151,7 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(retractFirstCommand)
             .addWaitCommand(0.4)
             .addCommand(retractSecondCommand)
+            .addWaitCommand(1)
             .build();
 
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
@@ -161,7 +169,12 @@ public class BackDropAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        BackDropConstants.init();
+        if (color == Color.RED) {
+            BackDropConstantsRed.set();
+        } else {
+            BackDropConstantsBlue.set();
+        }
+
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);

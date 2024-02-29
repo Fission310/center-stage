@@ -9,17 +9,15 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
-import org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstants;
 
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
-import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstants.*;
+import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstantsRed.*;
 
 public class Meep {
 
     public static boolean reflect;
 
     public static void main(String[] args) {
-        BackDropConstants.init();
         MeepMeep meepMeep = new MeepMeep(800);
 
         Position pos = Position.RIGHT;

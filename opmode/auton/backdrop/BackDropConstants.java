@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode.opmode.auton.backdrop;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Constant;
 import static org.firstinspires.ftc.teamcode.opmode.auton.util.GameConstants.*;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-@Config
 public class BackDropConstants {
     // Start Pose
     public static final double START_HEADING = UP;
@@ -18,20 +16,20 @@ public class BackDropConstants {
 
     // Spike Mark
     public static final double SPIKE_LEFT_HEADING = Math.toRadians(15);
-    public static final double SPIKE_CENTER_HEADING = Math.toRadians(70);
-    public static final double SPIKE_RIGHT_HEADING = Math.toRadians(70);
+    public static final double SPIKE_CENTER_HEADING = Math.toRadians(45);
+    public static final double SPIKE_RIGHT_HEADING = Math.toRadians(45);
 
     public static final double SPIKE_TANGENT = RIGHT;
 
     public static final double SPIKE_X = TILE_LENGTH / 2.0;
     public static final double SPIKE_Y = 3.0 * TILE_LENGTH / 2.0;
 
-    public static double SPIKE_LEFT_OFFSET_X = -1;
-    public static double SPIKE_LEFT_OFFSET_Y = 5;
-    public static double SPIKE_CENTER_OFFSET_X = 2;
-    public static double SPIKE_CENTER_OFFSET_Y = 1;
-    public static double SPIKE_RIGHT_OFFSET_X = 15;
-    public static double SPIKE_RIGHT_OFFSET_Y = 7;
+    protected static double SPIKE_LEFT_OFFSET_X;
+    protected static double SPIKE_LEFT_OFFSET_Y;
+    protected static double SPIKE_CENTER_OFFSET_X;
+    protected static double SPIKE_CENTER_OFFSET_Y;
+    protected static double SPIKE_RIGHT_OFFSET_X;
+    protected static double SPIKE_RIGHT_OFFSET_Y;
 
     public static Constant SPIKE;
 
@@ -41,8 +39,8 @@ public class BackDropConstants {
     public static final double STACK_X = -WALL_POS + 3.0 * BOT_LENGTH / 5.0;
     public static final double STACK_Y = TILE_LENGTH * 0.5;
 
-    public static double STACK_Y_OFFSET = 5;
-    public static double STACK_X_OFFSET = 1;
+    protected static double STACK_Y_OFFSET;
+    protected static double STACK_X_OFFSET;
 
     public static Constant STACK;
 
@@ -63,11 +61,11 @@ public class BackDropConstants {
     public static final double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
     public static final double TAG_Y = 3.0 * TILE_LENGTH / 2.0;
 
-    public static double TAG_X_OFFSET_1 = 4.11;
-    public static double TAG_X_OFFSET_2 = 4;
-    public static double TAG_LEFT_OFFSET = -10;
-    public static double TAG_CENTER_OFFSET = -4.11;
-    public static double TAG_RIGHT_OFFSET = 3.10;
+    protected static double TAG_X_OFFSET_1;
+    protected static double TAG_X_OFFSET_2;
+    protected static double TAG_LEFT_OFFSET;
+    protected static double TAG_CENTER_OFFSET;
+    protected static double TAG_RIGHT_OFFSET;
 
     public static Constant TAG_1;
     public static Constant TAG_2;
@@ -76,11 +74,11 @@ public class BackDropConstants {
     public static final double PARK_HEADING = DOWN;
 
     public static final double PARK_X = TAG_X;
-    public static final double PARK_Y = WALL_POS - BOT_LENGTH;
+    public static final double PARK_Y = WALL_POS - BOT_LENGTH / 2;
 
     public static Constant PARK;
 
-    public static void init() {
+    protected static void init() {
         final double[] ZERO = array(0);
 
         START_POSE = new Pose2d(START_X, START_Y, START_HEADING);
