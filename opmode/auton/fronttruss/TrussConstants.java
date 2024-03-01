@@ -15,7 +15,7 @@ public class TrussConstants {
     public static Pose2d START_POSE;
 
     // Spike Mark
-    public static final double SPIKE_LEFT_HEADING = Math.toRadians(315);
+    public static final double SPIKE_LEFT_HEADING = LEFT;
     public static final double SPIKE_CENTER_HEADING = Math.toRadians(135);
     public static final double SPIKE_RIGHT_HEADING = LEFT;
 
@@ -41,8 +41,12 @@ public class TrussConstants {
 
     protected static double STACK_Y_OFFSET_1;
     protected static double STACK_Y_OFFSET_2;
-    protected static double STACK_X_OFFSET_1;
-    protected static double STACK_X_OFFSET_2;
+    protected static double STACK_X_OFFSET_L_1;
+    protected static double STACK_X_OFFSET_L_2;
+    protected static double STACK_X_OFFSET_C_1;
+    protected static double STACK_X_OFFSET_C_2;
+    protected static double STACK_X_OFFSET_R_1;
+    protected static double STACK_X_OFFSET_R_2;
 
     public static Constant STACK_1;
     public static Constant STACK_2;
@@ -63,8 +67,13 @@ public class TrussConstants {
     public static final double TAG_X = WALL_POS - TILE_LENGTH / 2.0 - BOT_LENGTH / 2.0;
     public static final double TAG_Y = 3.0 * TILE_LENGTH / 2.0;
 
-    protected static double TAG_X_OFFSET_1;
-    protected static double TAG_X_OFFSET_2;
+    protected static double TAG_X_OFFSET_L_1;
+    protected static double TAG_X_OFFSET_L_2;
+    protected static double TAG_X_OFFSET_C_1;
+    protected static double TAG_X_OFFSET_C_2;
+    protected static double TAG_X_OFFSET_R_1;
+    protected static double TAG_X_OFFSET_R_2;
+
     protected static double TAG_LEFT_OFFSET;
     protected static double TAG_CENTER_OFFSET;
     protected static double TAG_RIGHT_OFFSET;
@@ -90,20 +99,24 @@ public class TrussConstants {
                 new double[] { SPIKE_LEFT_OFFSET_Y, SPIKE_CENTER_OFFSET_Y, SPIKE_RIGHT_OFFSET_Y },
                 new double[] { SPIKE_LEFT_HEADING, SPIKE_CENTER_HEADING, SPIKE_RIGHT_HEADING });
 
-        STACK_1 = new Constant(STACK_X, STACK_Y, array(STACK_X_OFFSET_1), array(STACK_Y_OFFSET_1),
+        STACK_1 = new Constant(STACK_X, STACK_Y,
+                new double[] { STACK_X_OFFSET_L_1, STACK_X_OFFSET_C_1, STACK_X_OFFSET_R_1 },
+                array(STACK_Y_OFFSET_1),
                 array(STACK_HEADING));
-        STACK_2 = new Constant(STACK_X, STACK_Y, array(STACK_X_OFFSET_2), array(STACK_Y_OFFSET_2),
+        STACK_2 = new Constant(STACK_X, STACK_Y,
+                new double[] { STACK_X_OFFSET_L_1, STACK_X_OFFSET_C_1, STACK_X_OFFSET_R_1 },
+                array(STACK_Y_OFFSET_2),
                 array(STACK_HEADING));
 
         TRUSS = new Constant(TRUSS_X, TRUSS_Y, ZERO, ZERO, array(TRUSS_HEADING));
         BACK_TRUSS = new Constant(TRUSS_X, TRUSS_Y, ZERO, ZERO, array(TRUSS_BACK_HEADING));
 
         TAG_1 = new Constant(TAG_X, TAG_Y,
-                array(TAG_X_OFFSET_1),
+                new double[] { TAG_X_OFFSET_L_1, TAG_X_OFFSET_C_1, TAG_X_OFFSET_R_1 },
                 new double[] { TAG_LEFT_OFFSET, TAG_CENTER_OFFSET, TAG_RIGHT_OFFSET },
                 array(TAG_HEADING));
         TAG_2 = new Constant(TAG_X, TAG_Y,
-                array(TAG_X_OFFSET_2),
+                new double[] { TAG_X_OFFSET_L_2, TAG_X_OFFSET_C_2, TAG_X_OFFSET_R_2 },
                 new double[] { TAG_LEFT_OFFSET, TAG_CENTER_OFFSET, TAG_RIGHT_OFFSET },
                 array(TAG_HEADING));
 

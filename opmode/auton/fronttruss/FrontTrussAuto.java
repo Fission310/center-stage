@@ -53,7 +53,13 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command releaseRightCommand = () -> {
         claw.rightOpen();
     };
-    private Command slidesCommand = () -> slides.goToPos(0);
+    private Command slidesCommand = () -> {
+        if (pos.index == 1) {
+            slides.setTarget(190);
+        } else {
+            slides.goToPos(0);
+        }
+    };
     private Command slidesSecondCommand = () -> slides.goToPos(1);
     private Command armIntakeCommand = () -> {
         arm.intakePos();
@@ -115,13 +121,16 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(intakeStartCommand)
             .addCommand(trussFirstCommand)
             .addCommand(sensePixels)
-            .addWaitCommand(0.5)
+            .addWaitCommand(0.8)
             .addCommand(intakeStopCommand)
-            .addWaitCommand(0.4)
+            .addWaitCommand(0.1)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .addWaitCommand(1.5)
+            .addCommand(releaseLeftCommand)
+            .addWaitCommand(0.5)
+            .addCommand(grabCommand)
+            .addWaitCommand(1)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
             .addCommand(slidesCommand)
@@ -172,7 +181,6 @@ public class FrontTrussAuto extends LinearOpMode {
             .addWaitCommand(0.4)
             .addCommand(retractSecondCommand)
             .addCommand(wristIntake)
-            .addCommand(slidesCommand)
             .addWaitCommand(0.3)
             .addCommand(armIntakeCommand)
             .addWaitCommand(0.7)
@@ -182,8 +190,8 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(stackSequence)
             .addCommandSequence(trussFirstSequence)
-            //.addCommandSequence(trussBackSequence)
-            //.addCommandSequence(trussSecondSequence)
+            // .addCommandSequence(trussBackSequence)
+            // .addCommandSequence(trussSecondSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();

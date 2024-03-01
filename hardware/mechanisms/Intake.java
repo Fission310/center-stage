@@ -49,6 +49,7 @@ public class Intake extends Mechanism {
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.55;
     public static double SENSOR_DELAY = 0.4;
+    public static double OUTTAKE_DOWN_DELAY = 0.5;
 
     public static double FAR_PIXEL = 18;
     public static double FAR_INTAKE = 10;
@@ -92,6 +93,7 @@ public class Intake extends Mechanism {
             .addCommand(pixelDown)
             .addWaitCommand(INTAKE_DOWN_DELAY)
             .addCommand(setPixelUp)
+            .addWaitCommand(OUTTAKE_DOWN_DELAY)
             .addCommand(intakeStop)
             .build();
 
