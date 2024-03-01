@@ -173,8 +173,9 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(retractSecondCommand)
             .addCommand(wristIntake)
             .addCommand(slidesCommand)
-            .addWaitCommand(.3)
+            .addWaitCommand(0.3)
             .addCommand(armIntakeCommand)
+            .addWaitCommand(0.7)
             .build();
 
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
@@ -193,7 +194,12 @@ public class FrontTrussAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        TrussConstants.init();
+        if (color == Color.RED) {
+            TrussConstantsRed.set();
+        } else {
+            TrussConstantsBlue.set();
+        }
+
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
