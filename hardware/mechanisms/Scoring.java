@@ -29,7 +29,7 @@ public class Scoring extends Mechanism {
     public static double SCORE_DELAY = 0.4;
     public static double SLIDES_DELAY = 0.1;
     public static double ARM_DELAY = 0.1;
-    public static double PLATFORM_DELAY = 1.35;
+    public static double PLATFORM_DELAY = 1.15;
     public static double PLATFORM_DOWN_DELAY = 0.1;
     public static double DT_SLOW = 0.8;
 

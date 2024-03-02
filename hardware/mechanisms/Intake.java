@@ -43,7 +43,7 @@ public class Intake extends Mechanism {
     public static double DOWN_POS = 0.07;
 
     public static double PIXEL_UP_POS = 0.5;
-    public static double PIXEL_MIDDLE_POS = 0.375;
+    public static double PIXEL_MIDDLE_POS = 0.3;
     public static double PIXEL_DOWN_POS = 0.055;
 
     public static double INTAKE_DOWN_DELAY = 1;
