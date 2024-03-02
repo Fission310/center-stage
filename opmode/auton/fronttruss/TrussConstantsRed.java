@@ -11,21 +11,21 @@ public class TrussConstantsRed extends TrussConstants {
     public static double SPIKE_RIGHT_OFFSET_X_R = 0;
     public static double SPIKE_RIGHT_OFFSET_Y_R = 0;
 
-    public static double STACK_Y_OFFSET_1_R = 3;
-    public static double STACK_Y_OFFSET_2_R = 8;
-    public static double STACK_X_OFFSET_1_L_R = 4;
-    public static double STACK_X_OFFSET_2_L_R = 3;
-    public static double STACK_X_OFFSET_1_C_R = 3;
-    public static double STACK_X_OFFSET_2_C_R = 3;
-    public static double STACK_X_OFFSET_1_R_R = 0.5;
-    public static double STACK_X_OFFSET_2_R_R = 3;
+    public static double STACK_Y_OFFSET_1_R = 5;
+    public static double STACK_Y_OFFSET_2_R = 5;
+    public static double STACK_X_OFFSET_1_L_R = 3.2;
+    public static double STACK_X_OFFSET_2_L_R = 6;
+    public static double STACK_X_OFFSET_1_C_R = 2.2;
+    public static double STACK_X_OFFSET_2_C_R = 5;
+    public static double STACK_X_OFFSET_1_R_R = 0.3;
+    public static double STACK_X_OFFSET_2_R_R = 1.9;
 
     public static double TAG_X_OFFSET_1_L_R = 5;
-    public static double TAG_X_OFFSET_2_L_R = -4;
+    public static double TAG_X_OFFSET_2_L_R = 5;
     public static double TAG_X_OFFSET_1_C_R = 6;
-    public static double TAG_X_OFFSET_2_C_R = -4;
+    public static double TAG_X_OFFSET_2_C_R = 6;
     public static double TAG_X_OFFSET_1_R_R = 6;
-    public static double TAG_X_OFFSET_2_R_R = -4;
+    public static double TAG_X_OFFSET_2_R_R = 6;
 
     public static double TAG_LEFT_OFFSET_R = -2.5;
     public static double TAG_CENTER_OFFSET_R = -0.9;

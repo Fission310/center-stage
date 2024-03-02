@@ -48,6 +48,7 @@ public class Intake extends Mechanism {
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.55;
+    public static double AUTO_INTAKE_UP_DELAY = 1;
     public static double SENSOR_DELAY = 0.4;
     public static double OUTTAKE_DOWN_DELAY = 0.5;
 
@@ -94,6 +95,14 @@ public class Intake extends Mechanism {
             .addWaitCommand(INTAKE_DOWN_DELAY)
             .addCommand(setPixelUp)
             .addWaitCommand(OUTTAKE_DOWN_DELAY)
+            .addCommand(intakeStop)
+            .build();
+
+    private CommandSequence autoPixelUpSequence = new CommandSequence()
+            .addWaitCommand(SENSOR_DELAY)
+            .addCommand(pixelUp)
+            .addWaitCommand(AUTO_INTAKE_UP_DELAY)
+            .addCommand(pixelFullyUp)
             .addCommand(intakeStop)
             .build();
 
@@ -177,6 +186,10 @@ public class Intake extends Mechanism {
 
     public void pixelUp() {
         pixelUpSequence.trigger();
+    }
+
+    public void autoPixelUp() {
+        autoPixelUpSequence.trigger();
     }
 
     public void pixelDown() {
