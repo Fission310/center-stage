@@ -18,8 +18,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Slides2 extends Mechanism {
 
-    public static double AUTO_POS = 100;
-    public static double LOW_POS = 190;
+    public static double AUTO_POS = 70;
+    public static double LOW_POS = 160;
     public static double MEDIUM_LOW_POS = 350;
     public static double MEDIUM_HIGH_POS = 600;
     public static double HIGH_POS = 845;

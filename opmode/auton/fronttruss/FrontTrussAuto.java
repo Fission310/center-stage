@@ -34,6 +34,8 @@ public class FrontTrussAuto extends LinearOpMode {
     private Webcam webcam;
     private Wrist wrist;
 
+    private boolean busy = false;
+
     public static double ARM_DELAY = 0.1;
     public static double SCORE_DELAY = 0.5;
     public static double SLIDES_DELAY = 0.5;
@@ -56,6 +58,8 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command slidesCommand = () -> {
         slides.goToPos(0);
     };
+    private Command busyFalse = () -> busy = false;
+    private Command busyTrue = () -> busy = true;
     private Command slidesSecondCommand = () -> slides.goToPos(1);
     private Command armIntakeCommand = () -> {
         arm.intakePos();
@@ -63,7 +67,7 @@ public class FrontTrussAuto extends LinearOpMode {
     };
     private Command sensePixels = () -> {
         long start = System.nanoTime();
-        while (intake.numPixels() < 1) {// && System.nanoTime() - start < 3000000) {
+        while (intake.numPixels() < 2 && System.nanoTime() - start < 3000000) {
         }
     };
     private Command intakeStartCommand = () -> intake.intake();
@@ -82,7 +86,7 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
-    private Command wristCommand = () -> wrist.autoPos(reflectPos(pos));
+    private Command wristCommand = () -> wrist.autoPos(reflect == true ? pos.index : pos.index % 2);
     private Command wristIntake = () -> wrist.intakePos();
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
@@ -114,6 +118,9 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(intakeUpFirst)
             .build();
     private CommandSequence trussFirstSequence = new CommandSequence()
+            .addCommand(busyTrue)
+            .addWaitCommand(5)
+            .addCommand(busyFalse)
             .addCommand(intakeStartCommand)
             .addCommand(trussFirstCommand)
             .addCommand(sensePixels)
@@ -183,8 +190,8 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(stackSequence)
             .addCommandSequence(trussFirstSequence)
-            //.addCommandSequence(trussBackSequence)
-            //.addCommandSequence(trussSecondSequence)
+            // .addCommandSequence(trussBackSequence)
+            // .addCommandSequence(trussSecondSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -280,7 +287,7 @@ public class FrontTrussAuto extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();
             slides.update();
-            commandMachine.run(drive.isBusy());
+            commandMachine.run(drive.isBusy() || busy);
         }
     }
 

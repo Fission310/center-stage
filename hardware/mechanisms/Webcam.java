@@ -29,6 +29,8 @@ public class Webcam extends Mechanism {
 
     private Color color;
 
+    public static int NONE = 6;
+
     public static int LOW_H_R = 0;
     public static int LOW_H_B = 100;
 
@@ -103,11 +105,11 @@ public class Webcam extends Mechanism {
 
         private static final Rect LEFT_ROI = new Rect(
                 new Point(0, 0),
-                new Point(SCREEN_WIDTH / 3.0, SCREEN_HEIGHT));
+                new Point(SCREEN_WIDTH / 2.0, SCREEN_HEIGHT));
 
         private static final Rect CENTER_ROI = new Rect(
-                new Point(SCREEN_WIDTH / 3.0, 0),
-                new Point(SCREEN_WIDTH / 3.0 * 2, SCREEN_HEIGHT));
+                new Point(SCREEN_WIDTH / 2.0, 0),
+                new Point(SCREEN_WIDTH, SCREEN_HEIGHT));
 
         private static final Rect RIGHT_ROI = new Rect(
                 new Point(SCREEN_WIDTH / 3.0 * 2, 0),
@@ -145,25 +147,25 @@ public class Webcam extends Mechanism {
             // submats for the boxes, these are the regions that'll detect the color
             Mat leftBox = mat.submat(LEFT_ROI);
             Mat centerBox = mat.submat(CENTER_ROI);
-            Mat rightBox = mat.submat(RIGHT_ROI);
+            //Mat rightBox = mat.submat(RIGHT_ROI);
 
             // how much in each region is white aka the color we filtered through the mask
-            leftPercent = Core.sumElems(leftBox).val[0] / LEFT_ROI.area() / 255;
-            centerPercent = Core.sumElems(centerBox).val[0] / CENTER_ROI.area() / 255;
-            rightPercent = Core.sumElems(rightBox).val[0] / RIGHT_ROI.area() / 255;
+            leftPercent = Core.sumElems(leftBox).val[0] / LEFT_ROI.area();
+            centerPercent = Core.sumElems(centerBox).val[0] / CENTER_ROI.area();
+            //rightPercent = Core.sumElems(rightBox).val[0] / RIGHT_ROI.area() / 255;
 
             telemetry.addData("LEFT", leftPercent);
             telemetry.addData("CENTER", centerPercent);
-            telemetry.addData("RIGHT", rightPercent);
+            //telemetry.addData("RIGHT", rightPercent);
 
-            if (leftPercent > centerPercent && leftPercent > rightPercent) {
+            if (leftPercent > centerPercent && leftPercent > NONE) {
                 Imgproc.rectangle(mat, LEFT_ROI, new Scalar(60, 255, 255), 10);
                 pos = Position.LEFT;
-            } else if (centerPercent > leftPercent && centerPercent > rightPercent) {
+            } else if (centerPercent > leftPercent && centerPercent > NONE) {
                 Imgproc.rectangle(mat, CENTER_ROI, new Scalar(60, 255, 255), 10);
                 pos = Position.CENTER;
-            } else if (rightPercent > leftPercent && rightPercent > centerPercent) {
-                Imgproc.rectangle(mat, RIGHT_ROI, new Scalar(60, 255, 255), 10);
+            } else {
+                //Imgproc.rectangle(mat, RIGHT_ROI, new Scalar(60, 255, 255), 10);
                 pos = Position.RIGHT;
             }
 
@@ -172,7 +174,7 @@ public class Webcam extends Mechanism {
 
             leftBox.release();
             centerBox.release();
-            rightBox.release();
+            //rightBox.release();
 
             return mat;
         }

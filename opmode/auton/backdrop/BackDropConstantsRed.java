@@ -14,11 +14,11 @@ public class BackDropConstantsRed extends BackDropConstants {
     public static double STACK_Y_OFFSET_R = 5;
     public static double STACK_X_OFFSET_R = 1;
 
-    public static double TAG_X_OFFSET_1_R = 3.11;
+    public static double TAG_X_OFFSET_1_R = 1;
     public static double TAG_X_OFFSET_2_R = 4;
     public static double TAG_LEFT_OFFSET_R = -8;
     public static double TAG_CENTER_OFFSET_R = -2.11;
-    public static double TAG_RIGHT_OFFSET_R = 3.10;
+    public static double TAG_RIGHT_OFFSET_R = 4.6;
 
     public static void set() {
         SPIKE_LEFT_OFFSET_X = SPIKE_LEFT_OFFSET_X_R;

@@ -58,6 +58,8 @@ public class TrussConstants {
     public static final double TRUSS_X = 3.0 * TILE_LENGTH / 2.0;
     public static final double TRUSS_Y = TILE_LENGTH / 2.0;
 
+    protected static double TRUSS_Y_OFFSET;
+
     public static Constant TRUSS;
     public static Constant BACK_TRUSS;
 
@@ -104,11 +106,11 @@ public class TrussConstants {
                 array(STACK_Y_OFFSET_1),
                 array(STACK_HEADING));
         STACK_2 = new Constant(STACK_X, STACK_Y,
-                new double[] { STACK_X_OFFSET_L_1, STACK_X_OFFSET_C_1, STACK_X_OFFSET_R_1 },
+                new double[] { STACK_X_OFFSET_L_2, STACK_X_OFFSET_C_2, STACK_X_OFFSET_R_2 },
                 array(STACK_Y_OFFSET_2),
                 array(STACK_HEADING));
 
-        TRUSS = new Constant(TRUSS_X, TRUSS_Y, ZERO, ZERO, array(TRUSS_HEADING));
+        TRUSS = new Constant(TRUSS_X, TRUSS_Y, ZERO, array(TRUSS_Y_OFFSET), array(TRUSS_HEADING));
         BACK_TRUSS = new Constant(TRUSS_X, TRUSS_Y, ZERO, ZERO, array(TRUSS_BACK_HEADING));
 
         TAG_1 = new Constant(TAG_X, TAG_Y,

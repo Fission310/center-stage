@@ -14,10 +14,10 @@ public class BackDropConstantsBlue extends BackDropConstants {
     public static double STACK_Y_OFFSET_B = 5;
     public static double STACK_X_OFFSET_B = 1;
 
-    public static double TAG_X_OFFSET_1_B = 4.11;
+    public static double TAG_X_OFFSET_1_B = 1;
     public static double TAG_X_OFFSET_2_B = 4;
-    public static double TAG_LEFT_OFFSET_B = -7;
-    public static double TAG_CENTER_OFFSET_B = 0;
+    public static double TAG_LEFT_OFFSET_B = -4.7;
+    public static double TAG_CENTER_OFFSET_B = 1;
     public static double TAG_RIGHT_OFFSET_B = 8;
 
     public static void set() {
