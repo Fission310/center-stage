@@ -40,7 +40,7 @@ public class FrontTrussAuto extends LinearOpMode {
     public static double SCORE_DELAY = 0.5;
     public static double SLIDES_DELAY = 0.5;
     public static double TRUSS_DELAY = 6;
-    public static double PLATFORM_DELAY = 1.5;
+    public static double PLATFORM_DELAY = 2.3;
 
     private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
     private TrajectorySequence[] stackTraj = new TrajectorySequence[3];
@@ -119,12 +119,12 @@ public class FrontTrussAuto extends LinearOpMode {
             .build();
     private CommandSequence trussFirstSequence = new CommandSequence()
             .addCommand(busyTrue)
-            .addWaitCommand(5)
+            .addWaitCommand(8)
             .addCommand(busyFalse)
             .addCommand(intakeStartCommand)
             .addCommand(trussFirstCommand)
             .addCommand(sensePixels)
-            .addWaitCommand(1.5)
+            .addWaitCommand(0.7)
             .addCommand(intakeStopCommand)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)

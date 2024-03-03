@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class BackDropConstantsRed extends BackDropConstants {
     public static double SPIKE_LEFT_OFFSET_X_R = -1;
-    public static double SPIKE_LEFT_OFFSET_Y_R = 3;
+    public static double SPIKE_LEFT_OFFSET_Y_R = 2;
     public static double SPIKE_CENTER_OFFSET_X_R = 15;
     public static double SPIKE_CENTER_OFFSET_Y_R = -6;
     public static double SPIKE_RIGHT_OFFSET_X_R = 19.11;
@@ -16,7 +16,7 @@ public class BackDropConstantsRed extends BackDropConstants {
 
     public static double TAG_X_OFFSET_1_R = 1;
     public static double TAG_X_OFFSET_2_R = 4;
-    public static double TAG_LEFT_OFFSET_R = -8;
+    public static double TAG_LEFT_OFFSET_R = -9;
     public static double TAG_CENTER_OFFSET_R = -2.11;
     public static double TAG_RIGHT_OFFSET_R = 4.6;
 

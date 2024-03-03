@@ -13,7 +13,7 @@ public class TrussConstantsRed extends TrussConstants {
 
     public static double STACK_Y_OFFSET_1_R = 3.7;
     public static double STACK_Y_OFFSET_2_R = 5;
-    public static double STACK_X_OFFSET_1_L_R = 3;
+    public static double STACK_X_OFFSET_1_L_R = 1;
     public static double STACK_X_OFFSET_2_L_R = 6;
     public static double STACK_X_OFFSET_1_C_R = 2;
     public static double STACK_X_OFFSET_2_C_R = 5;
@@ -29,9 +29,9 @@ public class TrussConstantsRed extends TrussConstants {
     public static double TAG_X_OFFSET_1_R_R = 5;
     public static double TAG_X_OFFSET_2_R_R = 5;
 
-    public static double TAG_LEFT_OFFSET_R = 3.6;
-    public static double TAG_CENTER_OFFSET_R = 1.5;
-    public static double TAG_RIGHT_OFFSET_R = 8;
+    public static double TAG_LEFT_OFFSET_R = 2;
+    public static double TAG_CENTER_OFFSET_R = 2;
+    public static double TAG_RIGHT_OFFSET_R = 9;
 
     public static void set() {
         SPIKE_LEFT_OFFSET_X = SPIKE_LEFT_OFFSET_X_R;
