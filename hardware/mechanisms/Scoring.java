@@ -82,7 +82,7 @@ public class Scoring extends Mechanism {
     };
 
     private CommandSequence countPixels = new CommandSequence()
-            .addWaitCommand(0.1)
+            .addWaitCommand(0.6)
             .addCommand(setPixels)
             .build();
     private CommandSequence outtakeABit = new CommandSequence()

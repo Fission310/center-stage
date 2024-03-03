@@ -22,12 +22,12 @@ public class TrussConstantsRed extends TrussConstants {
 
     public static double TRUSS_Y_OFFSET_R = 2;
 
-    public static double TAG_X_OFFSET_1_L_R = 5;
-    public static double TAG_X_OFFSET_2_L_R = 5;
-    public static double TAG_X_OFFSET_1_C_R = 5;
-    public static double TAG_X_OFFSET_2_C_R = 5;
-    public static double TAG_X_OFFSET_1_R_R = 5;
-    public static double TAG_X_OFFSET_2_R_R = 5;
+    public static double TAG_X_OFFSET_1_L_R = 4.2;
+    public static double TAG_X_OFFSET_2_L_R = 4.2;
+    public static double TAG_X_OFFSET_1_C_R = 4.2;
+    public static double TAG_X_OFFSET_2_C_R = 4.2;
+    public static double TAG_X_OFFSET_1_R_R = 4.2;
+    public static double TAG_X_OFFSET_2_R_R = 4.2;
 
     public static double TAG_LEFT_OFFSET_R = 2;
     public static double TAG_CENTER_OFFSET_R = 2;
