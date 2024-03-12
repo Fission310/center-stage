@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auton.fronttruss;
+package org.firstinspires.ftc.teamcode.opmode.auton.front;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -20,7 +20,7 @@ import static org.firstinspires.ftc.teamcode.opmode.auton.fronttruss.TrussConsta
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 
 @Config
-public class FrontTrussAuto extends LinearOpMode {
+public class FrontAuto extends LinearOpMode {
 
     private boolean reflect;
     private Color color;
@@ -35,6 +35,7 @@ public class FrontTrussAuto extends LinearOpMode {
     private Wrist wrist;
 
     private boolean busy = false;
+    private int cycle = 0;
 
     public static double ARM_DELAY = 0.1;
     public static double SCORE_DELAY = 0.5;
@@ -45,10 +46,11 @@ public class FrontTrussAuto extends LinearOpMode {
     private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
     private TrajectorySequence[] stackTraj = new TrajectorySequence[3];
     private TrajectorySequence[] trussFirstTraj = new TrajectorySequence[3];
-    private TrajectorySequence[] trussBackTraj = new TrajectorySequence[3];
-    private TrajectorySequence[] trussSecondTraj = new TrajectorySequence[3];
+    private TrajectorySequence[][] trussBackTraj = new TrajectorySequence[2][3];
+    private TrajectorySequence[][] trussTraj = new TrajectorySequence[2][3];
     private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
+    private Command incrementCycle = () -> cycle++;
     private Command releaseLeftCommand = () -> {
         claw.leftOpen();
     };
@@ -101,8 +103,8 @@ public class FrontTrussAuto extends LinearOpMode {
     private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
     private Command stackCommand = () -> drive.followTrajectorySequenceAsync(stackTraj[reflectPos(pos)]);
     private Command trussFirstCommand = () -> drive.followTrajectorySequenceAsync(trussFirstTraj[reflectPos(pos)]);
-    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[reflectPos(pos)]);
-    private Command trussSecondCommand = () -> drive.followTrajectorySequenceAsync(trussSecondTraj[reflectPos(pos)]);
+    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[cycle][reflectPos(pos)]);
+    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[cycle][reflectPos(pos)]);
     private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
@@ -152,9 +154,10 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommand(retractSecondCommand)
             .addCommand(intakeUpSecond)
             .build();
-    private CommandSequence trussSecondSequence = new CommandSequence()
+    private CommandSequence trussSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
-            .addCommand(trussSecondCommand)
+            .addCommand(incrementCycle)
+            .addCommand(trussCommand)
             .addCommand(sensePixels)
             .addWaitCommand(1.5)
             .addCommand(intakeStopCommand)
@@ -190,24 +193,20 @@ public class FrontTrussAuto extends LinearOpMode {
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(stackSequence)
             .addCommandSequence(trussFirstSequence)
-            // .addCommandSequence(trussBackSequence)
-            // .addCommandSequence(trussSecondSequence)
+            .addCommandSequence(trussBackSequence)
+            .addCommandSequence(trussSequence)
+            .addCommandSequence(trussBackSequence)
+            .addCommandSequence(trussSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
 
-    public FrontTrussAuto(Color color) {
+    public FrontAuto(Color color) {
         this.color = color;
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        if (color == Color.RED) {
-            TrussConstantsRed.set();
-        } else {
-            TrussConstantsBlue.set();
-        }
-
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
@@ -243,29 +242,55 @@ public class FrontTrussAuto extends LinearOpMode {
             trussFirstTraj[i] = drive
                     .trajectorySequenceBuilder(stackTraj[i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(TRUSS.getV(i)),
-                            reflectX(TRUSS.getH(i)))
+                    .splineTo(reflectX(FRONT_TRUSS_1.getV(i)),
+                            reflectX(FRONT_TRUSS_1.getH(i)))
+                    .splineTo(reflectX(END_TRUSS_1.getV(i)),
+                            reflectX(END_TRUSS_1.getH(i)))
                     .splineToConstantHeading(reflectX(TAG_1.getV(i)),
                             reflectX(TAG_1.getH(i)))
                     .build();
-            trussBackTraj[i] = drive
+            trussBackTraj[0][i] = drive
                     .trajectorySequenceBuilder(trussFirstTraj[i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(BACK_TRUSS.getV(i)),
-                            reflectX(BACK_TRUSS.getH(i)))
+                    .splineToConstantHeading(reflectX(END_TRUSS_BACK_1.getV(i)),
+                            reflectX(END_TRUSS_BACK_1.getH(i)))
+                    .splineToConstantHeading(reflectX(END_TRUSS_BACK_1.getV(i)),
+                            reflectX(END_TRUSS_BACK_1.getH(i)))
                     .splineTo(reflectX(STACK_2.getV(i)),
                             reflectX(STACK_2.getH(i)))
                     .build();
-            trussSecondTraj[i] = drive
-                    .trajectorySequenceBuilder(trussBackTraj[i].end())
+            trussTraj[0][i] = drive
+                    .trajectorySequenceBuilder(trussBackTraj[0][i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(TRUSS.getV(i)),
-                            reflectX(TRUSS.getH(i)))
+                    .splineTo(reflectX(FRONT_TRUSS_2.getV(i)),
+                            reflectX(FRONT_TRUSS_2.getH(i)))
+                    .splineTo(reflectX(END_TRUSS_2.getV(i)),
+                            reflectX(END_TRUSS_2.getH(i)))
                     .splineToConstantHeading(reflectX(TAG_2.getV(2 - i + i % 2)),
                             reflectX(TAG_2.getH(2 - i + i % 2)))
                     .build();
+            trussBackTraj[1][i] = drive
+                    .trajectorySequenceBuilder(trussTraj[0][i].end())
+                    .setReversed(false)
+                    .splineToConstantHeading(reflectX(END_TRUSS_BACK_2.getV(i)),
+                            reflectX(END_TRUSS_BACK_2.getH(i)))
+                    .splineToConstantHeading(reflectX(FRONT_TRUSS_BACK_2.getV(i)),
+                            reflectX(FRONT_TRUSS_BACK_2.getH(i)))
+                    .splineTo(reflectX(STACK_3.getV(i)),
+                            reflectX(STACK_3.getH(i)))
+                    .build();
+            trussTraj[1][i] = drive
+                    .trajectorySequenceBuilder(trussBackTraj[1][i].end())
+                    .setReversed(true)
+                    .splineTo(reflectX(FRONT_TRUSS_3.getV(i)),
+                            reflectX(FRONT_TRUSS_3.getH(i)))
+                    .splineTo(reflectX(END_TRUSS_3.getV(i)),
+                            reflectX(END_TRUSS_3.getH(i)))
+                    .splineToConstantHeading(reflectX(TAG_3.getV(2 - i + i % 2)),
+                            reflectX(TAG_3.getH(2 - i + i % 2)))
+                    .build();
             parkTraj[i] = drive
-                    .trajectorySequenceBuilder(trussFirstTraj[i].end())
+                    .trajectorySequenceBuilder(trussTraj[1][i].end())
                     .setReversed(false)
                     .splineToConstantHeading(reflectX(PARK.getV(i)),
                             reflectX(PARK.getH(i)))

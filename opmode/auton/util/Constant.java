@@ -3,26 +3,49 @@ package org.firstinspires.ftc.teamcode.opmode.auton.util;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 public class Constant {
-    private Vector2d[] vectors;
-    private double[] headings;
+    public double LEFT_X;
+    public double LEFT_Y;
+    public double LEFT_H;
+    public double CENTER_X;
+    public double CENTER_Y;
+    public double CENTER_H;
+    public double RIGHT_X;
+    public double RIGHT_Y;
+    public double RIGHT_H;
 
-    public Constant(double x, double y, double[] ox, double[] oy) {
-        this(x, y, ox, oy, new double[3]);
-    }
-
-    public Constant(double x, double y, double[] ox, double[] oy, double[] heading) {
-        vectors = new Vector2d[3];
-        headings = heading;
-        for (int i = 0; i < 3; i++) {
-            vectors[i] = new Vector2d(x + ox[i], y + oy[i]);
-        }
+    public Constant(double x, double y, double lx, double ly, double lh, double cx, double cy, double ch, double rx, double ry, double rh) {
+        LEFT_X = x + lx;
+        LEFT_Y = y + ly;
+        LEFT_H = lh;
+        CENTER_X = x + lx;
+        CENTER_Y = y + ly;
+        CENTER_H = lh;
+        RIGHT_X = x + lx;
+        RIGHT_Y = y + ly;
+        RIGHT_H = lh;
     }
 
     public Vector2d getV(int i) {
-        return vectors[i];
+        switch (i) {
+            case 0:
+                return new Vector2d(LEFT_X, LEFT_Y);
+            case 1:
+                return new Vector2d(CENTER_X, CENTER_Y);
+            case 2:
+                return new Vector2d(RIGHT_X, RIGHT_Y);
+        }
+        return new Vector2d(CENTER_X, CENTER_Y);
     }
 
     public double getH(int i) {
-        return headings[i];
+        switch (i) {
+            case 0:
+                return LEFT_H;
+            case 1:
+                return CENTER_H;
+            case 2:
+                return RIGHT_H;
+        }
+        return CENTER_H;
     }
 }

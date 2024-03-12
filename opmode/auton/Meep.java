@@ -38,13 +38,13 @@ public class Meep {
                                 .lineToLinearHeading(new Pose2d(reflectX(TAG_1.getV(i)),
                                         reflectX(TAG_1.getH(i))))
                                 .setReversed(false)
-                                .splineToConstantHeading(reflectX(BACK_TRUSS.getV(i)),
-                                        reflectX(BACK_TRUSS.getH(i)))
-                                .splineTo(reflectX(STACK.getV(i)),
-                                        reflectX(STACK.getH(i)))
+                                .splineToConstantHeading(reflectX(FRONT_TRUSS_1.getV(i)),
+                                        reflectX(FRONT_TRUSS_1.getH(i)))
+                                .splineTo(reflectX(STACK_1.getV(i)),
+                                        reflectX(STACK_1.getH(i)))
                                 .setReversed(true)
-                                .splineTo(reflectX(TRUSS.getV(i)),
-                                        reflectX(TRUSS.getH(i)))
+                                .splineTo(reflectX(FRONT_TRUSS_1.getV(i)),
+                                        reflectX(FRONT_TRUSS_1.getH(i)))
                                 .splineToConstantHeading(reflectX(TAG_2.getV(i)),
                                         reflectX(TAG_2.getH(i)))
                                 .setReversed(false)

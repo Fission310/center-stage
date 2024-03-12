@@ -1,11 +1,14 @@
-package org.firstinspires.ftc.teamcode.opmode.auton.fronttruss;
+package org.firstinspires.ftc.teamcode.opmode.auton.front.truss;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.opmode.auton.front.FrontAuto;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 
 @Autonomous(name = "FrontTrussAutoRed", preselectTeleOp = "Main")
-public class FrontTrussAutoRed extends FrontTrussAuto {
+public class FrontTrussAutoRed extends FrontAuto {
     public FrontTrussAutoRed() {
         super(Color.RED);
+        FrontTrussConstantsRed.setConstants();
     }
 }
