@@ -40,11 +40,11 @@ public class Intake extends Mechanism {
     public static double UP_AUTO_POS_FIRST_CYCLE = 0.36;
     public static double UP_AUTO_POS_SECOND_CYCLE = 0.18;
     public static double UP_POS = 0.23;
-    public static double DOWN_POS = 0.17;
+    public static double DOWN_POS = 0;
 
     public static double PIXEL_UP_POS = 0.5;
     public static double PIXEL_MIDDLE_POS = 0.4;
-    public static double PIXEL_DOWN_POS = 0.055;
+    public static double PIXEL_DOWN_POS = 0.125;
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.7;
@@ -205,7 +205,8 @@ public class Intake extends Mechanism {
     }
 
     public boolean isThirdPixel() {
-        return rightSensor.isPixel();// || leftSensor.isPixel();
+        return false;
+        //return rightSensor.isPixel();// || leftSensor.isPixel();
     }
 
     @Override

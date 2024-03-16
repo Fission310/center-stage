@@ -13,15 +13,15 @@ public class Constant {
     public double RIGHT_Y;
     public double RIGHT_H;
 
-    public Constant(double x, double y, double lx, double ly, double lh, double cx, double cy, double ch, double rx, double ry, double rh) {
-        LEFT_X = x + lx;
-        LEFT_Y = y + ly;
+    public Constant(double lx, double ly, double lh, double cx, double cy, double ch, double rx, double ry, double rh) {
+        LEFT_X = lx;
+        LEFT_Y = ly;
         LEFT_H = lh;
-        CENTER_X = x + lx;
-        CENTER_Y = y + ly;
+        CENTER_X = lx;
+        CENTER_Y = ly;
         CENTER_H = lh;
-        RIGHT_X = x + lx;
-        RIGHT_Y = y + ly;
+        RIGHT_X = lx;
+        RIGHT_Y = ly;
         RIGHT_H = lh;
     }
 

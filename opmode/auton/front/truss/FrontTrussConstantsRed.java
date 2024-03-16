@@ -1,132 +1,207 @@
 package org.firstinspires.ftc.teamcode.opmode.auton.front.truss;
 
-import com.acmerobotics.dashboard.config.Config;
-
-import org.firstinspires.ftc.teamcode.opmode.auton.front.TrussConstants;
+import org.firstinspires.ftc.teamcode.opmode.auton.front.FrontConstants;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Constant;
+import static org.firstinspires.ftc.teamcode.opmode.auton.util.GameConstants.*;
 
-@Config
-public class FrontTrussConstantsRed extends TrussConstants {
-    public static void setConstants() {
+public class FrontTrussConstantsRed extends FrontConstants {
+    public FrontTrussConstantsRed() {
         SPIKE = new Constant(
-                SPIKE_X,
-                SPIKE_Y,
-                -21,
-                -4,
-                SPIKE_LEFT_HEADING,
-                -5,
-                -5,
-                SPIKE_CENTER_HEADING,
-                1.5,
-                -3,
-                SPIKE_RIGHT_HEADING);
+                -35.25,
+                31.25,
+                LEFT,
+                -40.25,
+                30.25,
+                Math.toRadians(135),
+                -33.75,
+                32.25,
+                LEFT);
 
         STACK_1 = new Constant(
-                STACK_X,
-                STACK_Y,
-                6,
-                3,
-                STACK_HEADING,
-                2.2,
-                3,
-                STACK_HEADING,
-                0.8,
-                3,
-                STACK_HEADING);
+                -62.1,
+                11.75,
+                LEFT,
+                -62.1,
+                11.75,
+                LEFT,
+                -62.1,
+                11.75,
+                LEFT);
 
         STACK_2 = new Constant(
-                STACK_X,
-                STACK_Y,
-                9,
-                5,
-                STACK_HEADING,
-                8,
-                5,
-                STACK_HEADING,
-                6,
-                5,
-                STACK_HEADING);
+                -62.1,
+                11.75,
+                LEFT,
+                -62.1,
+                11.75,
+                LEFT,
+                -62.1,
+                11.75,
+                LEFT);
 
         STACK_3 = new Constant(
-                STACK_X,
-                STACK_Y,
-                9,
-                5,
-                STACK_HEADING,
-                8,
-                5,
-                STACK_HEADING,
-                6,
-                5,
-                STACK_HEADING);
+                -62.1,
+                11.75,
+                LEFT,
+                -62.1,
+                11.75,
+                LEFT,
+                -62.1,
+                11.75,
+                LEFT);
 
         TAG_1 = new Constant(
-                TAG_X,
-                TAG_Y,
-                3,
-                -3,
-                TAG_HEADING,
-                3,
-                1.1,
-                TAG_HEADING,
-                1,
-                6.5,
-                TAG_HEADING);
+                51.75,
+                35.25,
+                RIGHT,
+                51.75,
+                35.25,
+                RIGHT,
+                51.75,
+                35.25,
+                RIGHT);
 
         TAG_2 = new Constant(
-                TAG_X,
-                TAG_Y,
-                5,
-                -3,
-                TAG_HEADING,
-                6,
-                1.1,
-                TAG_HEADING,
-                6,
-                6.5,
-                TAG_HEADING);
+                51.75,
+                35.25,
+                RIGHT,
+                51.75,
+                35.25,
+                RIGHT,
+                51.75,
+                35.25,
+                RIGHT);
 
         TAG_3 = new Constant(
-                TAG_X,
-                TAG_Y,
-                5,
-                -3,
-                TAG_HEADING,
-                6,
-                1.1,
-                TAG_HEADING,
-                6,
-                6.5,
-                TAG_HEADING);
+                51.75,
+                35.25,
+                RIGHT,
+                51.75,
+                35.25,
+                RIGHT,
+                51.75,
+                35.25,
+                RIGHT);
 
-        FRONT_TRUSS_1 = new Constant(FRONT_TRUSS_X, FRONT_TRUSS_Y, 0, -1, FRONT_TRUSS_HEADING, 0, -1,
-                FRONT_TRUSS_HEADING, 0, -1, FRONT_TRUSS_HEADING);
+        FRONT_TRUSS_1 = new Constant(
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT);
 
-        FRONT_TRUSS_2 = new Constant(FRONT_TRUSS_X, FRONT_TRUSS_Y, 0, -1, FRONT_TRUSS_HEADING, 0, -1,
-                FRONT_TRUSS_HEADING, 0, -1, FRONT_TRUSS_HEADING);
+        FRONT_TRUSS_2 = new Constant(
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT);
 
-        FRONT_TRUSS_3 = new Constant(FRONT_TRUSS_X, FRONT_TRUSS_Y, 0, -1, FRONT_TRUSS_HEADING, 0, -1,
-                FRONT_TRUSS_HEADING, 0, -1, FRONT_TRUSS_HEADING);
+        FRONT_TRUSS_3 = new Constant(
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT);
 
-        FRONT_TRUSS_BACK_1 = new Constant(FRONT_TRUSS_X, FRONT_TRUSS_Y, 0, -1, FRONT_TRUSS_BACK_HEADING, 0, -1,
-                FRONT_TRUSS_BACK_HEADING, 0, -1, FRONT_TRUSS_BACK_HEADING);
+        FRONT_TRUSS_BACK_1 = new Constant(
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT);
 
-        FRONT_TRUSS_BACK_2 = new Constant(FRONT_TRUSS_X, FRONT_TRUSS_Y, 0, -1, FRONT_TRUSS_BACK_HEADING, 0, -1,
-                FRONT_TRUSS_BACK_HEADING, 0, -1, FRONT_TRUSS_BACK_HEADING);
+        FRONT_TRUSS_BACK_2 = new Constant(
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT);
 
-        END_TRUSS_1 = new Constant(END_TRUSS_X, END_TRUSS_Y, 0, -1, END_TRUSS_HEADING, 0, -1, END_TRUSS_HEADING, 0, -1,
-                END_TRUSS_HEADING);
+        END_TRUSS_1 = new Constant(
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT);
 
-        END_TRUSS_2 = new Constant(END_TRUSS_X, END_TRUSS_Y, 0, -1, END_TRUSS_HEADING, 0, -1, END_TRUSS_HEADING, 0, -1,
-                END_TRUSS_HEADING);
+        END_TRUSS_2 = new Constant(
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT);
 
-        END_TRUSS_3 = new Constant(END_TRUSS_X, END_TRUSS_Y, 0, -1, END_TRUSS_HEADING, 0, -1, END_TRUSS_HEADING, 0, -1,
-                END_TRUSS_HEADING);
+        END_TRUSS_3 = new Constant(
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT,
+                35.25,
+                11.75,
+                RIGHT);
 
-        END_TRUSS_BACK_1 = new Constant(END_TRUSS_X, END_TRUSS_Y, 0, -1, END_TRUSS_BACK_HEADING, 0, -1,
-                END_TRUSS_BACK_HEADING, 0, -1, END_TRUSS_BACK_HEADING);
+        END_TRUSS_BACK_1 = new Constant(
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT);
 
-        END_TRUSS_BACK_2 = new Constant(END_TRUSS_X, END_TRUSS_Y, 0, -1, END_TRUSS_BACK_HEADING, 0, -1,
-                END_TRUSS_BACK_HEADING, 0, -1, END_TRUSS_BACK_HEADING);
+        END_TRUSS_BACK_2 = new Constant(
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT,
+                35.25,
+                11.75,
+                LEFT);
+
+        PARK = new Constant(
+                51.75,
+                14,
+                DOWN,
+                51.75,
+                14,
+                DOWN,
+                51.75,
+                14,
+                DOWN);
     }
 }

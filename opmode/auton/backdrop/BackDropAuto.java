@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.hardware.mechanisms.Slides2;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
-import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstants.*;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 
 @Config
@@ -25,6 +24,7 @@ public class BackDropAuto extends LinearOpMode {
 
     private boolean reflect;
     private Color color;
+    private BackDropConstants constants;
     private Position pos = Position.CENTER;
 
     private Arm arm;
@@ -169,8 +169,9 @@ public class BackDropAuto extends LinearOpMode {
             .addCommandSequence(parkSequence)
             .build();
 
-    public BackDropAuto(Color color) {
+    public BackDropAuto(Color color, BackDropConstants constants) {
         this.color = color;
+        this.constants = constants;
     }
 
     @Override
@@ -195,60 +196,60 @@ public class BackDropAuto extends LinearOpMode {
 
         for (int i = 0; i < 3; i++) {
             spikeMarkTraj[i] = drive
-                    .trajectorySequenceBuilder(reflectX(START_POSE))
-                    .lineToLinearHeading(new Pose2d(reflectX(SPIKE.getV(i)),
-                            reflectX(SPIKE.getH(i))))
+                    .trajectorySequenceBuilder(reflectX(BackDropConstantsDash.START_POSE))
+                    .lineToLinearHeading(new Pose2d(reflectX(constants.SPIKE.getV(i)),
+                            reflectX(constants.SPIKE.getH(i))))
                     .build();
             backDropTraj[i] = drive
                     .trajectorySequenceBuilder(spikeMarkTraj[i].end())
                     .setReversed(true)
-                    .lineToLinearHeading(new Pose2d(reflectX(TAG_1.getV(i)),
-                            reflectX(TAG_1.getH(i))))
+                    .lineToLinearHeading(new Pose2d(reflectX(constants.TAG_1.getV(i)),
+                            reflectX(constants.TAG_1.getH(i))))
                     .build();
             trussBackTraj[0][i] = drive
                     .trajectorySequenceBuilder(backDropTraj[i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(END_TRUSS_BACK_1.getV(i)),
-                            reflectX(END_TRUSS_BACK_1.getH(i)))
-                    .splineToConstantHeading(reflectX(FRONT_TRUSS_BACK_1.getV(i)),
-                            reflectX(FRONT_TRUSS_BACK_1.getH(i)))
-                    .splineTo(reflectX(STACK_1.getV(i)),
-                            reflectX(STACK_1.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.END_TRUSS_BACK_1.getV(i)),
+                            reflectX(constants.END_TRUSS_BACK_1.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.FRONT_TRUSS_BACK_1.getV(i)),
+                            reflectX(constants.FRONT_TRUSS_BACK_1.getH(i)))
+                    .splineTo(reflectX(constants.STACK_1.getV(i)),
+                            reflectX(constants.STACK_1.getH(i)))
                     .build();
             trussTraj[0][i] = drive
                     .trajectorySequenceBuilder(trussBackTraj[0][i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(FRONT_TRUSS_1.getV(i)),
-                            reflectX(FRONT_TRUSS_1.getH(i)))
-                    .splineTo(reflectX(END_TRUSS_1.getV(i)),
-                            reflectX(END_TRUSS_1.getH(i)))
-                    .splineToConstantHeading(reflectX(TAG_2.getV(i)),
-                            reflectX(TAG_2.getH(i)))
+                    .splineTo(reflectX(constants.FRONT_TRUSS_1.getV(i)),
+                            reflectX(constants.FRONT_TRUSS_1.getH(i)))
+                    .splineTo(reflectX(constants.END_TRUSS_1.getV(i)),
+                            reflectX(constants.END_TRUSS_1.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.TAG_2.getV(i)),
+                            reflectX(constants.TAG_2.getH(i)))
                     .build();
             trussBackTraj[1][i] = drive
                     .trajectorySequenceBuilder(trussTraj[1][i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(END_TRUSS_BACK_2.getV(i)),
-                            reflectX(END_TRUSS_BACK_2.getH(i)))
-                    .splineToConstantHeading(reflectX(FRONT_TRUSS_BACK_2.getV(i)),
-                            reflectX(FRONT_TRUSS_BACK_2.getH(i)))
-                    .splineTo(reflectX(STACK_2.getV(i)),
-                            reflectX(STACK_2.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.END_TRUSS_BACK_2.getV(i)),
+                            reflectX(constants.END_TRUSS_BACK_2.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.FRONT_TRUSS_BACK_2.getV(i)),
+                            reflectX(constants.FRONT_TRUSS_BACK_2.getH(i)))
+                    .splineTo(reflectX(constants.STACK_2.getV(i)),
+                            reflectX(constants.STACK_2.getH(i)))
                     .build();
             trussTraj[1][i] = drive
                     .trajectorySequenceBuilder(trussBackTraj[1][i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(FRONT_TRUSS_2.getV(i)),
-                            reflectX(FRONT_TRUSS_2.getH(i)))
-                    .splineTo(reflectX(END_TRUSS_2.getV(i)),
-                            reflectX(END_TRUSS_2.getH(i)))
-                    .splineToConstantHeading(reflectX(TAG_3.getV(i)),
-                            reflectX(TAG_3.getH(i)))
+                    .splineTo(reflectX(constants.FRONT_TRUSS_2.getV(i)),
+                            reflectX(constants.FRONT_TRUSS_2.getH(i)))
+                    .splineTo(reflectX(constants.END_TRUSS_2.getV(i)),
+                            reflectX(constants.END_TRUSS_2.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.TAG_3.getV(i)),
+                            reflectX(constants.TAG_3.getH(i)))
                     .build();
             parkTraj[i] = drive
                     .trajectorySequenceBuilder(trussTraj[1][i].end())
                     .setReversed(false)
-                    .splineToConstantHeading(reflectX(PARK.getV(i)), reflectX(PARK.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.PARK.getV(i)), reflectX(constants.PARK.getH(i)))
                     .build();
         }
 
@@ -258,7 +259,7 @@ public class BackDropAuto extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.setPoseEstimate(reflectX(START_POSE));
+        drive.setPoseEstimate(reflectX(BackDropConstantsDash.START_POSE));
 
         waitForStart();
 
