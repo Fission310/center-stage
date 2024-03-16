@@ -86,7 +86,7 @@ public class TrussConstants {
     // Park Position
     public static final double PARK_HEADING = DOWN;
 
-    public static final double PARK_X = TAG_X;
+    public static final double PARK_ParkX = TAG_X;
     public static final double PARK_Y = BOT_LENGTH;
 
     public static Constant PARK;
