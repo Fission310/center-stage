@@ -1,10 +1,12 @@
 import csv
+import sys
 
-file_name = 'test'
+in_file = sys.argv[1]
+out_file = sys.argv[2]
 
 var_dict = {}
 
-with open(file_name + '.csv', 'r') as csv_file:
+with open(in_file, 'r') as csv_file:
   csv_reader = csv.reader(csv_file)
   curr_row = csv_reader.__next__()
 
@@ -19,13 +21,13 @@ with open(file_name + '.csv', 'r') as csv_file:
       var_dict[row[0]][list(pos)[i - 1]] = row[i]
 
 # Constants File
-f = open(file_name + '.java', 'r')
+f = open(out_file, 'r')
 const_file = f.read()
 f.close()
 
 # Heading
-heading = const_file[:const_file.index("setConstants() {") +
-                     len("setConstants() {")]
+heading = const_file[:const_file.index("() {") +
+                     len("() {")]
 
 #Setting Constants
 template = '''
@@ -60,6 +62,6 @@ heading += '''}
 }'''
 
 #Replacing java file with updated one
-f = open(file_name + '.java', 'w')
+f = open(out_file, 'w')
 f.write(heading)
 f.close()
