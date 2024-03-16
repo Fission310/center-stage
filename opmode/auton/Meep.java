@@ -11,7 +11,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Webcam.Position;
 
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
-import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstantsRed.*;
+import static org.firstinspires.ftc.teamcode.opmode.auton.backdrop.wall.BackDropWallConstantsRed.*;
 
 public class Meep {
 
@@ -31,24 +31,24 @@ public class Meep {
                         DriveConstants.MAX_ANG_ACCEL, DriveConstants.TRACK_WIDTH)
                 .setDimensions(17, 15)
                 .followTrajectorySequence(
-                        drive -> drive.trajectorySequenceBuilder(reflectX(START_POSE))
-                                .lineToLinearHeading(new Pose2d(reflectX(SPIKE.getV(i)),
-                                        reflectX(SPIKE.getH(i))))
-                                .setReversed(true)
-                                .lineToLinearHeading(new Pose2d(reflectX(TAG_1.getV(i)),
-                                        reflectX(TAG_1.getH(i))))
-                                .setReversed(false)
-                                .splineToConstantHeading(reflectX(BACK_TRUSS.getV(i)),
-                                        reflectX(BACK_TRUSS.getH(i)))
-                                .splineTo(reflectX(STACK.getV(i)),
-                                        reflectX(STACK.getH(i)))
-                                .setReversed(true)
-                                .splineTo(reflectX(TRUSS.getV(i)),
-                                        reflectX(TRUSS.getH(i)))
-                                .splineToConstantHeading(reflectX(TAG_2.getV(i)),
-                                        reflectX(TAG_2.getH(i)))
-                                .setReversed(false)
-                                .splineToConstantHeading(reflectX(PARK.getV(i)), reflectX(PARK.getH(i)))
+                        drive -> drive.trajectorySequenceBuilder(reflectX(new Pose2d(0, 0, 0)))
+                        //        .lineToLinearHeading(new Pose2d(reflectX(SPIKE.getV(i)),
+                        //                reflectX(SPIKE.getH(i))))
+                        //        .setReversed(true)
+                        //        .lineToLinearHeading(new Pose2d(reflectX(TAG_1.getV(i)),
+                        //                reflectX(TAG_1.getH(i))))
+                        //        .setReversed(false)
+                        //        .splineToConstantHeading(reflectX(FRONT_TRUSS_1.getV(i)),
+                        //                reflectX(FRONT_TRUSS_1.getH(i)))
+                        //        .splineTo(reflectX(STACK_1.getV(i)),
+                       //                 reflectX(STACK_1.getH(i)))
+                       //         .setReversed(true)
+                       //         .splineTo(reflectX(FRONT_TRUSS_1.getV(i)),
+                       //                 reflectX(FRONT_TRUSS_1.getH(i)))
+                       //         .splineToConstantHeading(reflectX(TAG_2.getV(i)),
+                       //                 reflectX(TAG_2.getH(i)))
+                       //         .setReversed(false)
+                       //         .splineToConstantHeading(reflectX(PARK.getV(i)), reflectX(PARK.getH(i)))
                                 .build());
 
         meepMeep.setDarkMode(true)
