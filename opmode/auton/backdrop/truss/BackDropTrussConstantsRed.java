@@ -4,9 +4,6 @@ import org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstants;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Constant;
 import static org.firstinspires.ftc.teamcode.opmode.auton.util.GameConstants.*;
 
-import com.acmerobotics.dashboard.config.Config;
-
-@Config
 public class BackDropTrussConstantsRed extends BackDropConstants {
     public BackDropTrussConstantsRed() {
         SPIKE = new Constant(
@@ -87,79 +84,79 @@ public class BackDropTrussConstantsRed extends BackDropConstants {
                 Math.toRadians(0));
     
         FRONT_TRUSS_2 = new Constant(
-                23.5,
+                23.6,
                 11.75,
                 Math.toRadians(0),
-                23.5,
+                23.6,
                 11.75,
                 Math.toRadians(0),
-                23.5,
+                23.6,
                 11.75,
                 Math.toRadians(0));
     
         FRONT_TRUSS_BACK_1 = new Constant(
-                23.5,
+                23.7,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.7,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.7,
                 11.75,
                 Math.toRadians(180));
     
         FRONT_TRUSS_BACK_2 = new Constant(
-                23.5,
+                23.8,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.8,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.8,
                 11.75,
                 Math.toRadians(180));
     
         END_TRUSS_1 = new Constant(
-                23.5,
+                23.9,
                 11.75,
                 Math.toRadians(0),
-                23.5,
+                23.9,
                 11.75,
                 Math.toRadians(0),
-                23.5,
+                23.9,
                 11.75,
                 Math.toRadians(0));
     
         END_TRUSS_2 = new Constant(
-                23.5,
+                23.10,
                 11.75,
                 Math.toRadians(0),
-                23.5,
+                23.10,
                 11.75,
                 Math.toRadians(0),
-                23.5,
+                23.10,
                 11.75,
                 Math.toRadians(0));
     
         END_TRUSS_BACK_1 = new Constant(
-                23.5,
+                23.11,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.11,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.11,
                 11.75,
                 Math.toRadians(180));
     
         END_TRUSS_BACK_2 = new Constant(
-                23.5,
+                23.12,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.12,
                 11.75,
                 Math.toRadians(180),
-                23.5,
+                23.12,
                 11.75,
                 Math.toRadians(180));
     

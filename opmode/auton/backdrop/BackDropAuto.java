@@ -36,6 +36,7 @@ public class BackDropAuto extends LinearOpMode {
     private Wrist wrist;
 
     private int cycle = 0;
+    private boolean busy = false;
 
     public static double ARM_DELAY = 0.1;
     public static double SCORE_DELAY = 0.5;
@@ -48,6 +49,8 @@ public class BackDropAuto extends LinearOpMode {
     private TrajectorySequence[][] trussTraj = new TrajectorySequence[2][3];
     private TrajectorySequence[] parkTraj = new TrajectorySequence[3];
 
+    private Command busyFalse = () -> busy = false;
+    private Command busyTrue = () -> busy = true;
     private Command incCycle = () -> cycle++;
     private Command releaseCommand = () -> {
         claw.leftOpen();
@@ -86,7 +89,7 @@ public class BackDropAuto extends LinearOpMode {
         }
     };
     private Command grabCommand = () -> claw.close();
-    private Command intakeUpSecond = () -> intake.upAuto(2);
+    private Command intakeUp = () -> intake.upAuto(cycle);
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
@@ -119,14 +122,17 @@ public class BackDropAuto extends LinearOpMode {
             .build();
     private CommandSequence trussBackSequence = new CommandSequence()
             .addCommand(trussBackCommand)
-            .addWaitCommand(0.2)
+            .addWaitCommand(0.3)
             .addCommand(retractFirstCommand)
-            .addWaitCommand(0.4)
+            .addWaitCommand(0.7)
             .addCommand(retractSecondCommand)
-            .addCommand(intakeUpSecond)
+            .addCommand(intakeUp)
             .build();
     private CommandSequence trussSequence = new CommandSequence()
             .addCommand(intakeStartCommand)
+            .addCommand(busyTrue)
+            .addWaitCommand(1)
+            .addCommand(busyFalse)
             .addCommand(trussCommand)
             .addCommand(incCycle)
             .addCommand(sensePixels)
@@ -136,7 +142,7 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .addWaitCommand(2)
+            .addWaitCommand(0.3)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
             .addCommand(slidesCommand)
@@ -161,10 +167,10 @@ public class BackDropAuto extends LinearOpMode {
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(backDropSequence)
-            .addCommandSequence(trussBackSequence)
-            .addCommandSequence(trussSequence)
-            .addCommandSequence(trussBackSequence)
-            .addCommandSequence(trussSequence)
+            //.addCommandSequence(trussBackSequence)
+            //.addCommandSequence(trussSequence)
+            //.addCommandSequence(trussBackSequence)
+            //.addCommandSequence(trussSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -211,7 +217,7 @@ public class BackDropAuto extends LinearOpMode {
                     .setReversed(false)
                     .splineToConstantHeading(reflectX(constants.END_TRUSS_BACK_1.getV(i)),
                             reflectX(constants.END_TRUSS_BACK_1.getH(i)))
-                    .splineToConstantHeading(reflectX(constants.FRONT_TRUSS_BACK_1.getV(i)),
+                    .splineTo(reflectX(constants.FRONT_TRUSS_BACK_1.getV(i)),
                             reflectX(constants.FRONT_TRUSS_BACK_1.getH(i)))
                     .splineTo(reflectX(constants.STACK_1.getV(i)),
                             reflectX(constants.STACK_1.getH(i)))
@@ -227,11 +233,11 @@ public class BackDropAuto extends LinearOpMode {
                             reflectX(constants.TAG_2.getH(i)))
                     .build();
             trussBackTraj[1][i] = drive
-                    .trajectorySequenceBuilder(trussTraj[1][i].end())
+                    .trajectorySequenceBuilder(trussTraj[0][i].end())
                     .setReversed(false)
                     .splineToConstantHeading(reflectX(constants.END_TRUSS_BACK_2.getV(i)),
                             reflectX(constants.END_TRUSS_BACK_2.getH(i)))
-                    .splineToConstantHeading(reflectX(constants.FRONT_TRUSS_BACK_2.getV(i)),
+                    .splineTo(reflectX(constants.FRONT_TRUSS_BACK_2.getV(i)),
                             reflectX(constants.FRONT_TRUSS_BACK_2.getH(i)))
                     .splineTo(reflectX(constants.STACK_2.getV(i)),
                             reflectX(constants.STACK_2.getH(i)))
@@ -268,7 +274,7 @@ public class BackDropAuto extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();
             slides.update();
-            commandMachine.run(drive.isBusy());
+            commandMachine.run(drive.isBusy() || busy);
         }
     }
 

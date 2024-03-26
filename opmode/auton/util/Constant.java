@@ -17,12 +17,12 @@ public class Constant {
         LEFT_X = lx;
         LEFT_Y = ly;
         LEFT_H = lh;
-        CENTER_X = lx;
-        CENTER_Y = ly;
-        CENTER_H = lh;
-        RIGHT_X = lx;
-        RIGHT_Y = ly;
-        RIGHT_H = lh;
+        CENTER_X = cx;
+        CENTER_Y = cy;
+        CENTER_H = ch;
+        RIGHT_X = rx;
+        RIGHT_Y = ry;
+        RIGHT_H = rh;
     }
 
     public Vector2d getV(int i) {

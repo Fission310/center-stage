@@ -31,10 +31,10 @@ public class Webcam extends Mechanism {
 
     public static int NONE = 6;
 
-    public static int LOW_H_R = 0;
-    public static int LOW_H_B = 100;
+    public static int LOW_H_R = 1;
+    public static int LOW_H_B = 105;
 
-    public static int HIGH_H_R = 10;
+    public static int HIGH_H_R = 5;
     public static int HIGH_H_B = 120;
 
     public Webcam(LinearOpMode opMode, Color color) {

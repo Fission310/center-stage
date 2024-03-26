@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.opmode.auton.backdrop.wall.BackDropWallCon
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
 public class BackDropConstantsDash {
     // Start Pose
     public static final double START_HEADING = UP;
@@ -16,7 +19,7 @@ public class BackDropConstantsDash {
     public static final double START_X = TILE_LENGTH / 2.0;
     public static final double START_Y = WALL_POS - BOT_LENGTH / 2.0;
 
-    public static Pose2d START_POSE;
+    public static Pose2d START_POSE = new Pose2d(START_X, START_Y, START_HEADING);
 
     public static final double SPIKE_TANGENT = RIGHT;
 

@@ -139,57 +139,57 @@ public class FrontTrussConstantsBlue extends FrontConstants {
                 Math.toRadians(180));
     
         END_TRUSS_1 = new Constant(
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0));
     
         END_TRUSS_2 = new Constant(
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0));
     
         END_TRUSS_3 = new Constant(
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(0));
     
         END_TRUSS_BACK_1 = new Constant(
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(180),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(180),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(180));
     
         END_TRUSS_BACK_2 = new Constant(
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(180),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(180),
-                35.25,
+                35.26,
                 11.75,
                 Math.toRadians(180));
     

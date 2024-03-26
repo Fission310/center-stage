@@ -30,6 +30,7 @@ public class Intake extends Mechanism {
     private IntakeSensor topSensor;
     private IntakeSensor bottomSensor;
     private IntakeSensor leftSensor;
+    private IntakeSensor middleSensor;
     private IntakeSensor rightSensor;
 
     public static double SPEED = 1;
@@ -37,19 +38,19 @@ public class Intake extends Mechanism {
 
     public double motorSpeed = SPEED;
 
-    public static double UP_AUTO_POS_FIRST_CYCLE = 0.36;
-    public static double UP_AUTO_POS_SECOND_CYCLE = 0.18;
-    public static double UP_POS = 0.23;
-    public static double DOWN_POS = 0;
+    public static double UP_AUTO_POS_FIRST_CYCLE = 0.4;
+    public static double UP_AUTO_POS_SECOND_CYCLE = 0.08;
+    public static double UP_POS = 0.14;
+    public static double DOWN_POS = 0.005;
 
     public static double PIXEL_UP_POS = 0.5;
-    public static double PIXEL_MIDDLE_POS = 0.4;
-    public static double PIXEL_DOWN_POS = 0.125;
+    public static double PIXEL_MIDDLE_POS = 0.39;
+    public static double PIXEL_DOWN_POS = 0.06;
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.7;
     public static double AUTO_INTAKE_UP_DELAY = 1;
-    public static double SENSOR_DELAY = 0.4;
+    public static double SENSOR_DELAY = 0;
     public static double OUTTAKE_DOWN_DELAY = 1;
 
     public static double FAR_PIXEL = 18;
@@ -119,6 +120,7 @@ public class Intake extends Mechanism {
         topSensor = new IntakeSensor(opMode, "intakeTopSensor", FAR_PIXEL);
         bottomSensor = new IntakeSensor(opMode, "intakeBottomSensor", FAR_PIXEL);
         leftSensor = new IntakeSensor(opMode, "intakeLeftSensor", FAR_INTAKE);
+        middleSensor = new IntakeSensor(opMode, "intakeMiddleSensor", FAR_INTAKE);
         rightSensor = new IntakeSensor(opMode, "intakeRightSensor", FAR_INTAKE);
     }
 
@@ -134,7 +136,8 @@ public class Intake extends Mechanism {
 
         topSensor.init(hwMap);
         bottomSensor.init(hwMap);
-        //leftSensor.init(hwMap);
+        leftSensor.init(hwMap);
+        middleSensor.init(hwMap);
         rightSensor.init(hwMap);
 
         pixelServo.setPosition(PIXEL_DOWN_POS);
@@ -172,7 +175,7 @@ public class Intake extends Mechanism {
     }
 
     public void upAuto(int cycle) {
-        double upPos = cycle == 1 ? UP_AUTO_POS_FIRST_CYCLE : UP_AUTO_POS_SECOND_CYCLE;
+        double upPos = cycle == 0 ? UP_AUTO_POS_FIRST_CYCLE : UP_AUTO_POS_SECOND_CYCLE;
         leftServo.setPosition(upPos);
         rightServo.setPosition(upPos);
         isUp = true;
@@ -205,8 +208,7 @@ public class Intake extends Mechanism {
     }
 
     public boolean isThirdPixel() {
-        return false;
-        //return rightSensor.isPixel();// || leftSensor.isPixel();
+        return leftSensor.isPixel() || middleSensor.isPixel() || rightSensor.isPixel();
     }
 
     @Override

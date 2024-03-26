@@ -4,16 +4,13 @@ import org.firstinspires.ftc.teamcode.opmode.auton.backdrop.BackDropConstants;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Constant;
 import static org.firstinspires.ftc.teamcode.opmode.auton.util.GameConstants.*;
 
-import com.acmerobotics.dashboard.config.Config;
-
-@Config
 public class BackDropTrussConstantsBlue extends BackDropConstants {
     public BackDropTrussConstantsBlue() {
         SPIKE = new Constant(
                 10.75,
                 38.25,
                 Math.toRadians(15),
-                23.75,
+                22.75,
                 33.25,
                 Math.toRadians(45),
                 29.75,
@@ -22,43 +19,43 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
     
         STACK_1 = new Constant(
                 -62.1,
-                11.75,
+                13,
+                Math.toRadians(180),
+                -62,
+                23,
                 Math.toRadians(180),
                 -62.1,
-                11.75,
-                Math.toRadians(180),
-                -62.1,
-                11.75,
+                15,
                 Math.toRadians(180));
     
         STACK_2 = new Constant(
                 -62.1,
                 11.75,
                 Math.toRadians(180),
-                -62.1,
-                11.75,
+                -73,
+                26,
                 Math.toRadians(180),
                 -62.1,
-                11.75,
+                13,
                 Math.toRadians(180));
     
         TAG_1 = new Constant(
-                51.75,
-                35.25,
+                50.5,
+                32.25,
                 Math.toRadians(180),
-                51.75,
-                35.25,
+                53.2,
+                37,
                 Math.toRadians(180),
-                51.75,
-                35.25,
+                51.5,
+                34.5,
                 Math.toRadians(180));
     
         TAG_2 = new Constant(
                 51.75,
                 35.25,
                 Math.toRadians(0),
-                51.75,
-                35.25,
+                42,
+                40,
                 Math.toRadians(0),
                 51.75,
                 35.25,
@@ -68,110 +65,110 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
                 51.75,
                 35.25,
                 Math.toRadians(0),
-                51.75,
-                35.25,
+                34,
+                43,
                 Math.toRadians(0),
                 51.75,
                 35.25,
                 Math.toRadians(0));
     
         FRONT_TRUSS_1 = new Constant(
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                -20,
+                17.5,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(0));
     
         FRONT_TRUSS_2 = new Constant(
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                -20,
+                22,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(0));
     
         FRONT_TRUSS_BACK_1 = new Constant(
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                -20,
+                17.5,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(180));
     
         FRONT_TRUSS_BACK_2 = new Constant(
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                -20,
+                22,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                -20,
+                14,
                 Math.toRadians(180));
     
         END_TRUSS_1 = new Constant(
-                23.5,
-                11.75,
+                23.9,
+                14,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                23.9,
+                17.5,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                23.9,
+                14,
                 Math.toRadians(0));
     
         END_TRUSS_2 = new Constant(
-                23.5,
-                11.75,
+                23.10,
+                14,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                23.10,
+                22,
                 Math.toRadians(0),
-                23.5,
-                11.75,
+                23.10,
+                14,
                 Math.toRadians(0));
     
         END_TRUSS_BACK_1 = new Constant(
-                23.5,
-                11.75,
+                23.11,
+                15,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                23.11,
+                17.5,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                23.11,
+                15,
                 Math.toRadians(180));
     
         END_TRUSS_BACK_2 = new Constant(
-                23.5,
-                11.75,
+                23.12,
+                14,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                23.12,
+                22,
                 Math.toRadians(180),
-                23.5,
-                11.75,
+                23.12,
+                14,
                 Math.toRadians(180));
     
         PARK = new Constant(
-                51.75,
-                63.5,
+                48,
+                15,
                 Math.toRadians(270),
-                51.75,
-                63.5,
+                48,
+                15,
                 Math.toRadians(270),
-                51.75,
-                63.5,
+                48,
+                15,
                 Math.toRadians(270));
     }
 }

@@ -255,8 +255,8 @@ public class FrontAuto extends LinearOpMode {
                     .setReversed(false)
                     .splineToConstantHeading(reflectX(constants.END_TRUSS_BACK_1.getV(i)),
                             reflectX(constants.END_TRUSS_BACK_1.getH(i)))
-                    .splineToConstantHeading(reflectX(constants.END_TRUSS_BACK_1.getV(i)),
-                            reflectX(constants.END_TRUSS_BACK_1.getH(i)))
+                    .splineToConstantHeading(reflectX(constants.FRONT_TRUSS_BACK_1.getV(i)),
+                            reflectX(constants.FRONT_TRUSS_BACK_1.getH(i)))
                     .splineTo(reflectX(constants.STACK_2.getV(i)),
                             reflectX(constants.STACK_2.getH(i)))
                     .build();
