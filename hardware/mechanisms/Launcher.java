@@ -16,7 +16,7 @@ public class Launcher extends Mechanism {
     private Servo launchServo;
 
     public static double LAUNCH_POS = 0;
-    public static double CLOSE_POS = 0.25;
+    public static double CLOSE_POS = 0.5;
 
     public Launcher(LinearOpMode opMode) {
         this.opMode = opMode;

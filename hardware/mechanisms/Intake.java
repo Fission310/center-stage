@@ -38,14 +38,17 @@ public class Intake extends Mechanism {
 
     public double motorSpeed = SPEED;
 
-    public static double UP_AUTO_POS_FIRST_CYCLE = 0.4;
-    public static double UP_AUTO_POS_SECOND_CYCLE = 0.08;
+    public static double UP_AUTO_ONE_PIXEL = 0.17;
+    public static double UP_AUTO_TWO_PIXELS = 0.11;
+    public static double UP_AUTO_THREE_PIXELS = 0.08;
+    public static double UP_AUTO_FOUR_PIXELS = 0.04;
+    public static double UP_AUTO_FIVE_PIXELS = 0.01;
     public static double UP_POS = 0.14;
     public static double DOWN_POS = 0.005;
 
-    public static double PIXEL_UP_POS = 0.5;
-    public static double PIXEL_MIDDLE_POS = 0.39;
-    public static double PIXEL_DOWN_POS = 0.06;
+    public static double PIXEL_UP_POS = 0.84;
+    public static double PIXEL_MIDDLE_POS = 0.74;
+    public static double PIXEL_DOWN_POS = 0.425;
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.7;
@@ -174,8 +177,15 @@ public class Intake extends Mechanism {
         isUp = true;
     }
 
-    public void upAuto(int cycle) {
-        double upPos = cycle == 0 ? UP_AUTO_POS_FIRST_CYCLE : UP_AUTO_POS_SECOND_CYCLE;
+    public void upAuto(int pixels) {
+        double[] positions = {
+            UP_AUTO_ONE_PIXEL,
+            UP_AUTO_TWO_PIXELS,
+            UP_AUTO_THREE_PIXELS,
+            UP_AUTO_FOUR_PIXELS,
+            UP_AUTO_FIVE_PIXELS,
+        };
+        double upPos = positions[pixels - 1];
         leftServo.setPosition(upPos);
         rightServo.setPosition(upPos);
         isUp = true;

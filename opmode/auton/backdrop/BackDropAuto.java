@@ -89,7 +89,7 @@ public class BackDropAuto extends LinearOpMode {
         }
     };
     private Command grabCommand = () -> claw.close();
-    private Command intakeUp = () -> intake.upAuto(cycle);
+    private Command intakeUp = () -> intake.upAuto(cycle * 2 + 2);
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
