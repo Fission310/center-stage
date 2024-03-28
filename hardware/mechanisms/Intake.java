@@ -39,16 +39,16 @@ public class Intake extends Mechanism {
     public double motorSpeed = SPEED;
 
     public static double UP_AUTO_ONE_PIXEL = 0.17;
-    public static double UP_AUTO_TWO_PIXELS = 0.11;
-    public static double UP_AUTO_THREE_PIXELS = 0.08;
+    public static double UP_AUTO_TWO_PIXELS = 0.15;
+    public static double UP_AUTO_THREE_PIXELS = 0.102;
     public static double UP_AUTO_FOUR_PIXELS = 0.04;
     public static double UP_AUTO_FIVE_PIXELS = 0.01;
     public static double UP_POS = 0.14;
     public static double DOWN_POS = 0.005;
 
-    public static double PIXEL_UP_POS = 0.84;
-    public static double PIXEL_MIDDLE_POS = 0.74;
-    public static double PIXEL_DOWN_POS = 0.425;
+    public static double PIXEL_UP_POS = 0.79;
+    public static double PIXEL_MIDDLE_POS = 0.69;
+    public static double PIXEL_DOWN_POS = 0.34;
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.7;
