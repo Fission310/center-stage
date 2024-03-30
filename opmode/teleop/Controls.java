@@ -4,7 +4,7 @@ import com.stuyfission.fissionlib.input.GamepadStatic.Input;
 
 public class Controls {
 
-    public static final Input CLIMB = Input.Y;
+    public static final Input CLIMB = Input.DPAD_DOWN;
     public static final Input SCORE_ONE = Input.RIGHT_BUMPER;
     public static final Input SCORE_TWO = Input.LEFT_BUMPER;
     public static final Input GRAB = Input.RIGHT_STICK_BUTTON;

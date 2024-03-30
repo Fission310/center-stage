@@ -1,18 +1,18 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.hardware.mechanisms.Scoring;
+import org.firstinspires.ftc.teamcode.hardware.mechanisms.ScoringMTI;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stuyfission.fissionlib.util.Mechanism;
 
-public class Robot extends Mechanism {
+public class MTIRobot extends Mechanism {
 
-    private Scoring scoring = new Scoring(opMode);
+    private ScoringMTI scoring = new ScoringMTI(opMode);
 
-    public Robot(LinearOpMode opMode) {
+    public MTIRobot(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 

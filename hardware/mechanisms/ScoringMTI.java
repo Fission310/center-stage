@@ -13,7 +13,7 @@ import com.stuyfission.fissionlib.input.GamepadStatic;
 import com.stuyfission.fissionlib.util.Mechanism;
 
 @Config
-public class Scoring extends Mechanism {
+public class ScoringMTI extends Mechanism {
 
     private Arm arm = new Arm(opMode);
     private Claw claw = new Claw(opMode);
@@ -42,6 +42,10 @@ public class Scoring extends Mechanism {
     private boolean makeDown = false;
     private boolean isGrab = false;
 
+    private int[] wristPositions =  { 3,  3,   3,   3,   3,   3,   3,   2,   3,   3,   3,   3,   3,   3,    3 };
+    private int[] slidesPositions = { 20, 160, 160, 300, 300, 440, 440, 370, 580, 580, 720, 720, 860, 1000, 1140 };
+    private int cycle = 0;
+
     private int slidesPos = 0;
 
     private State state = State.INTAKE;
@@ -53,7 +57,7 @@ public class Scoring extends Mechanism {
         SCORING
     }
 
-    public Scoring(LinearOpMode opMode) {
+    public ScoringMTI(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
@@ -66,7 +70,13 @@ public class Scoring extends Mechanism {
     private Command releaseRightCommand = () -> claw.rightOpen();
     private Command armCommand = () -> arm.scorePos();
     private Command intakeCommand = () -> intake.intake();
-    private Command wristCommand = () -> wrist.scorePos();
+    private Command wristCommand = () -> {
+        if (cycle < wristPositions.length) {
+            wrist.setPos(wristPositions[cycle]);
+        } else {
+            wrist.scorePos();
+        }
+    };
     private Command intakeUp = () -> intake.up();
     private Command outtakeCommand = () -> intake.outtake();
     private Command setPixels = () -> {
@@ -247,7 +257,11 @@ public class Scoring extends Mechanism {
 
                 for (int i = 0; i < 4; i++) {
                     if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                        slidesPos = i;
+                        if (cycle < slidesPositions.length) {
+                            slidesPos = slidesPositions[cycle];
+                        } else {
+                            slidesPos = i;
+                        }
                         armSequence.trigger();
                         state = State.SCORING;
                         break;
@@ -262,23 +276,8 @@ public class Scoring extends Mechanism {
                 if (claw.numPixels() == 0) {
                     retractSequence.trigger();
                     intake.down();
+                    cycle++;
                     state = State.INTAKE;
-                }
-
-                if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_UP)) {
-                    if (!up)
-                        slides.upABit();
-                    up = true;
-                } else {
-                    up = false;
-                }
-
-                if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_DOWN)) {
-                    if (!down)
-                        slides.downABit();
-                    down = true;
-                } else {
-                    down = false;
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_ONE)) {

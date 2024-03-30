@@ -20,12 +20,18 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stuyfission.fissionlib.util.Mechanism;
 
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Config
 public class Webcam extends Mechanism {
 
     private Detector detector;
     private OpenCvCamera camera;
+    private VisionPortal visionPortal;
+    private AprilTagProcessor aprilTag;
+    private AprilTagDetection desiredTag = null;
 
     private Color color;
 
@@ -36,6 +42,8 @@ public class Webcam extends Mechanism {
 
     public static int HIGH_H_R = 5;
     public static int HIGH_H_B = 120;
+
+    public static float DECIMATION = 3;
 
     public Webcam(LinearOpMode opMode, Color color) {
         this.opMode = opMode;
@@ -64,6 +72,14 @@ public class Webcam extends Mechanism {
 
         detector = new Detector(color);
         camera.setPipeline(detector);
+
+        aprilTag = new AprilTagProcessor.Builder().build();
+        aprilTag.setDecimation(DECIMATION);
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(webcamName)
+                .addProcessor(aprilTag)
+                .build();
+
     }
 
     public enum Position {
@@ -147,16 +163,16 @@ public class Webcam extends Mechanism {
             // submats for the boxes, these are the regions that'll detect the color
             Mat leftBox = mat.submat(LEFT_ROI);
             Mat centerBox = mat.submat(CENTER_ROI);
-            //Mat rightBox = mat.submat(RIGHT_ROI);
+            // Mat rightBox = mat.submat(RIGHT_ROI);
 
             // how much in each region is white aka the color we filtered through the mask
             leftPercent = Core.sumElems(leftBox).val[0] / LEFT_ROI.area();
             centerPercent = Core.sumElems(centerBox).val[0] / CENTER_ROI.area();
-            //rightPercent = Core.sumElems(rightBox).val[0] / RIGHT_ROI.area() / 255;
+            // rightPercent = Core.sumElems(rightBox).val[0] / RIGHT_ROI.area() / 255;
 
             telemetry.addData("LEFT", leftPercent);
             telemetry.addData("CENTER", centerPercent);
-            //telemetry.addData("RIGHT", rightPercent);
+            // telemetry.addData("RIGHT", rightPercent);
 
             if (leftPercent > centerPercent && leftPercent > NONE) {
                 Imgproc.rectangle(mat, LEFT_ROI, new Scalar(60, 255, 255), 10);
@@ -165,7 +181,7 @@ public class Webcam extends Mechanism {
                 Imgproc.rectangle(mat, CENTER_ROI, new Scalar(60, 255, 255), 10);
                 pos = Position.CENTER;
             } else {
-                //Imgproc.rectangle(mat, RIGHT_ROI, new Scalar(60, 255, 255), 10);
+                // Imgproc.rectangle(mat, RIGHT_ROI, new Scalar(60, 255, 255), 10);
                 pos = Position.RIGHT;
             }
 
@@ -174,7 +190,7 @@ public class Webcam extends Mechanism {
 
             leftBox.release();
             centerBox.release();
-            //rightBox.release();
+            // rightBox.release();
 
             return mat;
         }
