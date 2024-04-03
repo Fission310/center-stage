@@ -73,12 +73,12 @@ public class Webcam extends Mechanism {
         detector = new Detector(color);
         camera.setPipeline(detector);
 
-        aprilTag = new AprilTagProcessor.Builder().build();
-        aprilTag.setDecimation(DECIMATION);
-        visionPortal = new VisionPortal.Builder()
-                .setCamera(webcamName)
-                .addProcessor(aprilTag)
-                .build();
+        //aprilTag = new AprilTagProcessor.Builder().build();
+        //aprilTag.setDecimation(DECIMATION);
+        //visionPortal = new VisionPortal.Builder()
+        //        .setCamera(webcamName)
+        //        .addProcessor(aprilTag)
+        //        .build();
 
     }
 

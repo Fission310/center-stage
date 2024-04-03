@@ -42,9 +42,9 @@ public class ScoringMTI extends Mechanism {
     private boolean makeDown = false;
     private boolean isGrab = false;
 
-    private int[] wristPositions =  { 3,  3,   3,   3,   3,   3,   3,   2,   3,   3,   3,   3,   3,   3,    3 };
-    private int[] slidesPositions = { 20, 160, 160, 300, 300, 440, 440, 370, 580, 580, 720, 720, 860, 1000, 1140 };
-    private int cycle = 0;
+    private int[] wristPositions =  { 3,   3,   3,   3,   3,   3,   3,   2,   3,   3,   3,   2,   3 };
+    private int[] slidesPositions = { 160, 170, 190, 270, 270, 350, 350, 300, 470, 470, 530, 690, 730 };
+    private int cycle = -1;
 
     private int slidesPos = 0;
 
@@ -61,7 +61,7 @@ public class ScoringMTI extends Mechanism {
         this.opMode = opMode;
     }
 
-    private Command slidesScore = () -> slides.goToPos(slidesPos);
+    private Command slidesScore = () -> slides.setTarget(slidesPos);
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
@@ -71,7 +71,7 @@ public class ScoringMTI extends Mechanism {
     private Command armCommand = () -> arm.scorePos();
     private Command intakeCommand = () -> intake.intake();
     private Command wristCommand = () -> {
-        if (cycle < wristPositions.length) {
+        if (cycle < wristPositions.length && cycle != -1) {
             wrist.setPos(wristPositions[cycle]);
         } else {
             wrist.scorePos();
@@ -160,6 +160,9 @@ public class ScoringMTI extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         slides.telemetry(telemetry);
+
+        telemetry.addData("cycle", cycle);
+        telemetry.addData("slidesPos", slidesPos);
     }
 
     @Override
@@ -212,7 +215,7 @@ public class ScoringMTI extends Mechanism {
 
                 for (int i = 0; i < 4; i++) {
                     if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                        slidesPos = i;
+                        slidesPos = slides.getPos(i);
                         claw.close();
                         armSequence.trigger();
                         state = State.SCORING;
@@ -257,10 +260,11 @@ public class ScoringMTI extends Mechanism {
 
                 for (int i = 0; i < 4; i++) {
                     if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                        if (cycle < slidesPositions.length) {
+                        if (cycle < slidesPositions.length - 1) {
+                            cycle++;
                             slidesPos = slidesPositions[cycle];
                         } else {
-                            slidesPos = i;
+                            slidesPos = slides.getPos(i);
                         }
                         armSequence.trigger();
                         state = State.SCORING;
@@ -276,8 +280,23 @@ public class ScoringMTI extends Mechanism {
                 if (claw.numPixels() == 0) {
                     retractSequence.trigger();
                     intake.down();
-                    cycle++;
                     state = State.INTAKE;
+                }
+
+                if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_UP)) {
+                    if (!up)
+                        slides.upABit();
+                    up = true;
+                } else {
+                    up = false;
+                }
+
+                if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_DOWN)) {
+                    if (!down)
+                        slides.downABit();
+                    down = true;
+                } else {
+                    down = false;
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_ONE)) {
@@ -295,14 +314,6 @@ public class ScoringMTI extends Mechanism {
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {
                     scoreLeft.trigger();
                     scoreRight.trigger();
-                }
-
-                for (int i = 0; i < 4; i++) {
-                    if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES[i])) {
-                        slidesPos = i;
-                        slides.goToPos(i);
-                        break;
-                    }
                 }
                 break;
         }

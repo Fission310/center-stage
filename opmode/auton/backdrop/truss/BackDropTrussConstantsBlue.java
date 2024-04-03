@@ -117,46 +117,46 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
                 Math.toRadians(180));
     
         END_TRUSS_1 = new Constant(
-                23.9,
+                20,
                 17.5,
                 Math.toRadians(0),
-                23.9,
+                20,
                 17.5,
                 Math.toRadians(0),
-                23.9,
+                20,
                 17.5,
                 Math.toRadians(0));
     
         END_TRUSS_2 = new Constant(
-                23.10,
+                20,
                 22,
                 Math.toRadians(0),
-                23.10,
+                20,
                 22,
                 Math.toRadians(0),
-                23.10,
+                20,
                 22,
                 Math.toRadians(0));
     
         END_TRUSS_BACK_1 = new Constant(
-                23.11,
+                20,
                 17.5,
                 Math.toRadians(180),
-                23.11,
+                20,
                 17.5,
                 Math.toRadians(180),
-                23.11,
+                20,
                 17.5,
                 Math.toRadians(180));
     
         END_TRUSS_BACK_2 = new Constant(
-                23.12,
+                20,
                 22,
                 Math.toRadians(180),
-                23.12,
+                20,
                 22,
                 Math.toRadians(180),
-                23.12,
+                20,
                 22,
                 Math.toRadians(180));
     
