@@ -225,13 +225,13 @@ public class BackDropAuto extends LinearOpMode {
                             reflectX(constants.END_TRUSS_BACK_1.getH(i)))
                     .splineTo(reflectX(constants.FRONT_TRUSS_BACK_1.getV(i)),
                             reflectX(constants.FRONT_TRUSS_BACK_1.getH(i)))
-                    .splineTo(reflectX(constants.STACK_1.getV(i)),
+                    .splineToConstantHeading(reflectX(constants.STACK_1.getV(i)),
                             reflectX(constants.STACK_1.getH(i)))
                     .build();
             trussTraj[0][i] = drive
                     .trajectorySequenceBuilder(trussBackTraj[0][i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(constants.FRONT_TRUSS_1.getV(i)),
+                    .splineToConstantHeading(reflectX(constants.FRONT_TRUSS_1.getV(i)),
                             reflectX(constants.FRONT_TRUSS_1.getH(i)))
                     .splineTo(reflectX(constants.END_TRUSS_1.getV(i)),
                             reflectX(constants.END_TRUSS_1.getH(i)))
@@ -276,6 +276,7 @@ public class BackDropAuto extends LinearOpMode {
         waitForStart();
 
         webcam.stopStreaming();
+        webcam.aprilTagInit();
 
         webcam.setDesiredTag(reflectPos(pos));
 

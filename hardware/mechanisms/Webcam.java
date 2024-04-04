@@ -36,6 +36,7 @@ public class Webcam extends Mechanism {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
     private AprilTagDetection desiredTag = null;
+    private WebcamName webcamName;
 
     private Color color;
 
@@ -51,6 +52,7 @@ public class Webcam extends Mechanism {
 
     private int DESIRED_TAG_ID;
 
+
     public Webcam(LinearOpMode opMode, Color color) {
         this.opMode = opMode;
         this.color = color;
@@ -61,7 +63,7 @@ public class Webcam extends Mechanism {
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id",
                 hwMap.appContext.getPackageName());
 
-        WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
+        webcamName = hwMap.get(WebcamName.class, "webcam");
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -78,14 +80,15 @@ public class Webcam extends Mechanism {
 
         detector = new Detector(color);
         camera.setPipeline(detector);
+    }
 
+    public void aprilTagInit(){
         aprilTag = new AprilTagProcessor.Builder().build();
         aprilTag.setDecimation(DECIMATION);
         visionPortal = new VisionPortal.Builder()
                 .setCamera(webcamName)
                 .addProcessor(aprilTag)
                 .build();
-
     }
 
     public void setDesiredTag(int tag) {
@@ -140,6 +143,7 @@ public class Webcam extends Mechanism {
 
     public void stopStreaming() {
         camera.stopStreaming();
+        camera.closeCameraDevice();
     }
 
     private static class Detector extends OpenCvPipeline {

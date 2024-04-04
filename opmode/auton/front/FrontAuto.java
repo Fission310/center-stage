@@ -304,6 +304,7 @@ public class FrontAuto extends LinearOpMode {
         waitForStart();
 
         webcam.stopStreaming();
+        webcam.aprilTagInit();
 
         while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();
