@@ -161,14 +161,14 @@ public class BackDropTrussConstantsRed extends BackDropConstants {
                 Math.toRadians(180));
     
         PARK = new Constant(
-                48,
-                15,
+                40,
+                25,
                 Math.toRadians(270),
-                48,
-                15,
+                40,
+                25,
                 Math.toRadians(270),
-                48,
-                15,
+                40,
+                25,
                 Math.toRadians(270));
     }
 }

@@ -41,7 +41,7 @@ public class BackDropAuto extends LinearOpMode {
     public static double ARM_DELAY = 0.1;
     public static double SCORE_DELAY = 0.5;
     public static double SLIDES_DELAY = 0.5;
-    public static double PLATFORM_DELAY = 1.4;
+    public static double PLATFORM_DELAY = 1.3;
 
     private TrajectorySequence[] spikeMarkTraj = new TrajectorySequence[3];
     private TrajectorySequence[] backDropTraj = new TrajectorySequence[3];
@@ -54,6 +54,12 @@ public class BackDropAuto extends LinearOpMode {
     private Command incCycle = () -> cycle++;
     private Command releaseCommand = () -> {
         claw.leftOpen();
+        claw.rightOpen();
+    };
+    private Command releaseLeftCommand = () -> {
+        claw.leftOpen();
+    };
+    private Command releaseRightCommand = () -> {
         claw.rightOpen();
     };
     private Command sensePixels = () -> {
@@ -78,7 +84,8 @@ public class BackDropAuto extends LinearOpMode {
     private Command intakeCommand = () -> intake.up();
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
-    private Command slidesCommand = () -> slides.autoPos();
+    private Command slidesCommand = () -> slides.setTarget(200);
+    private Command slidesFirstCommand = () -> slides.autoPos();
     private Command armCommand = () -> arm.scorePos();
     private Command armIntakeCommand = () -> arm.intakePos();
     private Command wristCommand = () -> {
@@ -114,7 +121,7 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(backDropCommand)
             .addCommand(releaseLeft)
             .addWaitCommand(0.2)
-            .addCommand(slidesCommand)
+            .addCommand(slidesFirstCommand)
             .addWaitCommand(0.1)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
@@ -122,27 +129,28 @@ public class BackDropAuto extends LinearOpMode {
             .build();
     private CommandSequence trussBackSequence = new CommandSequence()
             .addCommand(trussBackCommand)
-            .addWaitCommand(0.3)
+            .addCommand(releaseRightCommand)
+            .addCommand(releaseLeftCommand)
+            .addWaitCommand(0.6)
             .addCommand(retractFirstCommand)
             .addWaitCommand(0.7)
             .addCommand(retractSecondCommand)
             .addCommand(intakeUp)
+            .addCommand(intakeStartCommand)
             .build();
     private CommandSequence trussSequence = new CommandSequence()
-            .addCommand(intakeStartCommand)
-            .addCommand(busyTrue)
-            .addWaitCommand(1)
-            .addCommand(busyFalse)
             .addCommand(trussCommand)
             .addCommand(incCycle)
+            .addCommand(intakeStartCommand)
             .addCommand(sensePixels)
-            .addWaitCommand(0.5)
-            .addCommand(intakeStopCommand)
-            .addWaitCommand(0.4)
+            .addWaitCommand(0.7)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
-            .addWaitCommand(0.3)
+            .addCommand(releaseLeftCommand)
+            .addWaitCommand(0.6)
+            .addCommand(grabCommand)
+            .addWaitCommand(0.2)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
             .addCommand(slidesCommand)
@@ -150,8 +158,6 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
             .addCommand(wristCommand)
-            .addWaitCommand(SCORE_DELAY)
-            .addCommand(releaseCommand)
             .build();
     private CommandSequence parkSequence = new CommandSequence()
             .addCommand(releaseCommand)
@@ -167,10 +173,10 @@ public class BackDropAuto extends LinearOpMode {
     private AutoCommandMachine commandMachine = new AutoCommandMachine()
             .addCommandSequence(spikeMarkSequence)
             .addCommandSequence(backDropSequence)
-            //.addCommandSequence(trussBackSequence)
-            //.addCommandSequence(trussSequence)
-            //.addCommandSequence(trussBackSequence)
-            //.addCommandSequence(trussSequence)
+            .addCommandSequence(trussBackSequence)
+            .addCommandSequence(trussSequence)
+            .addCommandSequence(trussBackSequence)
+            .addCommandSequence(trussSequence)
             .addCommandSequence(parkSequence)
             .addCommandSequence(parkSequence)
             .build();
@@ -271,10 +277,16 @@ public class BackDropAuto extends LinearOpMode {
 
         webcam.stopStreaming();
 
+        webcam.setDesiredTag(reflectPos(pos));
+
         while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();
             slides.update();
             commandMachine.run(drive.isBusy() || busy);
+
+            if (commandMachine.getCurrentCommandIndex() > 1 && webcam.detectAprilTag(telemetry)) {
+                webcam.relocalize(drive);
+            }
         }
     }
 

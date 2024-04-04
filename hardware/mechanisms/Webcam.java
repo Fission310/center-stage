@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.mechanisms;
 
+import java.util.List;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
@@ -15,10 +17,12 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.stuyfission.fissionlib.util.Mechanism;
 
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.opmode.auton.util.Color;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -44,6 +48,8 @@ public class Webcam extends Mechanism {
     public static int HIGH_H_B = 120;
 
     public static float DECIMATION = 3;
+
+    private int DESIRED_TAG_ID;
 
     public Webcam(LinearOpMode opMode, Color color) {
         this.opMode = opMode;
@@ -73,13 +79,47 @@ public class Webcam extends Mechanism {
         detector = new Detector(color);
         camera.setPipeline(detector);
 
-        //aprilTag = new AprilTagProcessor.Builder().build();
-        //aprilTag.setDecimation(DECIMATION);
-        //visionPortal = new VisionPortal.Builder()
-        //        .setCamera(webcamName)
-        //        .addProcessor(aprilTag)
-        //        .build();
+        aprilTag = new AprilTagProcessor.Builder().build();
+        aprilTag.setDecimation(DECIMATION);
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(webcamName)
+                .addProcessor(aprilTag)
+                .build();
 
+    }
+
+    public void setDesiredTag(int tag) {
+        DESIRED_TAG_ID = tag + 1;
+    }
+
+    public boolean detectAprilTag(Telemetry telemetry) {
+        boolean targetFound = false;
+
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+                telemetry.addData("detected ID", detection.id);
+                if ((DESIRED_TAG_ID < 0) || (detection.id == DESIRED_TAG_ID)) {
+                    targetFound = true;
+                    desiredTag = detection;
+                    break;
+                } else {
+                    telemetry.addData("Skipping", "Tag ID %d is not desired", detection.id);
+                }
+            } else {
+                telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
+            }
+        }
+
+        telemetry.addData("DESIRED TAG", DESIRED_TAG_ID);
+        return targetFound;
+    }
+
+    public void relocalize(SampleMecanumDrive drive) {
+        drive.setPoseEstimate(new Pose2d(
+                desiredTag.metadata.fieldPosition.get(0) - desiredTag.ftcPose.x - 0.0394 * 205.6,
+                desiredTag.metadata.fieldPosition.get(1) - desiredTag.ftcPose.y,
+                Math.toRadians(0) + desiredTag.ftcPose.bearing));
     }
 
     public enum Position {

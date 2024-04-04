@@ -8,7 +8,6 @@ import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
 import com.stuyfission.fissionlib.command.AutoCommandMachine;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Arm;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Claw;
@@ -295,7 +294,7 @@ public class FrontAuto extends LinearOpMode {
         }
 
         while (opModeInInit()) {
-            //pos = webcam.getPosition();
+            pos = webcam.getPosition();
             telemetry.addData("Position: ", pos);
             telemetry.update();
         }

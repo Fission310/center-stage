@@ -19,24 +19,24 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
     
         STACK_1 = new Constant(
                 -62.1,
-                13,
+                23,
                 Math.toRadians(180),
                 -62,
                 23,
                 Math.toRadians(180),
                 -62.1,
-                15,
+                23,
                 Math.toRadians(180));
     
         STACK_2 = new Constant(
                 -62.1,
-                11.75,
+                26,
                 Math.toRadians(180),
                 -73,
                 26,
                 Math.toRadians(180),
                 -62.1,
-                13,
+                26,
                 Math.toRadians(180));
     
         TAG_1 = new Constant(
@@ -161,14 +161,14 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
                 Math.toRadians(180));
     
         PARK = new Constant(
-                48,
-                15,
+                40,
+                25,
                 Math.toRadians(270),
-                48,
-                15,
+                40,
+                25,
                 Math.toRadians(270),
-                48,
-                15,
+                40,
+                25,
                 Math.toRadians(270));
     }
 }
