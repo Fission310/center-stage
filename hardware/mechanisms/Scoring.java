@@ -30,7 +30,7 @@ public class Scoring extends Mechanism {
     public static double SCORE_DELAY = 0.4;
     public static double SLIDES_DELAY = 0.1;
     public static double ARM_DELAY = 0.1;
-    public static double PLATFORM_DELAY = 0.85;
+    public static double PLATFORM_DELAY = 1;
     public static double PLATFORM_DOWN_DELAY = 0.1;
     public static double DT_SLOW = 0.8;
 
@@ -57,6 +57,7 @@ public class Scoring extends Mechanism {
         this.opMode = opMode;
     }
 
+    private Command setStateClaw = () -> state = State.CLAW;
     private Command slidesScore = () -> slides.goToPos(slidesPos);
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
@@ -106,6 +107,7 @@ public class Scoring extends Mechanism {
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
+            .addCommand(setStateClaw)
             .build();
     private CommandSequence pixelDown = new CommandSequence()
             .addCommand(pixelPlatformDown)
@@ -150,6 +152,9 @@ public class Scoring extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         slides.telemetry(telemetry);
+        telemetry.addData("State", state);
+        telemetry.addData("3rd Pixel", intake.isThirdPixel());
+        telemetry.addData("Num Pixels", intake.numPixels());
     }
 
     @Override
@@ -213,7 +218,7 @@ public class Scoring extends Mechanism {
             case TRANSFER:
                 drive.setSpeed(1);
                 drive.setReverse(false);
-                if (intake.numPixels() == 0) {
+                if (intake.numPixels() == 0 && !intake.isPixelUp()) {
                     state = State.INTAKE;
                     intake.down();
                 }
@@ -224,11 +229,14 @@ public class Scoring extends Mechanism {
                     intakeABit.trigger();
                 } else {
                     pixelSequence.trigger();
-                    state = State.CLAW;
                 }
 
                 break;
             case CLAW:
+                if (intake.isThirdPixel()) {
+                    intake.outtake();
+                }
+
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
                     claw.leftOpen();
                     claw.rightOpen();

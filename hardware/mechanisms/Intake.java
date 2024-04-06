@@ -56,8 +56,10 @@ public class Intake extends Mechanism {
     public static double SENSOR_DELAY = 0;
     public static double OUTTAKE_DOWN_DELAY = 1;
 
+    public static double FAR_LEFT_INTAKE = 75;
+    public static double FAR_MIDDLE_INTAKE = 18;
+    public static double FAR_RIGHT_INTAKE = 18;
     public static double FAR_PIXEL = 18;
-    public static double FAR_INTAKE = 10;
 
     public static int YELLOW = 10;
     public static int PURPLE = 10;
@@ -122,9 +124,9 @@ public class Intake extends Mechanism {
         this.opMode = opMode;
         topSensor = new IntakeSensor(opMode, "intakeTopSensor", FAR_PIXEL);
         bottomSensor = new IntakeSensor(opMode, "intakeBottomSensor", FAR_PIXEL);
-        leftSensor = new IntakeSensor(opMode, "intakeLeftSensor", FAR_INTAKE);
-        middleSensor = new IntakeSensor(opMode, "intakeMiddleSensor", FAR_INTAKE);
-        rightSensor = new IntakeSensor(opMode, "intakeRightSensor", FAR_INTAKE);
+        leftSensor = new IntakeSensor(opMode, "intakeLeftSensor", FAR_LEFT_INTAKE);
+        middleSensor = new IntakeSensor(opMode, "intakeMiddleSensor", FAR_MIDDLE_INTAKE);
+        rightSensor = new IntakeSensor(opMode, "intakeRightSensor", FAR_RIGHT_INTAKE);
     }
 
     @Override

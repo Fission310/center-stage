@@ -14,20 +14,19 @@ import org.firstinspires.ftc.teamcode.opmode.teleop.Controls;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-
 @Config
 public class Slides2 extends Mechanism {
 
     public static int AUTO_POS = 70;
     public static int LOW_POS = 160;
     public static int MEDIUM_LOW_POS = 350;
-    public static int MEDIUM_HIGH_POS = 600;
+    public static int MEDIUM_HIGH_POS = 530;
     public static int HIGH_POS = 845;
     public static int COLLECT_POS = -55;
     public static double LOW_VOLTAGE = 12;
-    public static int ABIT = 140;
+    public static int ABIT = 180;
 
-    private static int[] POSITIONS = {LOW_POS, MEDIUM_LOW_POS, MEDIUM_HIGH_POS, HIGH_POS};
+    private static int[] POSITIONS = { LOW_POS, MEDIUM_LOW_POS, MEDIUM_HIGH_POS, HIGH_POS };
 
     public static double KP = 0.003;
     public static double KI = 0;
@@ -103,7 +102,8 @@ public class Slides2 extends Mechanism {
 
     public void downUntil() {
         setTarget(-999999999);
-        while (voltage.getVoltage() > LOW_VOLTAGE) {}
+        while (voltage.getVoltage() > LOW_VOLTAGE) {
+        }
         intakePos();
     }
 
@@ -123,8 +123,8 @@ public class Slides2 extends Mechanism {
         }
         motors[0].setPower(power);
         motors[1].setPower(power);
-    }       
-    
+    }
+
     @Override
     public void loop(Gamepad gamepad) {
         update();
@@ -134,7 +134,7 @@ public class Slides2 extends Mechanism {
             goToPos(1);
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.MEDIUM_HIGH)) {
             goToPos(2);
-        } else if(GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
+        } else if (GamepadStatic.isButtonPressed(gamepad, Controls.HIGH)) {
             goToPos(3);
         }
     }

@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.hardware.mechanisms;
 
 import java.util.List;
 
+import javax.crypto.spec.DESKeySpec;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
@@ -92,7 +94,11 @@ public class Webcam extends Mechanism {
     }
 
     public void setDesiredTag(int tag) {
-        DESIRED_TAG_ID = tag + 1;
+        if (color == Color.RED) {
+            DESIRED_TAG_ID = tag + 4;
+        } else {
+            DESIRED_TAG_ID = tag + 1;
+        }
     }
 
     public boolean detectAprilTag(Telemetry telemetry) {
