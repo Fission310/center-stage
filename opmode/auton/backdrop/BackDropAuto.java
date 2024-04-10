@@ -107,11 +107,11 @@ public class BackDropAuto extends LinearOpMode {
         slides.intakePos();
     };
 
-    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
-    private Command backDropCommand = () -> drive.followTrajectorySequenceAsync(backDropTraj[reflectPos(pos)]);
-    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[cycle][reflectPos(pos)]);
-    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[cycle][reflectPos(pos)]);
-    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
+    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[pos.index]);
+    private Command backDropCommand = () -> drive.followTrajectorySequenceAsync(backDropTraj[pos.index]);
+    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[cycle][pos.index]);
+    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[cycle][pos.index]);
+    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[pos.index]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
             .addCommand(spikeMarkCommand)
@@ -278,7 +278,7 @@ public class BackDropAuto extends LinearOpMode {
         webcam.stopStreaming();
         webcam.aprilTagInit();
 
-        webcam.setDesiredTag(reflectPos(pos));
+        webcam.setDesiredTag(pos.index);
 
         while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();

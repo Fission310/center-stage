@@ -16,7 +16,6 @@ public class Controls {
     public static final Input INTAKE_TOGGLE = Input.LEFT_STICK_BUTTON;
     public static final Input LAUNCH = Input.DPAD_UP;
     public static final Input RETRACT = Input.DPAD_DOWN;
-
     public static final Input INTAKE = Input.RIGHT_TRIGGER;
     public static final Input OUTTAKE = Input.LEFT_TRIGGER;
     public static final Input INTAKE_UP = Input.NONE;

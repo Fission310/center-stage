@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.auton.front;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -61,7 +63,7 @@ public class FrontAuto extends LinearOpMode {
         slides.autoPos();
     };
     private Command slidesCommand = () -> {
-        slides.setTarget(200);
+        slides.setTarget(300);
     };
     private Command busyFalse = () -> busy = false;
     private Command busyTrue = () -> busy = true;
@@ -72,8 +74,19 @@ public class FrontAuto extends LinearOpMode {
     };
     private Command sensePixels = () -> {
         long start = System.nanoTime();
-        while (intake.numPixels() < 2 && System.nanoTime() - start < 3000000) {
+        boolean hadThird = false;
+        while (System.nanoTime() - start < 1000000000) {
+            if (intake.numPixels() == 2 && intake.isThirdPixel()) {
+                intake.autoOuttake();
+                hadThird = true;
+            } else if (intake.numPixels() == 2 && hadThird) {
+                intake.intake();
+            }
+            telemetry.addData("num pixels", intake.numPixels());
+            telemetry.addData("three pixels", intake.isThirdPixel());
+            telemetry.update();
         }
+        telemetry.clearAll();
     };
     private Command intakeStartCommand = () -> intake.intake();
     private Command intakeStopCommand = () -> {
@@ -84,14 +97,14 @@ public class FrontAuto extends LinearOpMode {
         arm.autoPos();
         wrist.autoPos(reflectPos(pos));
     };
-    private Command outtake = () -> intake.outtake();
+    private Command outtake = () -> intake.autoOuttake();
     private Command intakeUpFirst = () -> intake.upAuto(1);
     private Command intakeUpSecond = () -> intake.upAuto(2 * cycle + 3);
     private Command pixelPlatformUp = () -> intake.autoPixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();
-    private Command wristCommand = () -> wrist.autoPos(!reflect ? pos.index : pos.index % 2);
+    private Command wristCommand = () -> wrist.autoPos();
     private Command wristIntake = () -> wrist.intakePos();
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
@@ -103,12 +116,12 @@ public class FrontAuto extends LinearOpMode {
         slides.intakePos();
     };
 
-    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[reflectPos(pos)]);
-    private Command stackCommand = () -> drive.followTrajectorySequenceAsync(stackTraj[reflectPos(pos)]);
-    private Command trussFirstCommand = () -> drive.followTrajectorySequenceAsync(trussFirstTraj[reflectPos(pos)]);
-    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[cycle][reflectPos(pos)]);
-    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[cycle][reflectPos(pos)]);
-    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[reflectPos(pos)]);
+    private Command spikeMarkCommand = () -> drive.followTrajectorySequenceAsync(spikeMarkTraj[pos.index]);
+    private Command stackCommand = () -> drive.followTrajectorySequenceAsync(stackTraj[pos.index]);
+    private Command trussFirstCommand = () -> drive.followTrajectorySequenceAsync(trussFirstTraj[pos.index]);
+    private Command trussBackCommand = () -> drive.followTrajectorySequenceAsync(trussBackTraj[cycle][pos.index]);
+    private Command trussCommand = () -> drive.followTrajectorySequenceAsync(trussTraj[cycle][pos.index]);
+    private Command parkCommand = () -> drive.followTrajectorySequenceAsync(parkTraj[pos.index]);
 
     private CommandSequence spikeMarkSequence = new CommandSequence()
             .addCommand(spikeMarkCommand)
@@ -126,22 +139,20 @@ public class FrontAuto extends LinearOpMode {
             .addCommand(trussFirstCommand)
             .addCommand(intakeStartCommand)
             .addCommand(sensePixels)
-            .addWaitCommand(0.7)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
             .addCommand(releaseLeftCommand)
             .addWaitCommand(0.6)
             .addCommand(grabCommand)
-            .addWaitCommand(0.2)
+            .addWaitCommand(0.1)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
-            .addCommand(slidesCommand)
+            .addCommand(slidesCommandFirst)
             .addWaitCommand(0.1)
             .addCommand(armCommand)
             .addWaitCommand(ARM_DELAY)
             .addCommand(wristCommand)
-            .addCommand(slidesCommandFirst)
             .build();
     private CommandSequence trussBackSequence = new CommandSequence()
             .addCommand(trussBackCommand)
@@ -158,14 +169,13 @@ public class FrontAuto extends LinearOpMode {
             .addCommand(trussCommand)
             .addCommand(incrementCycle)
             .addCommand(sensePixels)
-            .addWaitCommand(0.7)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
             .addCommand(releaseLeftCommand)
             .addWaitCommand(0.6)
             .addCommand(grabCommand)
-            .addWaitCommand(0.2)
+            .addWaitCommand(0.1)
             .addCommand(pixelPlatformDown)
             .addWaitCommand(0.1)
             .addCommand(slidesCommand)
@@ -203,6 +213,8 @@ public class FrontAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);

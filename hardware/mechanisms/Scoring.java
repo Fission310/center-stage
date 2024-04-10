@@ -152,9 +152,11 @@ public class Scoring extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         slides.telemetry(telemetry);
+        intake.telemetry(telemetry);
         telemetry.addData("State", state);
         telemetry.addData("3rd Pixel", intake.isThirdPixel());
         telemetry.addData("Num Pixels", intake.numPixels());
+        telemetry.update();
     }
 
     @Override

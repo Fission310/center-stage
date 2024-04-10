@@ -7,21 +7,21 @@ import static org.firstinspires.ftc.teamcode.opmode.auton.util.GameConstants.*;
 public class BackDropTrussConstantsBlue extends BackDropConstants {
     public BackDropTrussConstantsBlue() {
         SPIKE = new Constant(
-                10.75,
-                38.25,
-                Math.toRadians(15),
-                22.75,
-                33.25,
-                Math.toRadians(45),
                 29.75,
                 43.25,
-                Math.toRadians(45));
+                Math.toRadians(45),
+                22.75,
+                32.25,
+                Math.toRadians(45),
+                10.75,
+                38.25,
+                Math.toRadians(15));
     
         STACK_1 = new Constant(
                 -62.1,
                 23,
                 Math.toRadians(180),
-                -62,
+                -64,
                 23,
                 Math.toRadians(180),
                 -62.1,
@@ -32,8 +32,8 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
                 -62.1,
                 26,
                 Math.toRadians(180),
-                -73,
-                26,
+                -72,
+                24,
                 Math.toRadians(180),
                 -62.1,
                 26,
@@ -41,13 +41,13 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
     
         TAG_1 = new Constant(
                 53.2,
-                32.25,
+                34.5,
                 Math.toRadians(180),
                 53.2,
                 37,
                 Math.toRadians(180),
                 53.2,
-                34.5,
+                32.25,
                 Math.toRadians(180));
     
         TAG_2 = new Constant(
@@ -88,7 +88,7 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
                 22,
                 Math.toRadians(0),
                 -20,
-                22,
+                21,
                 Math.toRadians(0),
                 -20,
                 22,
@@ -110,7 +110,7 @@ public class BackDropTrussConstantsBlue extends BackDropConstants {
                 22,
                 Math.toRadians(180),
                 -20,
-                22,
+                21,
                 Math.toRadians(180),
                 -20,
                 22,

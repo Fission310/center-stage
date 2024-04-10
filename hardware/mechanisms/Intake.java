@@ -34,6 +34,7 @@ public class Intake extends Mechanism {
     private IntakeSensor rightSensor;
 
     public static double SPEED = 1;
+    public static double AUTO_OUTTAKE_SPEED = 0.91;
     public static double SLOW_SPEED = 0.9;
 
     public double motorSpeed = SPEED;
@@ -46,9 +47,9 @@ public class Intake extends Mechanism {
     public static double UP_POS = 0.14;
     public static double DOWN_POS = 0.005;
 
-    public static double PIXEL_UP_POS = 0.79;
-    public static double PIXEL_MIDDLE_POS = 0.63;
-    public static double PIXEL_DOWN_POS = 0.34;
+    public static double PIXEL_UP_POS = 0.85;
+    public static double PIXEL_MIDDLE_POS = 0.7;
+    public static double PIXEL_DOWN_POS = 0.42;
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.7;
@@ -56,7 +57,7 @@ public class Intake extends Mechanism {
     public static double SENSOR_DELAY = 0;
     public static double OUTTAKE_DOWN_DELAY = 1;
 
-    public static double FAR_LEFT_INTAKE = 75;
+    public static double FAR_LEFT_INTAKE = 35;
     public static double FAR_MIDDLE_INTAKE = 18;
     public static double FAR_RIGHT_INTAKE = 18;
     public static double FAR_PIXEL = 18;
@@ -157,6 +158,10 @@ public class Intake extends Mechanism {
         intakeMotor.setPower(motorSpeed);
     }
 
+    public void autoOuttake() {
+        intakeMotor.setPower(AUTO_OUTTAKE_SPEED);
+    }
+
     public void stop() {
         intakeMotor.setPower(0);
     }
@@ -181,11 +186,11 @@ public class Intake extends Mechanism {
 
     public void upAuto(int pixels) {
         double[] positions = {
-            UP_AUTO_ONE_PIXEL,
-            UP_AUTO_TWO_PIXELS,
-            UP_AUTO_THREE_PIXELS,
-            UP_AUTO_FOUR_PIXELS,
-            UP_AUTO_FIVE_PIXELS,
+                UP_AUTO_ONE_PIXEL,
+                UP_AUTO_TWO_PIXELS,
+                UP_AUTO_THREE_PIXELS,
+                UP_AUTO_FOUR_PIXELS,
+                UP_AUTO_FIVE_PIXELS,
         };
         double upPos = positions[pixels - 1];
         leftServo.setPosition(upPos);
@@ -225,12 +230,13 @@ public class Intake extends Mechanism {
 
     @Override
     public void loop(Gamepad gamepad) {
-        if (motorSpeed == SLOW_SPEED) return;
+        if (motorSpeed == SLOW_SPEED)
+            return;
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_UP)) {
-            //up();
+            // up();
             pixelUp();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE_DOWN)) {
-            //down();
+            // down();
             pixelDown();
         }
 
@@ -242,6 +248,16 @@ public class Intake extends Mechanism {
         } else if (!lock) {
             stop();
         }
+
+    }
+
+    @Override
+    public void telemetry(Telemetry telemetry) {
+        topSensor.telemetry(telemetry);
+        bottomSensor.telemetry(telemetry);
+        leftSensor.telemetry(telemetry);
+        middleSensor.telemetry(telemetry);
+        rightSensor.telemetry(telemetry);
     }
 
     private class IntakeSensor extends Mechanism {
@@ -264,9 +280,6 @@ public class Intake extends Mechanism {
         }
 
         public boolean isPixel() {
-            Telemetry t = FtcDashboard.getInstance().getTelemetry();
-            t.addData(name + " dist", sensor.getDistance(DistanceUnit.MM));
-            t.update();
             return sensor.getDistance(DistanceUnit.MM) < far;
         }
 
@@ -286,6 +299,12 @@ public class Intake extends Mechanism {
             t.addData(name + " isPixel", isPixel);
             t.update();
             return isPixel;
+        }
+
+        @Override
+        public void telemetry(Telemetry telemetry) {
+            telemetry.addData(name + " dist", sensor.getDistance(DistanceUnit.MM));
+            telemetry.update();
         }
     }
 }

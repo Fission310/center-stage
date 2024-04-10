@@ -17,6 +17,8 @@ public class Launcher extends Mechanism {
 
     public static double LAUNCH_POS = 0.2;
     public static double CLOSE_POS = 0.7;
+    private boolean isLaunched = false;
+    private boolean isPressed = false;
 
     public Launcher(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -32,10 +34,16 @@ public class Launcher extends Mechanism {
     @Override
     public void loop(Gamepad gamepad) {
         if (GamepadStatic.isButtonPressed(gamepad, Controls.LAUNCH)) {
-            launchServo.setPosition(LAUNCH_POS);
-        }
-        if (GamepadStatic.isButtonPressed(gamepad, Controls.RETRACT)) {
-            launchServo.setPosition(CLOSE_POS);
+            if (!isLaunched && !isPressed) {
+                launchServo.setPosition(LAUNCH_POS);
+                isLaunched = true;
+            } else if (!isPressed) {
+                launchServo.setPosition(CLOSE_POS);
+                isLaunched = false;
+            }
+            isPressed = true;
+        } else {
+            isPressed = false;
         }
     }
 }
