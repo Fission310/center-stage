@@ -10,165 +10,165 @@ public class BackDropWallConstantsBlue extends BackDropConstants {
                 29.75,
                 43.25,
                 Math.toRadians(45),
-                23.75,
-                33.25,
+                25,
+                32,
                 Math.toRadians(45),
                 10.75,
                 38.25,
                 Math.toRadians(15));
     
         STACK_1 = new Constant(
-                -62.1,
-                11.75,
+                -61.5,
+                38,
                 Math.toRadians(180),
-                -62.1,
-                11.75,
+                -61,
+                37,
                 Math.toRadians(180),
-                -62.1,
-                11.75,
+                -52,
+                33,
                 Math.toRadians(180));
     
         STACK_2 = new Constant(
-                -62.1,
-                11.75,
+                -56.5,
+                30.5,
                 Math.toRadians(180),
-                -62.1,
-                11.75,
+                -63,
+                32,
                 Math.toRadians(180),
-                -62.1,
-                11.75,
+                -39,
+                18,
                 Math.toRadians(180));
     
         TAG_1 = new Constant(
-                51.75,
-                35.25,
+                52.5,
+                41,
                 Math.toRadians(180),
-                51.75,
-                35.25,
+                54,
+                41,
                 Math.toRadians(180),
-                51.75,
-                35.25,
+                54,
+                33,
                 Math.toRadians(180));
     
         TAG_2 = new Constant(
-                51.75,
+                56,
                 35.25,
                 Math.toRadians(0),
-                51.75,
+                54,
                 35.25,
                 Math.toRadians(0),
-                51.75,
-                35.25,
+                62,
+                28,
                 Math.toRadians(0));
     
         TAG_3 = new Constant(
-                51.75,
-                35.25,
+                59,
+                30,
                 Math.toRadians(0),
                 51.75,
                 35.25,
                 Math.toRadians(0),
-                51.75,
-                35.25,
+                68,
+                20,
                 Math.toRadians(0));
     
         FRONT_TRUSS_1 = new Constant(
-                -20,
-                63,
+                -26,
+                60,
                 Math.toRadians(0),
-                -20,
-                63,
+                -26,
+                64,
                 Math.toRadians(0),
-                -20,
-                63,
+                -44,
+                52,
                 Math.toRadians(0));
     
         FRONT_TRUSS_2 = new Constant(
-                -20,
-                63,
+                -26,
+                54.5,
                 Math.toRadians(0),
-                -20,
-                63,
+                -26,
+                66,
                 Math.toRadians(0),
-                -20,
-                63,
+                -38,
+                37,
                 Math.toRadians(0));
     
         FRONT_TRUSS_BACK_1 = new Constant(
-                -20,
-                63,
+                -26,
+                65.7,
                 Math.toRadians(180),
-                -20,
-                63,
+                -26,
+                67.3,
                 Math.toRadians(180),
-                -20,
-                63,
+                -43,
+                65,
                 Math.toRadians(180));
     
         FRONT_TRUSS_BACK_2 = new Constant(
-                -20,
-                63,
+                -26,
+                57,
                 Math.toRadians(180),
-                -20,
-                63,
+                -26,
+                55,
                 Math.toRadians(180),
-                -20,
-                63,
+                -36,
+                52,
                 Math.toRadians(180));
     
         END_TRUSS_1 = new Constant(
                 20,
-                63,
+                60,
                 Math.toRadians(0),
                 20,
-                63,
+                64,
                 Math.toRadians(0),
                 20,
-                63,
+                52,
                 Math.toRadians(0));
     
         END_TRUSS_2 = new Constant(
                 20,
-                63,
+                54.5,
                 Math.toRadians(0),
                 20,
-                63,
+                66,
                 Math.toRadians(0),
                 20,
-                63,
+                37,
                 Math.toRadians(0));
     
         END_TRUSS_BACK_1 = new Constant(
                 20,
-                63,
+                65.7,
                 Math.toRadians(180),
                 20,
-                63,
+                67.3,
                 Math.toRadians(180),
                 20,
-                63,
+                65,
                 Math.toRadians(180));
     
         END_TRUSS_BACK_2 = new Constant(
                 20,
-                63,
+                57,
                 Math.toRadians(180),
                 20,
-                63,
+                55,
                 Math.toRadians(180),
                 20,
-                63,
+                52,
                 Math.toRadians(180));
     
         PARK = new Constant(
                 51.75,
-                63.5,
+                50,
                 Math.toRadians(270),
                 51.75,
                 63.5,
                 Math.toRadians(270),
                 51.75,
-                63.5,
+                46,
                 Math.toRadians(270));
     }
 }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.mechanisms;
 
+import java.lang.Thread.State;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.opmode.teleop.Controls;
 
@@ -192,7 +194,7 @@ public class Scoring extends Mechanism {
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.CLIMB)) {
-                    intake.up();
+                    intake.climbUp();
                     climb.release();
                 }
 
@@ -223,9 +225,13 @@ public class Scoring extends Mechanism {
                 if (intake.numPixels() == 0 && !intake.isPixelUp()) {
                     state = State.INTAKE;
                     intake.down();
+                    break;
                 }
 
                 if (intake.isThirdPixel() && intake.numPixels() == 2) {
+                    if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
+                        intake.lockThird();
+                    }
                     intake.outtake();
                 } else if (intake.isThirdPixel() && intake.numPixels() == 1) {
                     intakeABit.trigger();
@@ -247,6 +253,7 @@ public class Scoring extends Mechanism {
                     makeDown = true;
                     isGrab = true;
                     state = State.INTAKE;
+                    break;
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {
@@ -273,6 +280,7 @@ public class Scoring extends Mechanism {
                     retractSequence.trigger();
                     intake.down();
                     state = State.INTAKE;
+                    break;
                 }
 
                 if (GamepadStatic.isButtonPressed(gamepad, Controls.SLIDES_UP)) {

@@ -220,8 +220,8 @@ public class Webcam extends Mechanism {
             centerPercent = Core.sumElems(centerBox).val[0] / CENTER_ROI.area();
             // rightPercent = Core.sumElems(rightBox).val[0] / RIGHT_ROI.area() / 255;
 
-            telemetry.addData("LEFT", leftPercent);
-            telemetry.addData("CENTER", centerPercent);
+            //telemetry.addData("LEFT", leftPercent);
+            //telemetry.addData("CENTER", centerPercent);
             // telemetry.addData("RIGHT", rightPercent);
 
             if (leftPercent > centerPercent && leftPercent > NONE) {
@@ -235,8 +235,8 @@ public class Webcam extends Mechanism {
                 pos = Position.RIGHT;
             }
 
-            telemetry.addData("pos", pos);
-            telemetry.update();
+            //telemetry.addData("pos", pos);
+            //telemetry.update();
 
             leftBox.release();
             centerBox.release();

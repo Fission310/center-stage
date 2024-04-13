@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.auton.backdrop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -64,8 +66,19 @@ public class BackDropAuto extends LinearOpMode {
     };
     private Command sensePixels = () -> {
         long start = System.nanoTime();
-        while (intake.numPixels() < 2 && System.nanoTime() - start < 3000000) {
+        boolean hadThird = false;
+        while (System.nanoTime() - start < 1000000000) {
+            if (intake.numPixels() == 2 && intake.isThirdPixel()) {
+                intake.autoOuttake();
+                hadThird = true;
+            } else if (intake.numPixels() == 2 && hadThird) {
+                intake.intake();
+            }
+            telemetry.addData("num pixels", intake.numPixels());
+            telemetry.addData("three pixels", intake.isThirdPixel());
+            telemetry.update();
         }
+        telemetry.clearAll();
     };
     private Command intakeStartCommand = () -> intake.intake();
     private Command intakeStopCommand = () -> {
@@ -84,17 +97,11 @@ public class BackDropAuto extends LinearOpMode {
     private Command intakeCommand = () -> intake.up();
     private Command pixelPlatformUp = () -> intake.pixelUp();
     private Command pixelPlatformDown = () -> intake.pixelDown();
-    private Command slidesCommand = () -> slides.setTarget(200);
-    private Command slidesFirstCommand = () -> slides.autoPos();
+    private Command slidesCommand = () -> slides.setTarget(300);
+    private Command slidesFirstCommand = () -> slides.setTarget(130);
     private Command armCommand = () -> arm.scorePos();
     private Command armIntakeCommand = () -> arm.intakePos();
-    private Command wristCommand = () -> {
-        if (!reflect) {
-            wrist.autoPos(0);
-        } else {
-            wrist.scorePos();
-        }
-    };
+    private Command wristCommand = () -> wrist.autoPos();;
     private Command grabCommand = () -> claw.close();
     private Command intakeUp = () -> intake.upAuto(cycle * 2 + 2);
     private Command retractFirstCommand = () -> {
@@ -143,7 +150,6 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(incCycle)
             .addCommand(intakeStartCommand)
             .addCommand(sensePixels)
-            .addWaitCommand(0.7)
             .addCommand(pixelPlatformUp)
             .addWaitCommand(PLATFORM_DELAY)
             .addCommand(grabCommand)
@@ -188,6 +194,7 @@ public class BackDropAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         reflect = color == Color.RED;
         arm = new Arm(this);
         drive = new SampleMecanumDrive(hardwareMap);
@@ -245,13 +252,13 @@ public class BackDropAuto extends LinearOpMode {
                             reflectX(constants.END_TRUSS_BACK_2.getH(i)))
                     .splineTo(reflectX(constants.FRONT_TRUSS_BACK_2.getV(i)),
                             reflectX(constants.FRONT_TRUSS_BACK_2.getH(i)))
-                    .splineTo(reflectX(constants.STACK_2.getV(i)),
+                    .splineToConstantHeading(reflectX(constants.STACK_2.getV(i)),
                             reflectX(constants.STACK_2.getH(i)))
                     .build();
             trussTraj[1][i] = drive
                     .trajectorySequenceBuilder(trussBackTraj[1][i].end())
                     .setReversed(true)
-                    .splineTo(reflectX(constants.FRONT_TRUSS_2.getV(i)),
+                    .splineToConstantHeading(reflectX(constants.FRONT_TRUSS_2.getV(i)),
                             reflectX(constants.FRONT_TRUSS_2.getH(i)))
                     .splineTo(reflectX(constants.END_TRUSS_2.getV(i)),
                             reflectX(constants.END_TRUSS_2.getH(i)))
@@ -267,7 +274,7 @@ public class BackDropAuto extends LinearOpMode {
 
         while (opModeInInit()) {
             pos = webcam.getPosition();
-            telemetry.addData("Position: ", pos);
+            telemetry.addData("Position", pos);
             telemetry.update();
         }
 

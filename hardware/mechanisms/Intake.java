@@ -40,16 +40,17 @@ public class Intake extends Mechanism {
     public double motorSpeed = SPEED;
 
     public static double UP_AUTO_ONE_PIXEL = 0.2;
-    public static double UP_AUTO_TWO_PIXELS = 0.165;
+    public static double UP_AUTO_TWO_PIXELS = 0.171;
     public static double UP_AUTO_THREE_PIXELS = 0.131;
     public static double UP_AUTO_FOUR_PIXELS = 0.04;
     public static double UP_AUTO_FIVE_PIXELS = 0.015;
     public static double UP_POS = 0.14;
+    public static double CLIMB_UP_POS = 0.24;
     public static double DOWN_POS = 0.005;
 
-    public static double PIXEL_UP_POS = 0.85;
-    public static double PIXEL_MIDDLE_POS = 0.7;
-    public static double PIXEL_DOWN_POS = 0.42;
+    public static double PIXEL_UP_POS = 0.69;
+    public static double PIXEL_MIDDLE_POS = 0.54;
+    public static double PIXEL_DOWN_POS = 0.26;
 
     public static double INTAKE_DOWN_DELAY = 1;
     public static double INTAKE_UP_DELAY = 0.7;
@@ -57,7 +58,7 @@ public class Intake extends Mechanism {
     public static double SENSOR_DELAY = 0;
     public static double OUTTAKE_DOWN_DELAY = 1;
 
-    public static double FAR_LEFT_INTAKE = 35;
+    public static double FAR_LEFT_INTAKE = 18;
     public static double FAR_MIDDLE_INTAKE = 18;
     public static double FAR_RIGHT_INTAKE = 18;
     public static double FAR_PIXEL = 18;
@@ -71,6 +72,7 @@ public class Intake extends Mechanism {
     private boolean isUp = false;
 
     private boolean lock = false;
+    private boolean colorFail = false;
 
     private Command pixelDown = () -> {
         lock = true;
@@ -184,6 +186,12 @@ public class Intake extends Mechanism {
         isUp = true;
     }
 
+    public void climbUp() {
+        leftServo.setPosition(CLIMB_UP_POS);
+        rightServo.setPosition(CLIMB_UP_POS);
+        isUp = true;
+    }
+
     public void upAuto(int pixels) {
         double[] positions = {
                 UP_AUTO_ONE_PIXEL,
@@ -220,12 +228,20 @@ public class Intake extends Mechanism {
         return isPixelUp;
     }
 
+    public void lockThird() {
+        colorFail = true;
+    }
+
     public int numPixels() {
         return (topSensor.isPixel() ? 1 : 0) + (bottomSensor.isPixel() ? 1 : 0);
     }
 
     public boolean isThirdPixel() {
-        return leftSensor.isPixel() || middleSensor.isPixel() || rightSensor.isPixel();
+        if (colorFail) {
+            return false;
+        } else {
+            return leftSensor.isPixel() || middleSensor.isPixel() || rightSensor.isPixel();
+        }
     }
 
     @Override
