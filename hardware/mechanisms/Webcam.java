@@ -54,7 +54,6 @@ public class Webcam extends Mechanism {
 
     private int DESIRED_TAG_ID;
 
-
     public Webcam(LinearOpMode opMode, Color color) {
         this.opMode = opMode;
         this.color = color;
@@ -84,7 +83,7 @@ public class Webcam extends Mechanism {
         camera.setPipeline(detector);
     }
 
-    public void aprilTagInit(){
+    public void aprilTagInit() {
         aprilTag = new AprilTagProcessor.Builder().build();
         aprilTag.setDecimation(DECIMATION);
         visionPortal = new VisionPortal.Builder()
@@ -106,29 +105,25 @@ public class Webcam extends Mechanism {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null) {
-                telemetry.addData("detected ID", detection.id);
-                if ((DESIRED_TAG_ID < 0) || (detection.id == DESIRED_TAG_ID)) {
-                    targetFound = true;
-                    desiredTag = detection;
-                    break;
-                } else {
-                    telemetry.addData("Skipping", "Tag ID %d is not desired", detection.id);
-                }
+            if (detection.metadata != null && detection.id == DESIRED_TAG_ID) {
+                targetFound = true;
+                desiredTag = detection;
+                break;
             } else {
                 telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
             }
         }
 
         telemetry.addData("DESIRED TAG", DESIRED_TAG_ID);
+        telemetry.addData("Tag detected", targetFound);
         return targetFound;
     }
 
     public void relocalize(SampleMecanumDrive drive) {
         drive.setPoseEstimate(new Pose2d(
-                desiredTag.metadata.fieldPosition.get(0) - desiredTag.ftcPose.x - 0.0394 * 205.6,
-                desiredTag.metadata.fieldPosition.get(1) - desiredTag.ftcPose.y,
-                Math.toRadians(0) + desiredTag.ftcPose.bearing));
+                desiredTag.metadata.fieldPosition.get(0) - desiredTag.ftcPose.y,
+                desiredTag.metadata.fieldPosition.get(1) - desiredTag.ftcPose.x - 0.0394 * 205.6,
+                Math.toRadians(180 - desiredTag.ftcPose.bearing)));
     }
 
     public enum Position {
@@ -171,11 +166,11 @@ public class Webcam extends Mechanism {
 
         private static final Rect LEFT_ROI = new Rect(
                 new Point(0, 0),
-                new Point(SCREEN_WIDTH / 2.0, SCREEN_HEIGHT));
+                new Point(SCREEN_WIDTH / 3.0, SCREEN_HEIGHT));
 
         private static final Rect CENTER_ROI = new Rect(
-                new Point(SCREEN_WIDTH / 2.0, 0),
-                new Point(SCREEN_WIDTH, SCREEN_HEIGHT));
+                new Point(SCREEN_WIDTH / 3.0, 0),
+                new Point(2.0 * SCREEN_WIDTH / 3.0, SCREEN_HEIGHT));
 
         private static final Rect RIGHT_ROI = new Rect(
                 new Point(SCREEN_WIDTH / 3.0 * 2, 0),
@@ -220,8 +215,8 @@ public class Webcam extends Mechanism {
             centerPercent = Core.sumElems(centerBox).val[0] / CENTER_ROI.area();
             // rightPercent = Core.sumElems(rightBox).val[0] / RIGHT_ROI.area() / 255;
 
-            //telemetry.addData("LEFT", leftPercent);
-            //telemetry.addData("CENTER", centerPercent);
+            // telemetry.addData("LEFT", leftPercent);
+            // telemetry.addData("CENTER", centerPercent);
             // telemetry.addData("RIGHT", rightPercent);
 
             if (leftPercent > centerPercent && leftPercent > NONE) {
@@ -235,8 +230,8 @@ public class Webcam extends Mechanism {
                 pos = Position.RIGHT;
             }
 
-            //telemetry.addData("pos", pos);
-            //telemetry.update();
+            // telemetry.addData("pos", pos);
+            // telemetry.update();
 
             leftBox.release();
             centerBox.release();

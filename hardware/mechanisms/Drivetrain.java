@@ -43,6 +43,10 @@ public class Drivetrain extends Mechanism {
         this.speed = speed;
     }
 
+    public SampleMecanumDrive getDrive() {
+        return this.drivetrain;
+    }
+
     @Override
     public void loop(Gamepad gamepad) {
         double leftStickY = max(gamepad.left_stick_y, gamepad.left_stick_y);

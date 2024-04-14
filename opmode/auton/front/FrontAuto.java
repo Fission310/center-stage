@@ -100,7 +100,13 @@ public class FrontAuto extends LinearOpMode {
     private Command outtake = () -> intake.autoOuttake();
     private Command intakeUpFirst = () -> intake.upAuto(1);
     private Command intakeUpSecond = () -> intake.upAuto(2 * cycle + 3);
-    private Command pixelPlatformUp = () -> intake.autoPixelUp();
+    private Command pixelPlatformUp = () -> {
+        if (intake.numPixels() == 2) {
+            intake.pixelUp();
+        } else {
+            intake.outtake();
+        }
+    };
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command grabCommand = () -> claw.close();
     private Command armCommand = () -> arm.scorePos();

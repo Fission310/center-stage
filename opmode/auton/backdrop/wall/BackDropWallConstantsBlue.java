@@ -19,7 +19,7 @@ public class BackDropWallConstantsBlue extends BackDropConstants {
     
         STACK_1 = new Constant(
                 -61.5,
-                38,
+                36,
                 Math.toRadians(180),
                 -61,
                 37,
@@ -63,7 +63,7 @@ public class BackDropWallConstantsBlue extends BackDropConstants {
     
         TAG_3 = new Constant(
                 59,
-                30,
+                34,
                 Math.toRadians(0),
                 51.75,
                 35.25,
@@ -77,7 +77,7 @@ public class BackDropWallConstantsBlue extends BackDropConstants {
                 60,
                 Math.toRadians(0),
                 -26,
-                64,
+                61.5,
                 Math.toRadians(0),
                 -44,
                 52,
@@ -110,53 +110,53 @@ public class BackDropWallConstantsBlue extends BackDropConstants {
                 57,
                 Math.toRadians(180),
                 -26,
-                55,
+                52,
                 Math.toRadians(180),
                 -36,
                 52,
                 Math.toRadians(180));
     
         END_TRUSS_1 = new Constant(
-                20,
+                1,
                 60,
                 Math.toRadians(0),
-                20,
-                64,
+                1,
+                61.5,
                 Math.toRadians(0),
-                20,
+                1,
                 52,
                 Math.toRadians(0));
     
         END_TRUSS_2 = new Constant(
-                20,
+                1,
                 54.5,
                 Math.toRadians(0),
-                20,
+                1,
                 66,
                 Math.toRadians(0),
-                20,
+                1,
                 37,
                 Math.toRadians(0));
     
         END_TRUSS_BACK_1 = new Constant(
-                20,
+                1,
                 65.7,
                 Math.toRadians(180),
-                20,
+                1,
                 67.3,
                 Math.toRadians(180),
-                20,
+                1,
                 65,
                 Math.toRadians(180));
     
         END_TRUSS_BACK_2 = new Constant(
-                20,
+                1,
                 57,
                 Math.toRadians(180),
-                20,
-                55,
+                1,
+                52,
                 Math.toRadians(180),
-                20,
+                1,
                 52,
                 Math.toRadians(180));
     

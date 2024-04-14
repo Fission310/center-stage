@@ -44,11 +44,11 @@ public class Intake extends Mechanism {
     public static double UP_AUTO_THREE_PIXELS = 0.131;
     public static double UP_AUTO_FOUR_PIXELS = 0.04;
     public static double UP_AUTO_FIVE_PIXELS = 0.015;
-    public static double UP_POS = 0.14;
+    public static double UP_POS = 0.17;
     public static double CLIMB_UP_POS = 0.24;
-    public static double DOWN_POS = 0.005;
+    public static double DOWN_POS = 0.07;
 
-    public static double PIXEL_UP_POS = 0.69;
+    public static double PIXEL_UP_POS = 0.73;
     public static double PIXEL_MIDDLE_POS = 0.54;
     public static double PIXEL_DOWN_POS = 0.26;
 
@@ -58,7 +58,7 @@ public class Intake extends Mechanism {
     public static double SENSOR_DELAY = 0;
     public static double OUTTAKE_DOWN_DELAY = 1;
 
-    public static double FAR_LEFT_INTAKE = 18;
+    public static double FAR_LEFT_INTAKE = 55;
     public static double FAR_MIDDLE_INTAKE = 18;
     public static double FAR_RIGHT_INTAKE = 18;
     public static double FAR_PIXEL = 18;
@@ -164,6 +164,10 @@ public class Intake extends Mechanism {
         intakeMotor.setPower(AUTO_OUTTAKE_SPEED);
     }
 
+    public boolean isLocked() {
+        return lock;
+    }
+
     public void stop() {
         intakeMotor.setPower(0);
     }
@@ -256,10 +260,15 @@ public class Intake extends Mechanism {
             pixelDown();
         }
 
+        if (lock) {
+            intake();
+        }
+
         if (GamepadStatic.isButtonPressed(gamepad, Controls.INTAKE)) {
             lock = false;
             intake();
         } else if (GamepadStatic.isButtonPressed(gamepad, Controls.OUTTAKE)) {
+            lock = false;
             outtake();
         } else if (!lock) {
             stop();

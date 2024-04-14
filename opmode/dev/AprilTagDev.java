@@ -30,7 +30,10 @@ public class AprilTagDev extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             drivetrain.loop(gamepad1);
-            webcam.detectAprilTag(telemetry);
+            if (webcam.detectAprilTag(telemetry)) {
+                webcam.relocalize(drivetrain.getDrive());
+            }
+            telemetry.update();
         }
     }
 }

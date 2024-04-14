@@ -71,6 +71,7 @@ public class Scoring extends Mechanism {
     private Command intakeCommand = () -> intake.intake();
     private Command wristCommand = () -> wrist.scorePos();
     private Command intakeUp = () -> intake.up();
+    private Command intakeUpClimb = () -> intake.climbUp();
     private Command outtakeCommand = () -> intake.outtake();
     private Command setPixels = () -> {
         if (intake.numPixels() == 2)
@@ -103,7 +104,7 @@ public class Scoring extends Mechanism {
             .build();
     private CommandSequence pixelSequence = new CommandSequence()
             .addCommand(stopCommand)
-            .addCommand(intakeUp)
+            .addCommand(intakeUpClimb)
             .addCommand(slidesUp)
             .addCommand(intakeCommand)
             .addCommand(pixelPlatformUp)
@@ -158,6 +159,7 @@ public class Scoring extends Mechanism {
         telemetry.addData("State", state);
         telemetry.addData("3rd Pixel", intake.isThirdPixel());
         telemetry.addData("Num Pixels", intake.numPixels());
+        telemetry.addData("lock", intake.isLocked());
         telemetry.update();
     }
 
@@ -178,7 +180,14 @@ public class Scoring extends Mechanism {
                     state = State.TRANSFER;
                     hasTwo = false;
                     makeDown = false;
+                    if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
+                        pixelSequence.trigger();
+                    }
                     break;
+                }
+
+                if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {
+                    intake.lockThird();
                 }
 
                 if (isGrab && !GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
@@ -220,6 +229,9 @@ public class Scoring extends Mechanism {
                 }
                 break;
             case TRANSFER:
+                if (!pixelSequence.hasCompleted) {
+                    break;
+                }
                 drive.setSpeed(1);
                 drive.setReverse(false);
                 if (intake.numPixels() == 0 && !intake.isPixelUp()) {
@@ -228,10 +240,11 @@ public class Scoring extends Mechanism {
                     break;
                 }
 
+                if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {
+                    intake.lockThird();
+                }
+
                 if (intake.isThirdPixel() && intake.numPixels() == 2) {
-                    if (GamepadStatic.isButtonPressed(gamepad, Controls.GRAB)) {
-                        intake.lockThird();
-                    }
                     intake.outtake();
                 } else if (intake.isThirdPixel() && intake.numPixels() == 1) {
                     intakeABit.trigger();
@@ -242,6 +255,14 @@ public class Scoring extends Mechanism {
                 break;
             case CLAW:
                 if (intake.isThirdPixel()) {
+                    intake.outtake();
+                }
+
+                if (GamepadStatic.isButtonPressed(gamepad, Controls.SCORE_TWO)) {
+                    intake.lockThird();
+                }
+
+                if (GamepadStatic.isButtonPressed(gamepad, Controls.OUTTAKE)) {
                     intake.outtake();
                 }
 
@@ -278,7 +299,6 @@ public class Scoring extends Mechanism {
 
                 if (claw.numPixels() == 0) {
                     retractSequence.trigger();
-                    intake.down();
                     state = State.INTAKE;
                     break;
                 }

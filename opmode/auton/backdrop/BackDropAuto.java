@@ -95,7 +95,13 @@ public class BackDropAuto extends LinearOpMode {
     };
     private Command releaseLeft = () -> claw.leftOpen();
     private Command intakeCommand = () -> intake.up();
-    private Command pixelPlatformUp = () -> intake.pixelUp();
+    private Command pixelPlatformUp = () -> {
+        if (intake.numPixels() == 2) {
+            intake.pixelUp();
+        } else {
+            intake.outtake();
+        }
+    };
     private Command pixelPlatformDown = () -> intake.pixelDown();
     private Command slidesCommand = () -> slides.setTarget(300);
     private Command slidesFirstCommand = () -> slides.setTarget(130);
@@ -103,7 +109,8 @@ public class BackDropAuto extends LinearOpMode {
     private Command armIntakeCommand = () -> arm.intakePos();
     private Command wristCommand = () -> wrist.autoPos();;
     private Command grabCommand = () -> claw.close();
-    private Command intakeUp = () -> intake.upAuto(cycle * 2 + 2);
+    private Command intakeUpFirst = () -> intake.upAuto(cycle * 2 + 1);
+    private Command intakeUpSecond = () -> intake.upAuto(cycle * 2 + 2);
     private Command retractFirstCommand = () -> {
         claw.leftOpen();
         claw.rightOpen();
@@ -142,11 +149,13 @@ public class BackDropAuto extends LinearOpMode {
             .addCommand(retractFirstCommand)
             .addWaitCommand(0.7)
             .addCommand(retractSecondCommand)
-            .addCommand(intakeUp)
+            .addCommand(intakeUpFirst)
             .addCommand(intakeStartCommand)
             .build();
     private CommandSequence trussSequence = new CommandSequence()
             .addCommand(trussCommand)
+            .addWaitCommand(0.2)
+            .addCommand(intakeUpSecond)
             .addCommand(incCycle)
             .addCommand(intakeStartCommand)
             .addCommand(sensePixels)
@@ -282,6 +291,8 @@ public class BackDropAuto extends LinearOpMode {
 
         waitForStart();
 
+        telemetry.clearAll();
+
         webcam.stopStreaming();
         webcam.aprilTagInit();
 
@@ -295,6 +306,7 @@ public class BackDropAuto extends LinearOpMode {
             if (commandMachine.getCurrentCommandIndex() > 1 && webcam.detectAprilTag(telemetry)) {
                 webcam.relocalize(drive);
             }
+            telemetry.update();
         }
     }
 
