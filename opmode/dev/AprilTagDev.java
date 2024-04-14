@@ -26,7 +26,7 @@ public class AprilTagDev extends LinearOpMode {
         webcam.stopStreaming();
         webcam.aprilTagInit();
 
-        webcam.setDesiredTag(1);
+        webcam.setDesiredTag(false);
 
         while (opModeIsActive() && !isStopRequested()) {
             drivetrain.loop(gamepad1);

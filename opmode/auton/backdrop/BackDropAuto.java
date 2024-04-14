@@ -5,12 +5,15 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.profile.VelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.stuyfission.fissionlib.command.Command;
 import com.stuyfission.fissionlib.command.CommandSequence;
 
 import com.stuyfission.fissionlib.command.AutoCommandMachine;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Arm;
 import org.firstinspires.ftc.teamcode.hardware.mechanisms.Claw;
@@ -291,21 +294,21 @@ public class BackDropAuto extends LinearOpMode {
 
         waitForStart();
 
-        telemetry.clearAll();
+        //telemetry.clearAll();
 
-        webcam.stopStreaming();
-        webcam.aprilTagInit();
+        //webcam.stopStreaming();
+        //webcam.aprilTagInit();
 
-        webcam.setDesiredTag(pos.index);
+        //webcam.setDesiredTag(reflect);
 
         while (opModeIsActive() && !isStopRequested() && !commandMachine.hasCompleted()) {
             drive.update();
             slides.update();
             commandMachine.run(drive.isBusy() || busy);
 
-            if (commandMachine.getCurrentCommandIndex() > 1 && webcam.detectAprilTag(telemetry)) {
-                webcam.relocalize(drive);
-            }
+            //if (commandMachine.getCurrentCommandIndex() > 1 && webcam.detectAprilTag(telemetry)) {
+            //    webcam.relocalize(drive);
+            //}
             telemetry.update();
         }
     }

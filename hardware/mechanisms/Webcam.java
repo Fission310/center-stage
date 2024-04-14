@@ -92,11 +92,11 @@ public class Webcam extends Mechanism {
                 .build();
     }
 
-    public void setDesiredTag(int tag) {
-        if (color == Color.RED) {
-            DESIRED_TAG_ID = tag + 4;
+    public void setDesiredTag(boolean reflect) {
+        if (reflect) {
+            DESIRED_TAG_ID = 5;
         } else {
-            DESIRED_TAG_ID = tag + 1;
+            DESIRED_TAG_ID = 1;
         }
     }
 
@@ -108,6 +108,7 @@ public class Webcam extends Mechanism {
             if (detection.metadata != null && detection.id == DESIRED_TAG_ID) {
                 targetFound = true;
                 desiredTag = detection;
+                telemetry.addData("I SEEE", detection.id);
                 break;
             } else {
                 telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
@@ -144,7 +145,7 @@ public class Webcam extends Mechanism {
 
     public void stopStreaming() {
         camera.stopStreaming();
-        camera.closeCameraDevice();
+        //camera.closeCameraDevice();
     }
 
     private static class Detector extends OpenCvPipeline {
